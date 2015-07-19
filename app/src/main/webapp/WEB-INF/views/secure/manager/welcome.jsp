@@ -3,14 +3,14 @@
 <html>
 <head>
     <title>Manager welcome page</title>
-    <link rel="stylesheet" href="../../../../css/style.css">
+    <link rel="stylesheet" href="../../../../resources/css/style.css">
 </head>
 <body>
 <nav>
-    <a href="Trucks.do" title="Truck list">Trucks</a>
-    <a href="Drivers.do" title="Driver list">Drivers</a>
-    <a href="Orders.do?role=manager" title="Order list">Orders</a>
-    <a href="Freights.do" title="Freight list">Freights</a>
+    <a href="trucks" title="Truck list">Trucks</a>
+    <a href="drivers" title="Driver list">Drivers</a>
+    <a href="orders?role=manager" title="Order list">Orders</a>
+    <a href="freights" title="Freight list">Freights</a>
 </nav>
 <br>
 

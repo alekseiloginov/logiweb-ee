@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 //@RequestMapping("/landing")
 public class HelloController {
-    @RequestMapping(value = "/landing", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/landin", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
         return "landing";
     }

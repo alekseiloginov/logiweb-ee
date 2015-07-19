@@ -17,24 +17,39 @@
 		<put-attribute name="body" value="/landing.html" />
 	</definition>
 
-	<definition name="employee" extends="base.definition">
-		<put-attribute name="title" value="Employee" />
-		<put-attribute name="body" value="/WEB-INF/views/employee.jsp" />
+	<definition name="secure/manager/trucks" extends="base.definition">
+		<put-attribute name="title" value="Trucks" />
+		<put-attribute name="body" value="/WEB-INF/views/secure/manager/trucks.jsp" />
 	</definition>
 
-	<definition name="login" extends="base.definition">
-		<put-attribute name="title" value="Login" />
-		<put-attribute name="body" value="/WEB-INF/views/login.jsp" />
-	</definition>
+    <definition name="secure/manager/drivers" extends="base.definition">
+        <put-attribute name="title" value="Drivers" />
+        <put-attribute name="body" value="/WEB-INF/views/secure/manager/drivers.jsp" />
+    </definition>
 
-	<definition name="logout" extends="base.definition">
-		<put-attribute name="title" value="Logout" />
-		<put-attribute name="body" value="/WEB-INF/views/logout.jsp" />
-	</definition>
+    <definition name="secure/manager/freights" extends="base.definition">
+        <put-attribute name="title" value="Freights" />
+        <put-attribute name="body" value="/WEB-INF/views/secure/manager/freights.jsp" />
+    </definition>
 
-	<definition name="denied" extends="base.definition">
-		<put-attribute name="title" value="Denied" />
-		<put-attribute name="body" value="/WEB-INF/views/denied.jsp" />
-	</definition>
+    <definition name="secure/manager/orders" extends="base.definition">
+        <put-attribute name="title" value="Orders" />
+        <put-attribute name="body" value="/WEB-INF/views/secure/manager/orders.jsp" />
+    </definition>
+
+	<!--<definition name="login" extends="base.definition">-->
+		<!--<put-attribute name="title" value="Login" />-->
+		<!--<put-attribute name="body" value="/WEB-INF/views/login.jsp" />-->
+	<!--</definition>-->
+
+	<!--<definition name="logout" extends="base.definition">-->
+		<!--<put-attribute name="title" value="Logout" />-->
+		<!--<put-attribute name="body" value="/WEB-INF/views/logout.jsp" />-->
+	<!--</definition>-->
+
+	<!--<definition name="denied" extends="base.definition">-->
+		<!--<put-attribute name="title" value="Denied" />-->
+		<!--<put-attribute name="body" value="/WEB-INF/views/denied.jsp" />-->
+	<!--</definition>-->
 
 </tiles-definitions>
