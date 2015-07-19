@@ -1,0 +1,111 @@
+body {
+    background-color: #8d9aa5;
+    font: 1em sans-serif;
+    color: #384047;
+    margin: 0;
+    padding: 0 10%;
+}
+.container {
+    box-sizing: border-box;
+    width: 90%;
+    max-width: 1080px;
+    background: #edeff0;
+    padding: 30px 15px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+}
+nav {
+    float: right;
+    margin: 1.5em 0;
+}
+a {
+    width: 100px;
+    margin: 15px 0;
+    display: inline-block;
+}
+br {
+    clear: both;
+}
+h1, h2, h4, p {
+    text-align: center;
+}
+form {
+    margin: 50px auto;
+    width: 344px;
+    color: steelblue;
+}
+input {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: inherit;
+}
+input[type="text"],
+input[type="password"] {
+    display: block;
+    margin-bottom: 25px;
+    width: 100%;
+    border: 2px solid #3f8abf;
+}
+input[type="submit"] {
+    background: #3f8abf;
+    width: 344px;
+    height: 45px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    -webkit-box-shadow: 0 2px 0 0 #3574a0;
+    -moz-box-shadow: 0 2px 0 0 #3574a0;
+    box-shadow: 0 2px 0 0 #3574a0;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+}
+input[type="submit"]:hover {
+    background: #397cac;
+    border-color: #397cac;
+    -webkit-box-shadow: 0 2px 0 0 #2c6085;
+    -moz-box-shadow: 0 2px 0 0 #2c6085;
+    box-shadow: 0 2px 0 0 #2c6085;
+}
+table {
+    border-collapse: collapse;
+}
+table, td, th {
+    margin: 20px auto;
+    padding: 5px;
+    border: 1px solid gray;
+}
+.error {
+    text-align: center;
+    color: red;
+}
+.db_error {
+    text-align: center;
+    color: red;
+}
+.success {
+    text-align: center;
+    color: green;
+}
+.db_success {
+    text-align: center;
+    color: green;
+}
+.jtable-dialog-form {
+    margin: 0 0 0 0;
+}
+.jtable-custom-input, .jtable-text-input, .jtable-password-input {
+    height: 40px;
+}
+.page-not-found {
+    background: white;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
