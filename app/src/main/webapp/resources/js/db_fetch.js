@@ -33,7 +33,7 @@
 //    $("#truckList").html(response);
 //});
 
-//$("#truckList").load("landing.html");
+//$("#truckList").load("landing.jsp");
 
 // fetching JSON truck object from the TruckListUpdateService
 var test = function () {

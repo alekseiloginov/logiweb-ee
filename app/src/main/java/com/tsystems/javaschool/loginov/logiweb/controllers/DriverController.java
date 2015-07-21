@@ -29,7 +29,7 @@ public class DriverController {
      * Redirects user to the driver page.
      */
     @RequestMapping(value = "/drivers", method = RequestMethod.GET)
-    public String redirectToDriverPage() {
+    public String getDriverPage() {
         return "secure/manager/drivers";
     }
 

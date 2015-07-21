@@ -54,7 +54,7 @@ public class AppErrorHandler extends HttpServlet {
             out.write("</ul>");
         }
         out.write("<br><br>");
-        out.write("<form action=\"/landing.html\" method=\"post\">\n" +
+        out.write("<form action=\"/landing.jsp\" method=\"post\">\n" +
                 "<input type=\"submit\" value=\"Go to the main page\">\n" +
                 "</form>");
 

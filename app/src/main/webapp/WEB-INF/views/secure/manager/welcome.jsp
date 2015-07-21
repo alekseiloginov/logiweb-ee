@@ -1,9 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page session="true"%>
 <html>
 <head>
     <title>Manager welcome page</title>
-    <link rel="stylesheet" href="../../../../resources/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 </head>
 <body>
 <nav>
@@ -15,10 +16,14 @@
 <br>
 
 <div class="container">
-    <h1>Hello, <c:out value="${sessionScope.user.getName()}"/>!</h1>
-    <p>Your email: <c:out value="${sessionScope.user.getEmail()}"/></p>
 
-    <form action="Logout" method="post">
+    <c:if test="${pageContext.request.userPrincipal.name != null}">
+        <h1>Hello, ${pageContext.request.userPrincipal.name}!</h1>
+        <%--<p>Your email: <c:out value="${sessionScope.user.getEmail()}"/></p>--%>
+    </c:if>
+
+    <form action="<c:url value="/j_spring_security_logout"/>" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="submit" value="Logout">
     </form>
 

@@ -2,21 +2,23 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+
 <head>
     <title>Orders</title>
     <!-- My styles -->
-    <link rel="stylesheet" href="../../../../css/style.css" />
+    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>" />
     <!-- JQuery UI - Overcast theme styles -->
-    <link rel="stylesheet" href="../../../../css/jquery-ui.css" />
-    <link rel="stylesheet" href="../../../../css/jquery-ui.theme.css" />
-    <link rel="stylesheet" href="../../../../css/jquery-ui.structure.css" />
+    <link rel="stylesheet" href="<c:url value="/resources/css/jquery-ui.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/resources/css/jquery-ui.theme.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/resources/css/jquery-ui.structure.css"/>" />
     <!-- jTable styles -->
-    <link rel="stylesheet" href="../../../../jtable/themes/metro/lightgray/jtable.min.css" />
+    <link rel="stylesheet" href="<c:url value="/resources/jtable/themes/metro/lightgray/jtable.min.css"/>" />
 </head>
+
 <body>
-<%Driver driver = (Driver) session.getAttribute("user");%>
+<%--<%Driver driver = (Driver) session.getAttribute("user");%>--%>
 <nav>
-    <a href="Welcome.do?role=driver" title="Welcome page">Home</a>
+    <a href="welcome" title="Welcome page">Home</a>
 </nav>
 <br><br>
 
@@ -29,15 +31,16 @@
 <!-- jQuery UI lib -->
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
 <!-- jTable script file -->
-<script src="../../../../jtable/jquery.jtable.min.js" type="text/javascript"></script>
+<script src="<c:url value="/resources/jtable/jquery.jtable.min.js"/>" type="text/javascript"></script>
 <!-- My JTable script -->
 <script>
     $(document).ready(function () {
         $('#OrderTableContainer').jtable({
-            title: 'Driver #<%=driver.getId()%> orders',
+            <%--title: 'Driver #<%=driver.getId()%> orders',--%>
+            title: 'Driver orders',
             actions: {
                 // drivers can only see orders
-                listAction: 'OrderList.do?role=driver&truckID=<%=driver.getTruck().getId()%>'
+                <%--listAction: 'OrderList.do?role=driver&truckID=<%=driver.getTruck().getId()%>'--%>
             },
             fields: {
                 id: {

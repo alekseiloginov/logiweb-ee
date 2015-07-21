@@ -1,10 +1,17 @@
 $(".error").hide();
 $(".success").hide();
 
-$( "button" ).click(function() {
+$( "#manager" ).click(function() {
     $( "#name" ).val( "Vasya" );
     $( "#surname" ).val( "Pupkin" );
-    $( "#email" ).val( "abc@abc.com" );
+    $( "#email" ).val( "Alex" );
+    $( "#password" ).val( "1234" );
+});
+
+$( "#login-driver" ).click(function() {
+    $( "#name" ).val( "Vasya" );
+    $( "#surname" ).val( "Pupkin" );
+    $( "#email" ).val( "Grisha" );
     $( "#password" ).val( "1234" );
 });
 

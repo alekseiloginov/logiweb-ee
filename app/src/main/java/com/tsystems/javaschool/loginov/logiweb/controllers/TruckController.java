@@ -29,7 +29,7 @@ public class TruckController {
      * Redirects user to the truck page.
      */
     @RequestMapping(value = "/trucks", method = RequestMethod.GET)
-    public String redirectToTruckPage() {
+    public String getTruckPage() {
         return "secure/manager/trucks";
     }
 

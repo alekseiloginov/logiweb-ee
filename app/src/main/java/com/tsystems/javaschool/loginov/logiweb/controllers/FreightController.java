@@ -27,7 +27,7 @@ public class FreightController {
      * Redirects user to the freights page.
      */
     @RequestMapping(value = "/freights", method = RequestMethod.GET)
-    public String redirectToDriverPage() {
+    public String getDriverPage() {
         return "secure/manager/freights";
     }
 

@@ -1,8 +1,12 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Spring MVC Controller to work with the order data.
@@ -25,16 +29,18 @@ public class OrderController {
      * Redirects user to the order page.
      */
     @RequestMapping(value = "/orders", method = RequestMethod.GET)
-    public String redirectToOrderPage() {
+    public ModelAndView getOrderPage(HttpServletRequest request, ModelAndView model) {
 
-//        String role = ((String[]) requestParameters.get("role"))[0];
-//        if (role.equals("manager")) {
-//            return "secure/manager/orders";
-//        } else if (role.equals("driver")) {
-//            return "secure/driver/orders";
-//        }
+        SecurityContextHolderAwareRequestWrapper wrapper = new SecurityContextHolderAwareRequestWrapper(request, "");
 
-        return "secure/manager/orders";
+        if (wrapper.isUserInRole("ROLE_MANAGER")) {
+            model.setViewName("secure/manager/orders");
+
+        } else if (wrapper.isUserInRole("ROLE_DRIVER")) {
+            model.setViewName("secure/driver/orders");
+        }
+
+        return model;
     }
 
 //    /**
