@@ -1,14 +1,33 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.services.FreightService;
+import com.tsystems.javaschool.loginov.logiweb.utils.GsonParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Spring MVC Controller to work with the freight data.
  */
 @Controller
 public class FreightController {
+
+    private FreightService freightService;
+
+    @Autowired(required=true)
+    @Qualifier(value="freightService")
+    public void setFreightService(FreightService freightService){
+        this.freightService = freightService;
+    }
+
 //    private ListService listService;
 //    private SaveService saveService;
 //    private UpdateService updateService;
@@ -29,6 +48,20 @@ public class FreightController {
     @RequestMapping(value = "/freights", method = RequestMethod.GET)
     public String getDriverPage() {
         return "secure/manager/freights";
+    }
+
+    /**
+     * Fetches a list of all freights using the FreightService and puts it to the response map.
+     */
+    @RequestMapping(value = "/FreightList.do", method = RequestMethod.POST)
+    public void getAllFreights(HttpServletResponse resp) throws IOException {
+
+        List freightList = freightService.listFreights();
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("data", freightList);
+
+        new GsonParser().parse(resultMap, resp);
     }
 
 //    /**

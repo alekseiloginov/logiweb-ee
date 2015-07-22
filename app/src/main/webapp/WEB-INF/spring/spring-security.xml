@@ -6,8 +6,9 @@
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <http auto-config="true">
+        <!--<intercept-url pattern="/TruckList.do" access="permitAll" />-->
         <intercept-url pattern="/welcome**" access="hasAnyRole('ROLE_MANAGER', 'ROLE_DRIVER')" />
-        <intercept-url pattern="/trucks**" access="hasRole('ROLE_MANAGER')" />
+        <intercept-url pattern="/trucks" access="hasRole('ROLE_MANAGER')" />
         <intercept-url pattern="/drivers**" access="hasRole('ROLE_MANAGER')" />
         <intercept-url pattern="/orders**" access="hasAnyRole('ROLE_MANAGER', 'ROLE_DRIVER')" />
         <intercept-url pattern="/freights**" access="hasRole('ROLE_MANAGER')" />
@@ -24,11 +25,11 @@
         <logout logout-success-url="/login_manager?logout"
                 logout-url="/j_spring_security_logout" />
 
-        <!-- enable csrf protection -->
-        <csrf/>
+        <!-- disable csrf protection -->
+        <csrf disabled="true"/>
     </http>
 
-    <authentication-manager id="in-memory-auth">
+    <authentication-manager>
         <authentication-provider>
             <user-service>
                 <user name="Alex" password="1234" authorities="ROLE_MANAGER" />
@@ -37,17 +38,7 @@
         </authentication-provider>
     </authentication-manager>
 
-
-
-    <!--<authentication-manager id="dao-auth">-->
-        <!--<authentication-provider user-service-ref="userDetailsService">-->
-        <!--</authentication-provider>-->
-    <!--</authentication-manager>-->
-
-    <!--<beans:bean id="userDetailsService" class="com.springtest.dao.AppUserDetailsServiceDAO" />-->
-
-
-    <!--<authentication-manager id="jdbc-auth">-->
+    <!--<authentication-manager>-->
         <!--<authentication-provider>-->
             <!--<jdbc-user-service data-source-ref="dataSource"-->
                                <!--users-by-username-query="select username,password,enabled from Users where username = ?"-->
@@ -55,7 +46,7 @@
         <!--</authentication-provider>-->
     <!--</authentication-manager>-->
 
-    <!--&lt;!&ndash; MySQL DB DataSource &ndash;&gt;-->
+    <!--&lt;!&ndash; MySQL DataSource &ndash;&gt;-->
     <!--<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
         <!--<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
         <!--<beans:property name="url" value="jdbc:mysql://localhost:3306/TestDB" />-->
@@ -63,8 +54,8 @@
         <!--<beans:property name="password" value="1234" />-->
     <!--</beans:bean>-->
 
-    <!--&lt;!&ndash; If DataSource is configured in Tomcat Servlet Container &ndash;&gt;-->
-    <!--<beans:bean id="dbDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">-->
+    <!--&lt;!&ndash; MySQL DataSource configured in WildFly &ndash;&gt;-->
+    <!--<beans:bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">-->
         <!--<beans:property name="jndiName" value="java:comp/env/jdbc/MyLocalDB" />-->
     <!--</beans:bean>-->
 </beans:beans>

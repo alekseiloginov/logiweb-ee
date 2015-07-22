@@ -15,6 +15,7 @@
     <properties>
         <spring.version>4.1.7.RELEASE</spring.version>
         <spring-security.version>4.0.1.RELEASE</spring-security.version>
+        <hibernate.version>4.3.5.Final</hibernate.version>
     </properties>
 
     <dependencies>
@@ -54,6 +55,20 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <!-- Spring TX -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework</groupId>-->
+            <!--<artifactId>spring-tx</artifactId>-->
+            <!--<version>${spring.version}</version>-->
+        <!--</dependency>-->
+
+        <!-- Spring ORM -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
         <!-- MySQL driver 5.1.36 -->
         <dependency>
             <groupId>mysql</groupId>
@@ -68,12 +83,19 @@
             <version>2.3.1</version>
         </dependency>
 
-        <!-- Hibernate Core 4.3.5.Final -->
+        <!-- Hibernate Core -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.3.5.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
+
+        <!-- Hibernate Entity Manager -->
+        <!--<dependency>-->
+            <!--<groupId>org.hibernate</groupId>-->
+            <!--<artifactId>hibernate-entitymanager</artifactId>-->
+            <!--<version>${hibernate.version}</version>-->
+        <!--</dependency>-->
 
         <!-- Spring Security Web -->
         <!-- This component integrates the Spring Security to the Servlet API.

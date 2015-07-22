@@ -1,5 +1,9 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.services.OrderService;
+import com.tsystems.javaschool.loginov.logiweb.utils.GsonParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,12 +11,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Spring MVC Controller to work with the order data.
  */
 @Controller
 public class OrderController {
+
+    private OrderService orderService;
+
+    @Autowired(required=true)
+    @Qualifier(value="orderService")
+    public void setOrderService(OrderService orderService){
+        this.orderService = orderService;
+    }
+
 //    private ListService listService;
 //    private SaveService saveService;
 //    private UpdateService updateService;
@@ -41,6 +59,27 @@ public class OrderController {
         }
 
         return model;
+    }
+
+    /**
+     * Fetches a list of all orders using the OrderService and puts it to the response map.
+     */
+    @RequestMapping(value = "/OrderList.do", method = RequestMethod.POST)
+    public void getAllOrders(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        SecurityContextHolderAwareRequestWrapper wrapper = new SecurityContextHolderAwareRequestWrapper(req, "");
+        Map<String, Object> resultMap = new HashMap<>();
+
+//        if (wrapper.isUserInRole("ROLE_MANAGER")) {
+            List orderList = orderService.listOrders();
+            resultMap.put("data", orderList);
+
+//        } else if (wrapper.isUserInRole("ROLE_DRIVER")) {
+//            Order order = orderService.getOrderById(truckID);
+//            resultMap.put("data", order);
+//        }
+
+        new GsonParser().parse(resultMap, resp);
     }
 
 //    /**

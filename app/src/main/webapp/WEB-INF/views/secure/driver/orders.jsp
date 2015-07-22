@@ -40,6 +40,7 @@
             title: 'Driver orders',
             actions: {
                 // drivers can only see orders
+                listAction: 'OrderList.do'
                 <%--listAction: 'OrderList.do?role=driver&truckID=<%=driver.getTruck().getId()%>'--%>
             },
             fields: {
@@ -59,7 +60,7 @@
                     create: false,
                     display: function (orderData) {
                         //Create an image that will be used to open child table
-                        var $img = $('<img src="/images/list_metro.png" title="View waypoints" />');
+                        var $img = $('<img src="resources/images/list_metro.png" title="View waypoints" />');
                         //Open child table when user clicks the image
                         $img.click(function () {
                             $('#OrderTableContainer').jtable('openChildTable',
@@ -147,7 +148,7 @@
                     create: false,
                     display: function (orderData) {
                         //Create an image that will be used to open child table
-                        var $img = $('<img src="/images/list_metro.png" title="View drivers" />');
+                        var $img = $('<img src="resources/images/list_metro.png" title="View drivers" />');
                         //Open child table when user clicks the image
                         $img.click(function () {
                             $('#OrderTableContainer').jtable('openChildTable',

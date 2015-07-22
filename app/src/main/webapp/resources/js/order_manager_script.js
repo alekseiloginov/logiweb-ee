@@ -5,7 +5,7 @@ $(document).ready(function () {
         title: 'Table of orders',
         sorting: true,
         actions: {
-            listAction: 'OrderList.do?role=manager',
+            listAction: 'OrderList.do',
             createAction: 'OrderSave.do',
             updateAction: 'OrderUpdate.do',
             deleteAction: 'OrderDelete.do'
@@ -27,7 +27,7 @@ $(document).ready(function () {
                 create: false,
                 display: function (orderData) {
                     //Create an image that will be used to open child table
-                    var $img = $('<img src="/images/list_metro.png" title="View waypoints" />');
+                    var $img = $('<img src="resources/images/list_metro.png" title="View waypoints" />');
                     //Open child table when user clicks the image
                     $img.click(function () {
                         $('#OrderTableContainer').jtable('openChildTable',
@@ -118,7 +118,7 @@ $(document).ready(function () {
                 create: false,
                 display: function (orderData) {
                     //Create an image that will be used to open child table
-                    var $img = $('<img src="/images/list_metro.png" title="View drivers" />');
+                    var $img = $('<img src="resources/images/list_metro.png" title="View drivers" />');
                     //Open child table when user clicks the image
                     $img.click(function () {
                         $('#OrderTableContainer').jtable('openChildTable',

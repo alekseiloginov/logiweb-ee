@@ -35,8 +35,8 @@
     <c:if test="${not empty success}">
       <p class="db_success">${success}</p>
     </c:if>
-    <p class="error">Error message</p>
-    <p class="success">Success message</p>
+    <p class="error"></p>
+    <p class="success"></p>
   </div>
 </div>
 

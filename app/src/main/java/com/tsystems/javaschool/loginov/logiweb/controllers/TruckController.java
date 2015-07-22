@@ -1,9 +1,19 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.services.TruckService;
+import com.tsystems.javaschool.loginov.logiweb.utils.GsonParser;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Spring MVC Controller to work with the truck data.
@@ -11,6 +21,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class TruckController {
     private static Logger logger = Logger.getLogger(TruckController.class);
+
+    private TruckService truckService;
+
+    @Autowired(required=true)
+    @Qualifier(value="truckService")
+    public void setTruckService(TruckService truckService){
+        this.truckService = truckService;
+    }
+
 //    private ListService listService;
 //    private SaveService saveService;
 //    private UpdateService updateService;
@@ -31,6 +50,20 @@ public class TruckController {
     @RequestMapping(value = "/trucks", method = RequestMethod.GET)
     public String getTruckPage() {
         return "secure/manager/trucks";
+    }
+
+    /**
+     * Fetches a list of all trucks using the TruckService and puts it to the response map.
+     */
+    @RequestMapping(value = "/TruckList.do", method = RequestMethod.POST)
+    public void getAllTrucks(HttpServletResponse resp) throws IOException {
+
+        List truckList = truckService.listTrucks();
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("data", truckList);
+
+        new GsonParser().parse(resultMap, resp);
     }
 
 //    /**
