@@ -8,18 +8,27 @@
 
 <ui:composition>
     <h:head>
-        <h1><h:outputText value="jsf-ejb example" /></h1>
+        <h1><h:outputText value="Driver Status Service" /></h1>
     </h:head>
 
     <h:body>
-        <!--<f:view>-->
-            <!--<h:outputLabel value="Hello, world"/>-->
-        <!--</f:view>-->
+        <h1>Hello, driver!</h1>
+        <div id="container">
+            <h:form id="response">
+                <h:panelGrid columns="2">
+                    <h:outputLabel>Your current status:</h:outputLabel>
+                    <h:outputLabel value="#{driverStatus.message}" />
+                </h:panelGrid>
+            </h:form>
 
-        <h:form id="form">
-            <h:outputLabel value="helloEJB returned message: "/>
-            <h:outputText  value="#{HelloJSFBean.message}"/>
-        </h:form>
+            <h:form id="statusForm">
+                <h:panelGrid columns="3">
+                    <h:outputLabel>New status:</h:outputLabel>
+                    <h:inputText value="#{status}" />
+                    <h:commandButton id="add" value="Set" action="#{driverStatus.setStatus(status)}"/>
+                </h:panelGrid>
+            </h:form>
+        </div>
     </h:body>
 </ui:composition>
 

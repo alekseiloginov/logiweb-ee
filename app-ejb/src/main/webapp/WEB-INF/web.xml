@@ -19,9 +19,9 @@
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
 
-    <!--<welcome-file-list>-->
-    <!--<welcome-file>faces/helloWorld.xhtml</welcome-file>-->
-    <!--</welcome-file-list>-->
+    <welcome-file-list>
+    <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
 
     <!-- Log4j -->
     <!--<context-param>-->
