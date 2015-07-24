@@ -7,7 +7,8 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>app</module>
+        <module>app-spring</module>
+        <module>app-ejb</module>
         <module>db</module>
     </modules>
     <name>Logiweb - Enterprise Edition</name>
