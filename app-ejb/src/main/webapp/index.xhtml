@@ -12,21 +12,31 @@
     </h:head>
 
     <h:body>
-        <h1>Hello, driver!</h1>
+        <h2>Hello, driver!</h2>
         <div id="container">
+
             <h:form id="response">
                 <h:panelGrid columns="2">
                     <h:outputLabel>Your current status:</h:outputLabel>
                     <h:outputLabel value="#{driverStatus.message}" />
                 </h:panelGrid>
             </h:form>
+            <br />
+
 
             <h:form id="statusForm">
-                <h:panelGrid columns="3">
-                    <h:outputLabel>New status:</h:outputLabel>
-                    <h:inputText value="#{status}" />
-                    <h:commandButton id="add" value="Set" action="#{driverStatus.setStatus(status)}"/>
-                </h:panelGrid>
+
+                Select new status :
+                <h:selectOneRadio value="#{status}">
+                    <f:selectItem itemValue="Free" itemLabel="Free" />
+                    <f:selectItem itemValue="In Shift" itemLabel="In Shift" />
+                    <f:selectItem itemValue="Driving" itemLabel="Driving" />
+                </h:selectOneRadio>
+                <br />
+
+                <h:commandButton value="Change" action="#{driverStatus.setStatus(status)}" />
+                <h:commandButton value="Reset" type="reset" />
+
             </h:form>
         </div>
     </h:body>
