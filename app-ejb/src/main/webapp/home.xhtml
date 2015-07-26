@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Driver Rest UI</title>
+    <h:outputStylesheet library="css" name="style.css"  />
+</h:head>
+
+<ui:fragment rendered="#{identity.loggedIn}">
+    <br />
+    <h1>Hello, #{identity.account.firstName}!</h1>
+    <br />
+
+    <div class="container">
+        <h2>Driver Status</h2>
+
+        <h:form id="driverStatusResponse">
+            <h:panelGrid columns="2">
+                <h:outputLabel>Your current status:</h:outputLabel>
+                <h:outputLabel value="#{driverBean.driverStatusMessage}" />
+            </h:panelGrid>
+        </h:form>
+
+        <h:form id="driverStatusForm">
+
+            <p>Select new status :</p>
+            <h:selectOneRadio value="#{driverStatus}">
+                <f:selectItem itemValue="free" itemLabel="Free" />
+                <f:selectItem itemValue="shift" itemLabel="In Shift" />
+                <f:selectItem itemValue="driving" itemLabel="Driving" />
+            </h:selectOneRadio>
+            <br />
+
+            <h:commandButton value="Change" action="#{driverBean.setDriverStatus(driverStatus)}" />
+            <!--<h:commandButton value="Reset" type="reset" />-->
+            <br />
+            <br />
+
+            <h:outputLink class="mini-container"
+                          value="http://localhost:8080/logiweb-ee/rest/driver/#{identity.account.loginName}/status/#{driverStatus}" >
+                <p>Save</p>
+            </h:outputLink>
+
+        </h:form>
+    </div>
+
+    <br />
+    <br />
+    <br />
+
+    <div class="container">
+        <h2>Freights Status</h2>
+
+        <h:form id="freightStatusResponse">
+            <h:panelGrid columns="2">
+                <h:outputLabel> Current status of freight #{freightID}:</h:outputLabel>
+                <h:outputLabel value="#{driverBean.freightStatusMessage}" />
+            </h:panelGrid>
+        </h:form>
+
+        <h:form id="freightStatusForm">
+
+            <h:outputLabel for="freightID" value="Freight ID" />
+            <h:inputText id="freightID" value="#{freightID}"/>
+
+            <p>Select new status :</p>
+            <h:selectOneRadio value="#{freightStatus}">
+                <f:selectItem itemValue="shipped" itemLabel="Shipped" />
+                <f:selectItem itemValue="delivered" itemLabel="Delivered" />
+            </h:selectOneRadio>
+            <br />
+
+            <h:commandButton value="Change" action="#{driverBean.setFreightStatus(freightStatus)}" />
+            <!--<h:commandButton value="Reset" type="reset" />-->
+            <br />
+            <br />
+
+            <h:outputLink class="mini-container"
+                          value="http://localhost:8080/logiweb-ee/rest/freight/#{freightID}/status/#{freightStatus}" >
+                <p>Save</p>
+            </h:outputLink>
+
+        </h:form>
+    </div>
+
+
+    <h:form>
+        <h:commandButton id="logout" value="Log out" action="#{identity.logout}"/>
+    </h:form>
+</ui:fragment>
+
+<h:form id="loginForm" rendered="#{not identity.loggedIn}">
+    <h:messages globalOnly="true"/>
+
+    <div class="container">
+
+        <div class="loginRow">
+            <h:outputLabel for="name" value="Driver #" styleClass="loginLabel"/>
+            <h:inputText id="name" value="#{loginCredentials.userId}"/>
+        </div>
+
+        <div class="loginRow">
+            <h:outputLabel for="password" value="Password" styleClass="loginLabel"/>
+            <h:inputSecret id="password" value="#{loginCredentials.password}" redisplay="true"/>
+        </div>
+    </div>
+    <br />
+
+    <div class="buttons">
+        <h:commandButton id="login" value="Login" action="#{identity.login}" styleClass="loginButton"/>
+    </div>
+</h:form>
+
+</html>

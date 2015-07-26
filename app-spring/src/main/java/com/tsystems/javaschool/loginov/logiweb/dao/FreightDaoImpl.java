@@ -4,6 +4,7 @@ import com.tsystems.javaschool.loginov.logiweb.models.Freight;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,7 +30,16 @@ public class FreightDaoImpl implements FreightDao {
 
     public void updateFreight(Freight freight) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.update(freight);
+        int freightId = freight.getId();
+        String newFreightStatus = freight.getStatus();
+
+        Freight dbFreight = (Freight) session.createCriteria(Freight.class)
+                .add(Restrictions.eq("id", freightId))
+                .uniqueResult();
+
+        dbFreight.setStatus(newFreightStatus);
+
+        session.update(dbFreight);
         logger.info("Freight updated successfully, Freight details=" + freight);
     }
 

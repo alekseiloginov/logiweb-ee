@@ -36,7 +36,7 @@ public class DriverStatusChange {
     @Column(name = "last_modified_time")
     private Date last_modified_time;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "driver_id", nullable = false)
     private Driver driver;
 

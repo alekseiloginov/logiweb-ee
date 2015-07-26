@@ -85,6 +85,14 @@
         <beans:property name="freightDao" ref="freightDao" />
     </beans:bean>
 
+    <!-- DriverStatusChange DAO & Service beans -->
+    <beans:bean id="driverStatusChangeDao" class="com.tsystems.javaschool.loginov.logiweb.dao.DriverStatusChangeDaoImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="driverStatusChangeService" class="com.tsystems.javaschool.loginov.logiweb.services.DriverStatusChangeService">
+        <beans:property name="driverStatusChangeDao" ref="driverStatusChangeDao" />
+    </beans:bean>
+
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

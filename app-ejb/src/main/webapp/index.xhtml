@@ -28,14 +28,18 @@
 
                 Select new status :
                 <h:selectOneRadio value="#{status}">
-                    <f:selectItem itemValue="Free" itemLabel="Free" />
-                    <f:selectItem itemValue="In Shift" itemLabel="In Shift" />
-                    <f:selectItem itemValue="Driving" itemLabel="Driving" />
+                    <f:selectItem itemValue="free" itemLabel="Free" />
+                    <f:selectItem itemValue="shift" itemLabel="In Shift" />
+                    <f:selectItem itemValue="driving" itemLabel="Driving" />
                 </h:selectOneRadio>
                 <br />
 
                 <h:commandButton value="Change" action="#{driverStatus.setStatus(status)}" />
                 <h:commandButton value="Reset" type="reset" />
+
+                <h:outputLink value="http://localhost:8080/logiweb-ee/rest/driver/status/#{status}" >
+                    Save
+                </h:outputLink>
 
             </h:form>
         </div>
