@@ -5,6 +5,11 @@
 
     <display-name>Logiweb EE - EJB/JSF</display-name>
 
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>bootstrap</param-value>
+    </context-param>
+
     <!-- Redirect any 500 Error Code to /error.jsf -->
     <!--<error-page>-->
         <!--<error-code>500</error-code>-->

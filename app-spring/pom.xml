@@ -188,6 +188,33 @@
             <version>0.1.7</version>
         </dependency>
 
+        <!-- Apache CXF - JAX.WS -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <!-- Apache CXF - JAX.RS -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <!-- Apache CXF - Transports HTTP -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+        <!-- Jackson JSON - JAX-RS provider - 2.6.0 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+
         <!-- CGLIB, only required and used for @Configuration usage -->
         <!--<dependency>-->
             <!--<groupId>cglib</groupId>-->
