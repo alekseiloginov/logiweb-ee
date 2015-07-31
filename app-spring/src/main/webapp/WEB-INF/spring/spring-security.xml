@@ -14,15 +14,14 @@
         <intercept-url pattern="/freights**" access="hasRole('ROLE_MANAGER')" />
         <!--<intercept-url pattern="/trucks" access="permitAll" />-->
 
-        <form-login login-page="/login_manager"
+        <form-login login-page="/landing"
                     default-target-url="/welcome"
-                    authentication-failure-url="/login_manager?error"
+                    authentication-failure-url="/landing?error"
                     login-processing-url="/j_spring_security_check"
                     username-parameter="email"
                     password-parameter="password"/>
 
-        <!-- Add an adequate redirect for a driver too -->
-        <logout logout-success-url="/login_manager?logout"
+        <logout logout-success-url="/landing?logout"
                 logout-url="/j_spring_security_logout" />
 
         <!-- disable csrf protection -->

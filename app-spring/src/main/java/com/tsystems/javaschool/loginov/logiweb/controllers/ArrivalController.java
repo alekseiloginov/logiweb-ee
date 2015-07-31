@@ -101,8 +101,21 @@ public class ArrivalController {
      * Redirects a user to the landing page.
      */
     @RequestMapping(value = {"/", "/landing"}, method = RequestMethod.GET)
-    public String landing() {
-        return "landing";
+    public ModelAndView landing(@RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "logout", required = false) String logout,
+                                ModelAndView model) {
+
+        if (error != null) {
+            model.addObject("error", "Invalid email address or password");
+        }
+
+        if (logout != null) {
+            model.addObject("success", "You've been logged out successfully!");
+        }
+
+        model.setViewName("landing");
+
+        return model;
     }
 
     /**

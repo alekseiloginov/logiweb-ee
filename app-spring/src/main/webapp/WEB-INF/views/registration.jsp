@@ -1,43 +1,67 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
 
-<head lang="en">
-  <meta charset="UTF-8">
-  <title>Manager sign-up Page</title>
-  <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>">
-</head>
+<p class="lead">Enter your name, surname, email and password</p>
 
-<body onload='document.regForm.name.focus();'>
-<nav>
-  <a href="landing" title="Go to the welcome page">Home</a>
-  <a href="login_manager" title="Go to the manager login page">Log in</a>
+<form name="regForm" class="form-signup" action="Register.go" onsubmit="return validateRegForm()" method="post">
+    <input type="text" id="name" name="name" class="form-control" placeholder="Name"required autofocus>
+    <input type="text" id="surname" name="surname" class="form-control" placeholder="Surname" required>
+    <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required>
+    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+    <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
+    <button class="btn btn-lg btn-success btn-block" type="submit">Sign up</button>
+</form>
 
-  <button id="manager">Fill form</button>
-</nav>
-<br>
+<%-- Fill Manager Button --%>
+<%--<button id="fill-manager" type="submit" class="btn btn-xs btn-default pull-left">Fill form</button>--%>
 
-<div class="container">
-  <h2>Enter your name, surname, email and password</h2>
-
-  <form name="regForm" action="Register.go" onsubmit="return validateRegForm()" method="post">
-    <input id="name" type="text" name="name" placeholder="name"><br>
-    <input id="surname" type="text" name="surname" placeholder="surname"><br>
-    <input id="email" type="text" name="email" placeholder="email"><br>
-    <input id="password" type="password" name="password" placeholder="password"><br>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <input type="submit" value="Sign-up">
-  </form>
-
-  <div>
+<div>
     <c:if test="${not empty error}">
-      <p class="db_error">${error}</p>
+        <p class="db_error">${error}</p>
     </c:if>
-    <p class="error">Error message</p>
-  </div>
+    <p class="error"></p>
 </div>
 
-<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="<c:url value="/resources/js/script.js"/>" type="text/javascript" charset="utf-8"></script>
-</body>
-</html>
+<style>
+    .form-signup {
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+    .form-signup .form-signup-heading,
+    .form-signup .checkbox {
+        margin-bottom: 10px;
+    }
+    .form-signup .checkbox {
+        font-weight: normal;
+    }
+    .form-signup .form-control {
+        position: relative;
+        height: auto;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .form-signup .form-control:focus {
+        z-index: 2;
+    }
+    .form-signup input[id="name"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .form-signup input[id="surname"] {
+        margin-bottom: -1px;
+        border-radius: 0;
+    }
+    .form-signup input[id="email"] {
+        margin-bottom: -1px;
+        border-radius: 0;
+    }
+    .form-signup input[id="password"] {
+        margin-bottom: 20px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+</style>

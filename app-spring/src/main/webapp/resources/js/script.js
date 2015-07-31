@@ -1,33 +1,38 @@
 $(".error").hide();
 $(".success").hide();
 
-$( "#manager" ).click(function() {
+<!-- Bootstrap Modal JavaScript for login form -->
+$("#myBtn").click(function(){
+    $("#myModal").modal();
+});
+
+$( "#fill-manager" ).click(function() {
     $( "#name" ).val( "Vasya" );
     $( "#surname" ).val( "Pupkin" );
-    $( "#email" ).val( "Alex" );
+    $( "#username" ).val( "Alex" );
     $( "#password" ).val( "1234" );
 });
 
-$( "#login-driver" ).click(function() {
+$( "#fill-driver" ).click(function() {
     $( "#name" ).val( "Vasya" );
     $( "#surname" ).val( "Pupkin" );
-    $( "#email" ).val( "Grisha" );
+    $( "#username" ).val( "Grisha" );
     $( "#password" ).val( "1234" );
 });
 
 function validateLoginForm() {
     var errorHTML;
-    var email = document.forms["loginForm"]["email"].value;
+    var email = document.forms["loginForm"]["username"].value;
     var password = document.forms["loginForm"]["password"].value;
 
     if (email == null || email == "") {
-        errorHTML = "Email must be filled out";
+        errorHTML = "Username must be filled out";
         $(".error").html(errorHTML).show();
-        document.getElementById("email").style.border = "2px solid red";
+        document.getElementById("username").style.border = "2px solid red";
         return false;
     } else if (email != "") {
         $(".error").hide();
-        document.getElementById("email").style.border = "2px solid #3f8abf";
+        document.getElementById("username").style.border = "2px solid #3f8abf";
     }
 
     if (password == null || password == "") {
@@ -39,7 +44,7 @@ function validateLoginForm() {
         $(".error").hide();
         document.getElementById("password").style.border = "2px solid #3f8abf";
     }
-    $('input[type="submit"]').hide();
+    $('button[type="submit"]').hide();
     var successHTML = "Processing...";
     $(".success").html(successHTML).show();
 }

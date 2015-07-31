@@ -10,7 +10,7 @@
 <nav>
     <a href="trucks" title="Truck list">Trucks</a>
     <a href="drivers" title="Driver list">Drivers</a>
-    <a href="orders?role=manager" title="Order list">Orders</a>
+    <a href="orders" title="Order list">Orders</a>
     <a href="freights" title="Freight list">Freights</a>
 </nav>
 <br>
