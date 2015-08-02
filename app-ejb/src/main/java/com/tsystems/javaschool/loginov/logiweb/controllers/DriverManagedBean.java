@@ -43,9 +43,16 @@ public class DriverManagedBean {
 
         try {
             result = statusEJB.setFreightStatus(freightId, freightStatus);
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                                        "Freight status successfully saved! Current status of freight with id #"
-                                        + freightId + " now is " + freightStatus.toUpperCase(), null);
+            if (!result.isEmpty()) {
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Freight status successfully saved! Current status of freight with id #"
+                                + freightId + " now is " + freightStatus.toUpperCase(), null);
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Can't set this freight status with the mentioned freight id.", null);
+                logger.error("Exception while setting a new freight status");
+            }
 
         } catch (Exception e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,

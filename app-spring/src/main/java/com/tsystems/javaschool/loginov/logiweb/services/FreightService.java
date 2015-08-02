@@ -30,6 +30,11 @@ public class FreightService {
     }
 
     @Transactional
+    public void updateFreightStatus(Freight freight) {
+        this.freightDao.updateFreightStatus(freight);
+    }
+
+    @Transactional
     public List<Freight> listFreights() {
         return this.freightDao.listFreights();
     }

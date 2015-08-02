@@ -1,12 +1,16 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
+import com.tsystems.javaschool.loginov.logiweb.models.DriverStatusChange;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Hibernate specific DAO implementation for drivers.
@@ -31,6 +35,47 @@ public class DriverDaoImpl implements DriverDao {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(driver);
         logger.info("Driver updated successfully, Driver details=" + driver);
+    }
+
+    public void updateDriverStatusAndWorkedHours(Driver driver) {
+        Session session = this.sessionFactory.getCurrentSession();
+        int driverId = driver.getId();
+        String newDriverStatus = driver.getStatus();
+
+        Driver dbDriver = (Driver) session.createCriteria(Driver.class)
+                .add(Restrictions.eq("id", driverId))
+                .uniqueResult();
+
+        // update driver's worked hours
+        String lastDriverStatus = dbDriver.getStatus();
+
+        // if statuses are the same or last one is FREE, don't update driver's worked hours
+        if (!newDriverStatus.equalsIgnoreCase(lastDriverStatus) && !lastDriverStatus.equalsIgnoreCase("free")) {
+
+            DriverStatusChange lastDriverStatusChange =
+                    (DriverStatusChange) session.createCriteria(DriverStatusChange.class)
+                            .add(Restrictions.eq("driver", dbDriver))
+                            .add(Restrictions.eq("status", lastDriverStatus))
+                            .uniqueResult();
+
+            long statusLastModifiedTimeInMillis = lastDriverStatusChange.getLast_modified_time().getTime();
+
+            long newWorkedHoursInMillis = (new Date()).getTime() - statusLastModifiedTimeInMillis;
+
+//            int newWorkedHours1 = (int) ((newWorkedHoursInMillis / (1000 * 60 * 60)) % 24);
+
+            int newWorkedHours = (int) TimeUnit.MILLISECONDS.toHours(newWorkedHoursInMillis);
+
+            dbDriver.setWorked_hours(dbDriver.getWorked_hours() + newWorkedHours);
+        }
+
+
+
+        // update driver status
+        dbDriver.setStatus(newDriverStatus);
+
+        session.update(dbDriver);
+        logger.info("Driver status updated successfully, Driver details=" + dbDriver);
     }
 
     @SuppressWarnings("unchecked")

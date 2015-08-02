@@ -13,6 +13,8 @@ public interface FreightDao {
 
     void updateFreight(Freight freight);
 
+    void updateFreightStatus(Freight freight);
+
     List<Freight> listFreights();
 
     Freight getFreightById(int id);

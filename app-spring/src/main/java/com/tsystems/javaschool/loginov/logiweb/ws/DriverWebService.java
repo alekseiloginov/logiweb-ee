@@ -11,6 +11,6 @@ import javax.jws.WebService;
 public interface DriverWebService {
 
     @WebMethod
-    public String setDriverStatus(@WebParam(name="driverId") Integer driverId,
-                                  @WebParam(name="driverStatus") String driverStatus);
+    String setDriverStatus(@WebParam(name="driverId") Integer driverId,
+                           @WebParam(name="driverStatus") String driverStatus);
 }

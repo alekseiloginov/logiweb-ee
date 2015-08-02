@@ -30,6 +30,12 @@ public class FreightDaoImpl implements FreightDao {
 
     public void updateFreight(Freight freight) {
         Session session = this.sessionFactory.getCurrentSession();
+        session.update(freight);
+        logger.info("Freight updated successfully, Freight details=" + freight);
+    }
+
+    public void updateFreightStatus(Freight freight) {
+        Session session = this.sessionFactory.getCurrentSession();
         int freightId = freight.getId();
         String newFreightStatus = freight.getStatus();
 
@@ -40,7 +46,7 @@ public class FreightDaoImpl implements FreightDao {
         dbFreight.setStatus(newFreightStatus);
 
         session.update(dbFreight);
-        logger.info("Freight updated successfully, Freight details=" + freight);
+        logger.info("Freight status updated successfully, Freight details=" + dbFreight);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,17 +61,17 @@ public class FreightDaoImpl implements FreightDao {
 
     public Freight getFreightById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Freight freight = (Freight) session.load(Freight.class, new Integer(id));
-        logger.info("Freight loaded successfully, Freight details=" + freight);
+        Freight freight = (Freight) session.get(Freight.class, id);
+        logger.info("Freight by id loaded, Freight details=" + freight);
         return freight;
     }
 
     public void removeFreight(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Freight freight = (Freight) session.load(Freight.class, new Integer(id));
-        if (freight != null){
+        Freight freight = (Freight) session.get(Freight.class, id);
+        if (freight != null) {
             session.delete(freight);
+            logger.info("Freight deleted successfully, Freight details=" + freight);
         }
-        logger.info("Freight deleted successfully, Freight details=" + freight);
     }
 }

@@ -1,47 +1,142 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
 
-<head>
-    <title>Trucks</title>
-    <!-- My styles -->
-    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>" />
-    <!-- JQuery UI - Overcast theme styles -->
-    <link rel="stylesheet" href="<c:url value="/resources/css/jquery-ui.css"/>" />
-    <link rel="stylesheet" href="<c:url value="/resources/css/jquery-ui.theme.css"/>" />
-    <link rel="stylesheet" href="<c:url value="/resources/css/jquery-ui.structure.css"/>" />
-    <!-- jTable styles -->
-    <link rel="stylesheet" href="<c:url value="/resources/jtable/themes/metro/lightgray/jtable.min.css"/>" />
-    <!-- jTable: CSS file for validation engine -->
-    <link rel="stylesheet" href="<c:url value="/resources/css/validationEngine.jquery.css"/>" />
-</head>
+<li class="active">
+    <a href="trucks"><i class="fa fa-fw fa-bus"></i> Trucks</a>
+</li><br><br>
 
-<body>
-<nav>
-    <a href="drivers" title="Driver list">Drivers</a>
-    <a href="orders" title="Order list">Orders</a>
-    <a href="freights" title="Freight list">Freights</a>
-    <a href="welcome" title="Welcome page">Home</a>
-</nav>
-<br><br>
 
-<div class="container">
-    <div id="TruckTableContainer"></div>
+<h2 class="sub-header">Truck list</h2><hr />
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Plate number</th>
+            <th>Driver number</th>
+            <th>Capacity (tons)</th>
+            <th>Drivable</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>AB12345</td>
+            <td>2</td>
+            <td>2</td>
+            <td>✔</td>
+            <td>Moscow</td>
+        </tr>
+        <tr>
+            <td>BC67890</td>
+            <td>2</td>
+            <td>3</td>
+            <td>✔</td>
+            <td>Peterburg</td>
+        </tr>
+        <tr>
+            <td>DE98765</td>
+            <td>3</td>
+            <td>4</td>
+            <td>✔</td>
+            <td>Minsk</td>
+        </tr>
+        <tr>
+            <td>FG23415</td>
+            <td>2</td>
+            <td>1</td>
+            <td>✔</td>
+            <td>Tver</td>
+        </tr>
+        <tr>
+            <td>CE66211</td>
+            <td>3</td>
+            <td>3</td>
+            <td>✔</td>
+            <td>Murmansk</td>
+        </tr>
+        <%--<tr>--%>
+            <%--<td>1,005</td>--%>
+            <%--<td>Nulla</td>--%>
+            <%--<td>quis</td>--%>
+            <%--<td>sem</td>--%>
+            <%--<td>at</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,006</td>--%>
+            <%--<td>nibh</td>--%>
+            <%--<td>elementum</td>--%>
+            <%--<td>imperdiet</td>--%>
+            <%--<td>Duis</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,007</td>--%>
+            <%--<td>sagittis</td>--%>
+            <%--<td>ipsum</td>--%>
+            <%--<td>Praesent</td>--%>
+            <%--<td>mauris</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,008</td>--%>
+            <%--<td>Fusce</td>--%>
+            <%--<td>nec</td>--%>
+            <%--<td>tellus</td>--%>
+            <%--<td>sed</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,009</td>--%>
+            <%--<td>augue</td>--%>
+            <%--<td>semper</td>--%>
+            <%--<td>porta</td>--%>
+            <%--<td>Mauris</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,010</td>--%>
+            <%--<td>massa</td>--%>
+            <%--<td>Vestibulum</td>--%>
+            <%--<td>lacinia</td>--%>
+            <%--<td>arcu</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,011</td>--%>
+            <%--<td>eget</td>--%>
+            <%--<td>nulla</td>--%>
+            <%--<td>Class</td>--%>
+            <%--<td>aptent</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,012</td>--%>
+            <%--<td>taciti</td>--%>
+            <%--<td>sociosqu</td>--%>
+            <%--<td>ad</td>--%>
+            <%--<td>litora</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,013</td>--%>
+            <%--<td>torquent</td>--%>
+            <%--<td>per</td>--%>
+            <%--<td>conubia</td>--%>
+            <%--<td>nostra</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,014</td>--%>
+            <%--<td>per</td>--%>
+            <%--<td>inceptos</td>--%>
+            <%--<td>himenaeos</td>--%>
+            <%--<td>Curabitur</td>--%>
+        <%--</tr>--%>
+        <%--<tr>--%>
+            <%--<td>1,015</td>--%>
+            <%--<td>sodales</td>--%>
+            <%--<td>ligula</td>--%>
+            <%--<td>in</td>--%>
+            <%--<td>libero</td>--%>
+        <%--</tr>--%>
+        </tbody>
+    </table>
 </div>
 
-<!-- jQuery lib -->
-<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-<!-- jQuery UI lib -->
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
-<!-- jTable script file -->
-<script src="<c:url value="/resources/jtable/jquery.jtable.min.js"/>" type="text/javascript"></script>
-<!-- My jTable script file -->
-<script src="<c:url value="/resources/js/truck_script.js"/>" type="text/javascript" charset="utf-8"></script>
-<!-- jTable: Javascript files for validation engine -->
-<script src="<c:url value="/resources/js/jquery.validationEngine.js"/>" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/jquery.validationEngine-en.js"/>" type="text/javascript"></script>
-<%--<script src="<c:url value="/resources/js/jquery.validationEngine-de.js"/>" type="text/javascript"></script>--%>
-<!-- jTable DE localization script file -->
-<%--<script src="<c:url value="/resources/jtable/localization/jquery.jtable.de.js"/>" type="text/javascript" charset="utf-8"></script>--%>
-</body>
-</html>
+
+
+
+<br />
+<div id="TruckTableContainer"></div>
+

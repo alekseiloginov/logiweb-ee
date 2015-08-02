@@ -1,6 +1,6 @@
 <div class='footer'>
     <div class='container'>
-        <p>Logiweb &copy;2015</p>
+        <p>&copy; T-Systems 2015</p>
     </div>
 </div>
 

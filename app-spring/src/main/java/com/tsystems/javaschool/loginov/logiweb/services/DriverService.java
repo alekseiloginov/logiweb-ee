@@ -30,6 +30,11 @@ public class DriverService {
     }
 
     @Transactional
+    public void updateDriverStatusAndWorkedHours(Driver driver) {
+        this.driverDao.updateDriverStatusAndWorkedHours(driver);
+    }
+
+    @Transactional
     public List<Driver> listDrivers() {
         return this.driverDao.listDrivers();
     }

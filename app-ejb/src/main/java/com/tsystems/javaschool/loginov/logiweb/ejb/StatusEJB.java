@@ -6,12 +6,12 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 
 /**
  * A simple Status EJB. The EJB does not use an interface.
  */
-@Stateful
+@Stateless
 public class StatusEJB {
 
     /**

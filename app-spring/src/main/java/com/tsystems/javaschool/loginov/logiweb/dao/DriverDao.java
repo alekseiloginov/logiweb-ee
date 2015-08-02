@@ -13,6 +13,8 @@ public interface DriverDao {
 
     void updateDriver(Driver driver);
 
+    void updateDriverStatusAndWorkedHours(Driver driver);
+
     List<Driver> listDrivers();
 
     Driver getDriverById(int id);
