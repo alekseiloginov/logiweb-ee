@@ -8,133 +8,136 @@
 
 <h:head>
     <title>Driver Rest UI</title>
-    <h:outputStylesheet library="css" name="style.css"  />
+    <!--<h:outputStylesheet library="css" name="style.css"  />-->
+    <h:outputStylesheet name="grid/grid.css" library="primefaces" />
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
 </h:head>
 
 <h:body>
-    <pm:page>
-<!--<p:layout fullPage="true">-->
-    <!--<p:layoutUnit header="11111" position="north" size="50">-->
-        <!--<h:outputText value="Top content." />-->
-    <!--</p:layoutUnit>-->
-    <!--<p:layoutUnit footer="0000" position="south" size="100">-->
-        <!--<h:outputText value="Bottom content." />-->
-    <!--</p:layoutUnit>-->
-    <!--<p:layoutUnit position="west" size="300">-->
-        <!--<h:outputText value="Left content" />-->
-    <!--</p:layoutUnit>-->
-    <!--<p:layoutUnit position="east" size="200">-->
-        <!--<h:outputText value="Right Content" />-->
-    <!--</p:layoutUnit>-->
-    <!--<p:layoutUnit position="center">-->
+    <pm:header title="LOGIWEB" swatch="b"/>
+    <p:fragment autoUpdate="true" rendered="#{identity.loggedIn}">
+            <div class="container">
 
-<p:fragment autoUpdate="true" rendered="#{identity.loggedIn}">
-    <br />
-    <h1>Hello, #{identity.account.firstName}!</h1>
-    <br />
+                <div align="middle">
+                    <h5><i class="fa fa-fw fa-clock-o"/> <p:clock pattern="HH:mm:ss - dd.MM.yyyy" /></h5>
+                </div>
 
-    <div class="container">
-        <p:clock autoSync="true" />
-        <h2>Driver Status</h2>
+                <h4><i class="fa fa-fw fa-user"/> #{identity.account.firstName} - status: #{driverStatus}</h4>
 
-        <h:form id="driverStatusResponse">
-            <p:panelGrid columns="2">
-                <p:outputLabel>Your current status:</p:outputLabel>
-                <p:outputLabel value="#{driverStatus}" />
-            </p:panelGrid>
-        </h:form>
+                <p:separator />
 
-        <p:separator />
+                <h:form id="driverStatusForm">
 
-        <h:form id="driverStatusForm">
+                    <p>Select new driver status :</p>
+                    <div class="ui-grid">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-8">
+                                <p:selectOneMenu value="#{driverStatus}" layout="pageDirection">
+                                    <f:selectItem itemValue="free" itemLabel="Free" />
+                                    <f:selectItem itemValue="shift" itemLabel="In Shift" />
+                                    <f:selectItem itemValue="driving" itemLabel="Driving" />
+                                </p:selectOneMenu>
+                            </div>
 
-            <p>Select new status :</p>
-            <p:selectOneRadio value="#{driverStatus}" layout="pageDirection">
-                <f:selectItem itemValue="free" itemLabel="Free" />
-                <f:selectItem itemValue="shift" itemLabel="In Shift" />
-                <f:selectItem itemValue="driving" itemLabel="Driving" />
-            </p:selectOneRadio>
+                            <div class="ui-grid-col-1"></div>
+                            <div class="ui-grid-col-3">
+                                <h:commandButton value="✔"
+                                                 action="#{driverBean.setDriverStatus(identity.account.loginName, driverStatus)}" />
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+                <h:messages id="driverPsuedoGlobalMessages" for="driverStatusForm" globalOnly="true"
+                            infoStyle="color:green" errorStyle="color:red" warnClass="color:orange"/>
+                <h:messages id="driverClientMessages" rendered="#{not empty facesContext.getMessageList('driverStatusForm')}"
+                            globalOnly="false" infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
+
+                <p:separator />
+
+                <!-- Freight list with editing a-la contacts -->
+
+                <!--<h:form id="freightStatusResponse">-->
+                    <!--<h:panelGrid columns="2">-->
+                        <!--<h:outputLabel> Current status of freight #{freightID}:</h:outputLabel>-->
+                        <!--<h:outputLabel value="#{freightStatus}" />-->
+                    <!--</h:panelGrid>-->
+                <!--</h:form>-->
+
+                <h:form id="freightStatusForm">
+
+                    <p>Select new freight status :</p>
+
+                    <h:inputText id="freightID" value="#{freightID}" required="true" style="" />
+                    <p:watermark for="freightID" value="Freight ID" />
+                    <h:message for="freightID" style="color: red"/>
+
+
+                    <div class="ui-grid">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-8">
+                                <p:selectOneMenu value="#{freightStatus}" layout="pageDirection">
+                                    <f:selectItem itemValue="shipped" itemLabel="Shipped" />
+                                    <f:selectItem itemValue="delivered" itemLabel="Delivered" />
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="ui-grid-col-1"></div>
+                            <div class="ui-grid-col-3">
+                                <h:commandButton value="✔"
+                                                 action="#{driverBean.setFreightStatus(freightID, freightStatus)}" />
+                            </div>
+                        </div>
+                    </div>
+
+                </h:form>
+                <h:messages id="freightPsuedoGlobalMessages" for="freightStatusForm" globalOnly="true"
+                            infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
+                <h:messages id="freightClientMessages" rendered="#{not empty facesContext.getMessageList('freightStatusForm')}"
+                            globalOnly="false" infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
+
+                <p:separator />
+
+                <h:form>
+                    <h:commandButton id="logout" value="Log out" action="#{identity.logout}" />
+                </h:form>
+            </div>
+
+    </p:fragment>
+
+    <h:form id="loginForm" rendered="#{not identity.loggedIn}">
+        <h:messages globalOnly="true"/>
+
+        <div class="container">
+            <br />
+            <br />
+            <br />
+            <h4 style="text-align: center">Remote status change service</h4>
             <br />
 
-            <h:commandButton value="SOAP Save" action="#{driverBean.setDriverStatus(identity.account.loginName, driverStatus)}" />
-        </h:form>
-        <h:messages id="driverPsuedoGlobalMessages" for="driverStatusForm" globalOnly="true"
-                    infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
-        <h:messages id="driverClientMessages" rendered="#{not empty facesContext.getMessageList('driverStatusForm')}"
-                    globalOnly="false" infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
-    </div>
-
-    <br />
-    <br />
-    <br />
-
-    <div class="container">
-        <h2>Freights Status</h2>
-
-        <h:form id="freightStatusResponse">
-            <h:panelGrid columns="2">
-                <h:outputLabel> Current status of freight #{freightID}:</h:outputLabel>
-                <h:outputLabel value="#{freightStatus}" />
-            </h:panelGrid>
-        </h:form>
-
-        <h:form id="freightStatusForm">
-
-            <!--<h:outputLabel for="freightID" value="Freight ID" />-->
-            <h:inputText id="freightID" value="#{freightID}"/>
-            <p:watermark for="freightID" value="Freight ID" />
-
-            <p>Select new status :</p>
-            <h:selectOneRadio value="#{freightStatus}">
-                <f:selectItem itemValue="shipped" itemLabel="Shipped" />
-                <f:selectItem itemValue="delivered" itemLabel="Delivered" />
-            </h:selectOneRadio>
+            <div class="loginRow">
+                <!--<p:outputLabel for="ID" value="Driver #" styleClass="loginLabel"/>-->
+                <h:inputText id="ID" value="#{loginCredentials.userId}" required="true"/>
+                <p:watermark for="ID" value="Driver ID" />
+                <h:message for="ID" style="color: red"/>
+            </div>
             <br />
 
-            <h:commandButton value="REST Save" action="#{driverBean.setFreightStatus(freightID, freightStatus)}" />
-        </h:form>
-        <h:messages id="freightPsuedoGlobalMessages" for="freightStatusForm" globalOnly="true"
-                    infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
-        <h:messages id="freightClientMessages" rendered="#{not empty facesContext.getMessageList('freightStatusForm')}"
-                    globalOnly="false" infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
-    </div>
+            <div class="loginRow">
+                <!--<p:outputLabel for="password" value="Password" styleClass="loginLabel"/>-->
+                <h:inputSecret id="password" value="#{loginCredentials.password}" redisplay="true" required="true"/>
+                <p:watermark for="password" value="Password" />
+                <h:message for="password" style="color: red"/>
+            </div>
+            <br />
 
-
-    <h:form>
-        <h:commandButton id="logout" value="Log out" action="#{identity.logout}"/>
+            <div class="buttons">
+                <h:commandButton id="login" value="Login" action="#{identity.login}" styleClass="loginButton"/>
+            </div>
+        </div>
     </h:form>
-</p:fragment>
-
-<h:form id="loginForm" rendered="#{not identity.loggedIn}">
-    <h:messages globalOnly="true"/>
-
-    <div class="container">
-
-        <div class="loginRow">
-            <!--<p:outputLabel for="ID" value="Driver #" styleClass="loginLabel"/>-->
-            <h:inputText id="ID" value="#{loginCredentials.userId}" required="true"/>
-            <p:watermark for="ID" value="Driver ID" />
-            <h:message for="ID" style="color: red"/>
-        </div>
-        <br />
-
-        <div class="loginRow">
-            <!--<p:outputLabel for="password" value="Password" styleClass="loginLabel"/>-->
-            <h:inputSecret id="password" value="#{loginCredentials.password}" redisplay="true" required="true"/>
-            <p:watermark for="password" value="Password" />
-            <h:message for="password" style="color: red"/>
-        </div>
-    </div>
-    <br />
-
-    <div class="buttons">
-        <h:commandButton id="login" value="Login" action="#{identity.login}" styleClass="loginButton"/>
-    </div>
-</h:form>
-
-    <!--</p:layoutUnit>-->
-<!--</p:layout>-->
-    </pm:page>
 </h:body>
 
 </html>

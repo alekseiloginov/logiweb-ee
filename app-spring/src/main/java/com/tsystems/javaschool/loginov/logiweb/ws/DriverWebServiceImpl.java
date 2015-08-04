@@ -22,6 +22,7 @@ public class DriverWebServiceImpl implements DriverWebService {
 
 //    @Autowired(required=true)
 //    @Qualifier(value="driverStatusChangeService")
+//    @Required
 //    public void setDriverStatusChangeService(DriverStatusChangeService driverStatusChangeService){
 //        this.driverStatusChangeService = driverStatusChangeService;
 //    }
