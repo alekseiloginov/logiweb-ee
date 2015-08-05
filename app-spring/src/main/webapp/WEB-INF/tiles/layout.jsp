@@ -41,12 +41,68 @@
 					<ol class="breadcrumb">
 						<li class="active">
 							<i class="fa fa-dashboard"></i> Dashboard
-							<tiles:insertAttribute name="body" />
 						</li>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/welcome'}">
+                            <li>
+                                <a href="welcome"><i class="fa fa-fw fa-home"></i> Home</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/trucks'}">
+                            <li>
+                                <a href="trucks"><i class="fa fa-fw fa-bus"></i> Trucks</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/drivers'}">
+                            <li>
+                                <a href="drivers"><i class="fa fa-fw fa-user"></i> Drivers</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/freights'}">
+                            <li>
+                                <a href="freights"><i class="fa fa-fw fa-cube"></i> Freights</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/orders'}">
+                            <li>
+                                <a href="orders"><i class="fa fa-fw fa-file-text-o"></i> Orders</a>
+                            </li>
+                        </c:if>
 					</ol>
 				</div>
 			</div>
 			<!-- /.row -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/welcome'}">
+                                    <i class="fa fa-fw fa-home"></i> Home
+                                </c:if>
+                                <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/trucks'}">
+                                    <i class="fa fa-fw fa-bus"></i> Trucks
+                                </c:if>
+                                <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/drivers'}">
+                                    <i class="fa fa-fw fa-user"></i> Drivers
+                                </c:if>
+                                <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/freights'}">
+                                    <i class="fa fa-fw fa-cube"></i> Freights
+                                </c:if>
+                                <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/orders'}">
+                                    <i class="fa fa-fw fa-file-text-o"></i> Orders
+                                </c:if>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="body">
+                                <tiles:insertAttribute name="body" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
 
 		</div>
 		<!-- /.container-fluid -->
