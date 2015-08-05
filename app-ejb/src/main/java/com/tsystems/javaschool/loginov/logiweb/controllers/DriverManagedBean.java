@@ -5,25 +5,41 @@ import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A simple managed bean that is used to invoke the StatusEJB and store the status.
  * The status message is obtained by invoking getStatusMessage().
  */
 @ManagedBean(name="driverBean")
-@ApplicationScoped
+@SessionScoped
 public class DriverManagedBean {
     private static Logger logger = Logger.getLogger(DriverManagedBean.class);
-    FacesMessage message;
-    String result = null;
+    private FacesMessage message;
+    private String result = null;
 
     @EJB
     private StatusEJB statusEJB;
 
+    public List<String> getDriverStatusList(Integer driverId) {
+        List<String> driverStatusList = new ArrayList<>(Arrays.asList(new String[]{"free", "shift", "driving"}));
+        String currentDriverStatus = getDriverStatus(driverId).toLowerCase();
+        driverStatusList.remove(currentDriverStatus);
+        return driverStatusList;
+    }
+
     public void setDriverStatus(Integer driverId, String driverStatus) {
+
+        if (driverStatus.isEmpty()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sorry, the driver is already in that status!", null);
+            FacesContext.getCurrentInstance().addMessage("driverStatusForm", message);
+            return;
+        }
 
         try {
             result = statusEJB.setDriverStatus(driverId, driverStatus);
@@ -37,6 +53,10 @@ public class DriverManagedBean {
             e.printStackTrace();
         }
         FacesContext.getCurrentInstance().addMessage("driverStatusForm", message);
+    }
+
+    public String getDriverStatus(Integer driverId) {
+        return statusEJB.getDriverStatus(driverId);
     }
 
     public void setFreightStatus(Integer freightId, String freightStatus) {

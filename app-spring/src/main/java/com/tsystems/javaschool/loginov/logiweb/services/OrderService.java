@@ -1,6 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 import com.tsystems.javaschool.loginov.logiweb.dao.OrderDao;
+import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,11 @@ public class OrderService {
     @Transactional
     public Order getOrderById(int id) {
         return this.orderDao.getOrderById(id);
+    }
+
+    @Transactional
+    public Order getOrderByDriver(Driver driver) {
+        return this.orderDao.getOrderByDriver(driver);
     }
 
     @Transactional

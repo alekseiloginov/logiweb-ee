@@ -1,60 +1,191 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile">
 
 <h:head>
     <title>Driver Rest UI</title>
-    <!-- My CSS file -->
     <!--<h:outputStylesheet library="css" name="style.css"  />-->
+    <h:outputStylesheet name="grid/grid.css" library="primefaces" />
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />-->
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
 </h:head>
 
 <h:body>
+    <h:form id="loginForm" rendered="#{not identity.loggedIn}">
+        <h:messages globalOnly="true"/>
 
-    <pm:page id="first">
-        <pm:header title="Main Page" swatch="b"/>
-        <!--<pm:header title="Main Page"/>-->
+        <div class="container">
+            <br />
+            <br />
+            <br />
+            <h4 style="text-align: center">Remote status change service</h4>
+            <br />
+
+            <div class="loginRow">
+                <!--<p:outputLabel for="ID" value="Driver #" styleClass="loginLabel"/>-->
+                <h:inputText id="ID" value="#{loginCredentials.userId}" required="true"/>
+                <p:watermark for="ID" value="Driver ID" />
+                <h:message for="ID" style="color: red"/>
+            </div>
+            <br />
+
+            <div class="loginRow">
+                <!--<p:outputLabel for="password" value="Password" styleClass="loginLabel"/>-->
+                <h:inputSecret id="password" value="#{loginCredentials.password}" redisplay="true" required="true"/>
+                <p:watermark for="password" value="Password" />
+                <h:message for="password" style="color: red"/>
+            </div>
+            <br />
+
+            <div class="buttons">
+                <h:commandButton id="login" value="Login" action="#{identity.login}" styleClass="loginButton"/>
+            </div>
+        </div>
+    </h:form>
+
+    <pm:page id="list">
+        <pm:header title="Contacts" swatch="b">
+                <p:commandButton styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-delete" id="logout" value="Log out"
+                                 action="#{identity.logout}" />
+        </pm:header>
+
         <pm:content>
-            <p>Choose a new status</p>
-            <!--<p:panelGrid columns="2">-->
+            <h:form id="listForm">
+                <p:dataList id="freightsList" value="#{freightStatusBean.getFreights(identity.account.loginName)}" var="freight" pt:data-inset="true">
+                    <p:commandLink value="#{freight.id} - #{freight.name} - #{freight.status}"
+                                   update=":edit:editForm:editFormPanel"
+                                   action="pm:edit?transition=flip">
+                        <f:setPropertyActionListener value="#{freight}" target="#{freightStatusBean.freight}" />
+                    </p:commandLink>
+                </p:dataList>
 
-                <p:selectOneMenu id="selectOneDriverStatus">
-                    <f:selectItem itemLabel="Select" itemValue="" />
-                    <f:selectItem itemLabel="Free" itemValue="free" />
-                    <f:selectItem itemLabel="In Shift" itemValue="shift" />
-                    <f:selectItem itemLabel="Driving" itemValue="driving" />
-                </p:selectOneMenu>
-                <p:button outcome="pm:second?transition=flow" value="SOAP Save-Flow" />
-                <p:button outcome="pm:second?transition=flip" value="Freight-Flip" />
+                <div class="container">
 
-                <p:commandButton value="SOAP Save" action="#{driverBean.setDriverStatus(identity.account.loginName, driverStatus)}" />
-            <!--</p:panelGrid>-->
-            <p:button id="logout" value="Log out" action="#{identity.logout}" />
+                    <div align="middle">
+                        <h5><i class="fa fa-fw fa-clock-o"/> <p:clock pattern="HH:mm:ss - dd.MM.yyyy" /></h5>
+                    </div>
+
+                    <p:separator />
+
+                    <h4><i class="fa fa-fw fa-user"/> Driver ##{identity.account.loginName}: #{identity.account.firstName}</h4>
+
+                    <h:form id="driverStatusForm">
+                        <p:growl id="growl" />
+
+                        <div class="ui-grid">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-8">
+                                    <p:selectOneMenu value="#{newDriverStatus}" layout="pageDirection">
+                                        <f:selectItem itemValue=""
+                                                      itemLabel="Status: #{driverBean.getDriverStatus(identity.account.loginName)}" />
+                                        <f:selectItems value="#{driverBean.getDriverStatusList(identity.account.loginName)}"/>
+                                    </p:selectOneMenu>
+                                </div>
+
+                                <div class="ui-grid-col-1"></div>
+                                <div class="ui-grid-col-3">
+                                    <h:commandButton value="✔"
+                                                     action="#{driverBean.setDriverStatus(identity.account.loginName, newDriverStatus)}"
+                                                     update="growl"/>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                    <!--<h:messages id="driverPsuedoGlobalMessages" for="driverStatusForm" globalOnly="true"-->
+                    <!--infoStyle="color:green" errorStyle="color:red" warnClass="color:orange"/>-->
+                    <!--<h:messages id="driverClientMessages" rendered="#{not empty facesContext.getMessageList('driverStatusForm')}"-->
+                    <!--globalOnly="false" infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />-->
+
+                    <p:separator />
+
+                    <!-- Freight list with editing a-la contacts -->
+
+                    <!--<h:form id="freightStatusResponse">-->
+                    <!--<h:panelGrid columns="2">-->
+                    <!--<h:outputLabel> Current status of freight #{freightID}:</h:outputLabel>-->
+                    <!--<h:outputLabel value="#{freightStatus}" />-->
+                    <!--</h:panelGrid>-->
+                    <!--</h:form>-->
+
+                    <h:form id="freightStatusForm">
+
+                        <p>Select new freight status :</p>
+
+                        <h:inputText id="freightID" value="#{freightID}" required="true" style="" />
+                        <p:watermark for="freightID" value="Freight ID" />
+                        <h:message for="freightID" style="color: red"/>
+
+
+                        <div class="ui-grid">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-8">
+                                    <p:selectOneMenu value="#{newFreightStatus}" layout="pageDirection">
+                                        <f:selectItem itemValue="shipped" itemLabel="Shipped" />
+                                        <f:selectItem itemValue="delivered" itemLabel="Delivered" />
+                                    </p:selectOneMenu>
+                                </div>
+
+                                <div class="ui-grid-col-1"></div>
+                                <div class="ui-grid-col-3">
+                                    <h:commandButton styleClass="ui-btn-right ui-btn-inline"  icon="ui-icon-plus" value="✔"
+                                                     action="#{driverBean.setFreightStatus(freightID, newFreightStatus)}" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </h:form>
+                    <h:messages id="freightPsuedoGlobalMessages" for="freightStatusForm" globalOnly="true"
+                                infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
+                    <h:messages id="freightClientMessages" rendered="#{not empty facesContext.getMessageList('freightStatusForm')}"
+                                globalOnly="false" infoStyle="color:green" errorStyle="color:red" warnClass="color:orange" />
+
+                    <p:separator />
+
+                </div>
+            </h:form>
         </pm:content>
     </pm:page>
-    <pm:page id="second">
-        <pm:header title="Second Page">
-            <p:button outcome="pm:first" value="Back" icon="ui-icon-arrow-l" styleClass="ui-btn-left ui-btn-inline"/>
-        </pm:header>
-        <pm:content>
-            <p>Choose a freight and it's status</p>
-            <p:selectOneMenu id="selectOneFreightStatus">
-                <f:selectItem itemLabel="Select" itemValue="" />
-                <f:selectItem itemLabel="Shipped" itemValue="shipped" />
-                <f:selectItem itemLabel="Delivered" itemValue="delivered" />
-            </p:selectOneMenu>
-            <p:button value="REST Save-Flow" outcome="pm:first?transition=flow" />
 
-            <p:button value="Driver-Flip" outcome="pm:first?transition=flip" />
+    <pm:page id="edit">
+        <pm:header title="Contacts" swatch="b">
+            <p:button styleClass="ui-btn-left ui-btn-inline" value="Back" icon="ui-icon-arrow-l" outcome="pm:list?transition=flip"/>
+        </pm:header>
+
+        <pm:content>
+            <h:form id="editForm">
+                <p:outputPanel id="editFormPanel">
+                    <pm:field>
+                        <h4>Freight ID:</h4>
+                        <h4>#{freightStatusBean.freight.id}</h4>
+                    </pm:field>
+
+                    <pm:field>
+                        <h4>Freight Title:</h4>
+                        <h4>#{freightStatusBean.freight.name}</h4>
+                    </pm:field>
+
+                    <pm:field>
+                        <p:outputLabel for="status" value="Status" />
+                        <p:selectOneButton id="status" value="#{freightStatusBean.freight.status}">
+                            <f:selectItem itemLabel="Shipped" itemValue="shipped" />
+                            <f:selectItem itemLabel="Delivered" itemValue="delivered" />
+                        </p:selectOneButton>
+                    </pm:field>
+                </p:outputPanel>
+
+                <p:commandButton value="Save"
+                                 action="#{freightStatusBean.updateFreight(freightStatusBean.freight.id,
+                                                                            freightStatusBean.freight.status)}"
+                                 update=":list:listForm:freightsList" icon="ui-icon-check"/>
+            </h:form>
+
         </pm:content>
     </pm:page>
 </h:body>

@@ -1,5 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
+import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Order;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -45,8 +46,26 @@ public class OrderDaoImpl implements OrderDao {
 
     public Order getOrderById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Order order = (Order) session.load(Order.class, new Integer(id));
-        logger.info("Order loaded successfully, Order details=" + order);
+        Order order = (Order) session.get(Order.class, id);
+        logger.info("Order by id loaded successfully, Order details=" + order);
+        return order;
+    }
+
+    public Order getOrderByDriver(Driver driver) {
+        Order order = null;
+        Session session = this.sessionFactory.getCurrentSession();
+
+        int driverId = driver.getId();
+
+        List orderIdList = session.createSQLQuery("SELECT order_id FROM order_drivers WHERE driver_id="+driverId).list();
+
+        if (!orderIdList.isEmpty()) {
+            int orderId = (int) orderIdList.get(0);
+            order = (Order) session.get(Order.class, orderId);
+            logger.info("Order by driver loaded successfully, Order details=" + order);
+        } else {
+            logger.info("No freights found for the Drivers=" + driver);
+        }
         return order;
     }
 

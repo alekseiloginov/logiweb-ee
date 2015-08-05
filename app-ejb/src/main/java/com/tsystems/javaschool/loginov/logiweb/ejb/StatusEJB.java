@@ -1,5 +1,8 @@
 package com.tsystems.javaschool.loginov.logiweb.ejb;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tsystems.javaschool.loginov.logiweb.models.Freight;
 import com.tsystems.javaschool.loginov.logiweb.ws.DriverWebService;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -7,6 +10,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 
 import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple Status EJB. The EJB does not use an interface.
@@ -15,10 +20,10 @@ import javax.ejb.Stateless;
 public class StatusEJB {
 
     /**
-     * This method takes a driver id and status and saves them using SOAP webservice.
+     * This method takes a driver id and status and updates the status them using SOAP webservice.
      *
-     * @param driverId the id to be saves
-     * @param driverStatus the status to be saves
+     * @param driverId driver id to update his/her status
+     * @param driverStatus the status to update
      * @return the result message
      */
     public String setDriverStatus(Integer driverId, String driverStatus) {
@@ -33,16 +38,33 @@ public class StatusEJB {
     }
 
     /**
-     * This method takes a freight id and status and saves them using RESTful webservice.
+     * This method takes a driver id and gets his/her status using SOAP webservice.
      *
-     * @param freightId the id to be saves
-     * @param freightStatus the status to be saves
+     * @param driverId driver id to get his/her status
+     * @return the result message
+     */
+    public String getDriverStatus(Integer driverId) {
+
+        String serviceUrl = "http://localhost:8080/logiweb-ee/services/soap";
+        JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+        factory.setServiceClass(DriverWebService.class);
+        factory.setAddress(serviceUrl);
+        DriverWebService driverWebService = (DriverWebService) factory.create();
+
+        return driverWebService.getDriverStatus(driverId);
+    }
+
+    /**
+     * This method takes a freight id and status and updates the status using RESTful webservice.
+     *
+     * @param freightId freight id to update its status
+     * @param freightStatus the status to update
      * @return the result message.
      */
     public String setFreightStatus(Integer freightId, String freightStatus) throws Exception {
 
         String serviceUrl =
-                "http://localhost:8080/logiweb-ee/services/rest/freight/" + freightId + "/status/" + freightStatus;
+                "http://localhost:8080/logiweb-ee/services/rest/freights/" + freightId + "/statuses/" + freightStatus;
 
         HttpClient client = new HttpClient();
         PostMethod postMethod = new PostMethod(serviceUrl);
@@ -58,5 +80,42 @@ public class StatusEJB {
         postMethod.releaseConnection();
 
         return output;
+    }
+
+    /**
+     * This method takes a driver id and responses with the driver's freight list using RESTful webservice.
+     *
+     * @param driverId driver id to get his/her freights
+     * @return the result message.
+     */
+    public List<Freight> getFreightList(Integer driverId) throws Exception {
+        List<Freight> freightList;
+
+        String serviceUrl =
+                "http://localhost:8080/logiweb-ee/services/rest/drivers/" + driverId + "/freights/list";
+
+        HttpClient client = new HttpClient();
+        PostMethod postMethod = new PostMethod(serviceUrl);
+        client.executeMethod(postMethod);
+        Header requestHeader = new Header();
+        requestHeader.setName("content-type");
+        requestHeader.setValue("application/x-www-form-urlencoded");
+        requestHeader.setName("accept");
+        requestHeader.setValue("application/json");
+        postMethod.addRequestHeader(requestHeader);
+        client.executeMethod(postMethod);
+        String output = postMethod.getResponseBodyAsString();
+        postMethod.releaseConnection();
+
+        if (!output.isEmpty()) {
+            // parsing JSON string to Java List using Jackson
+            ObjectMapper objectMapper = new ObjectMapper();
+            freightList = objectMapper.readValue(output, new TypeReference<List<Freight>>() {
+            });
+        } else {
+            freightList = new ArrayList<>();
+        }
+
+        return freightList;
     }
 }

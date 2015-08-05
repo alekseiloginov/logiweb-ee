@@ -28,7 +28,7 @@ public class DriverWebServiceImpl implements DriverWebService {
 //    }
 
     /**
-     * Takes an id and a status of a driver and responses with the driver status.
+     * Takes an id and a status of a driver and responses with the driver status using SOAP webservice.
      */
     public String setDriverStatus(Integer driverId, String driverStatus) {
 
@@ -42,5 +42,12 @@ public class DriverWebServiceImpl implements DriverWebService {
         driverService.updateDriverStatusAndWorkedHours(driver);
 
         return "Driver status successfully saved!";
+    }
+
+    /**
+     * Takes a driver id and gets his/her status using SOAP webservice.
+     */
+    public String getDriverStatus(Integer driverId) {
+        return driverService.getDriverById(driverId).getStatus();
     }
 }
