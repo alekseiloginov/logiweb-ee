@@ -9,9 +9,9 @@ import java.util.List;
  */
 public interface FreightDao {
 
-    void addFreight(Freight freight);
+    Freight addFreight(Freight freight);
 
-    void updateFreight(Freight freight);
+    Freight updateFreight(Freight freight);
 
     void updateFreightStatus(Freight freight);
 
@@ -20,4 +20,6 @@ public interface FreightDao {
     Freight getFreightById(int id);
 
     void removeFreight(int id);
+
+    String getFreightOptions(int orderID, String city);
 }

@@ -9,7 +9,7 @@
     $(document).ready(function () {
         $('#OrderTableContainer').jtable({
             <%--title: 'Driver #<%=driver.getId()%> orders',--%>
-            title: 'Driver orders',
+            title: 'Available orders',
             actions: {
                 // drivers can only see orders
                 listAction: 'OrderList.do'

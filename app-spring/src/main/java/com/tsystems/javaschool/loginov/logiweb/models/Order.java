@@ -21,6 +21,12 @@ public class Order {
         this.truck = truck;
     }
 
+    public Order(int id, int completed, Truck truck) {
+        this.id = id;
+        this.completed = completed;
+        this.truck = truck;
+    }
+
     public Order(int completed, Truck truck, Set<Driver> drivers, Set<Waypoint> waypoints) {
         this.completed = completed;
         this.truck = truck;

@@ -1,13 +1,14 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
-import com.tsystems.javaschool.loginov.logiweb.models.Driver;
-import com.tsystems.javaschool.loginov.logiweb.models.Order;
+import com.tsystems.javaschool.loginov.logiweb.models.*;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Hibernate specific DAO implementation for orders.
@@ -22,16 +23,43 @@ public class OrderDaoImpl implements OrderDao {
         this.sessionFactory = sessionFactory;
     }
 
-    public void addOrder(Order order) {
+    public Order addOrder(Order order) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.persist(order);
-        logger.info("Order saved successfully, Order details=" + order);
+
+        Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
+        truckQuery.setString("plate_number", order.getTruck().getPlate_number());
+        Truck dbTruck = (Truck) truckQuery.uniqueResult();
+        order.setTruck(dbTruck);
+
+        int savedOrderID = (int) session.save(order);
+
+        Query orderQuery = session.createQuery("from Order where id = :savedOrderID");
+        orderQuery.setInteger("savedOrderID", savedOrderID);
+        Order savedOrder = (Order) orderQuery.uniqueResult();
+        logger.info("Order saved successfully, Order details=" + savedOrder);
+
+        return savedOrder;
     }
 
-    public void updateOrder(Order order) {
+    public Order updateOrder(Order order) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.update(order);
-        logger.info("Order updated successfully, Order details=" + order);
+
+        Query orderQuery = session.createQuery("from Order where id = :id");
+        orderQuery.setInteger("id", order.getId());
+        Order orderToUpdate = (Order) orderQuery.uniqueResult();
+        orderToUpdate.setCompleted(order.getCompleted());
+
+        Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
+        truckQuery.setString("plate_number", order.getTruck().getPlate_number());
+        Truck dbTruck = (Truck) truckQuery.uniqueResult();
+        orderToUpdate.setTruck(dbTruck);
+
+        session.update(orderToUpdate);
+
+        Order updatedOrder = (Order) orderQuery.uniqueResult();
+        logger.info("Order updated successfully, Order details=" + updatedOrder);
+
+        return updatedOrder;
     }
 
     @SuppressWarnings("unchecked")
@@ -76,5 +104,52 @@ public class OrderDaoImpl implements OrderDao {
             session.delete(order);
         }
         logger.info("Order deleted successfully, Order details=" + order);
+    }
+
+    /**
+     * Gets all waypoints for the provided order ID from the database and returns them as a set of waypoints.
+     */
+    public Set<Waypoint> getAllOrderWaypoints(Integer orderID) {
+        Session session = sessionFactory.getCurrentSession();
+        Query orderQuery = session.createQuery("from Order where id = :orderID");
+        orderQuery.setInteger("orderID", orderID);
+        Order order = (Order) orderQuery.uniqueResult();
+        return order.getWaypoints();
+    }
+
+    /**
+     * Saves a waypoint to the database and returns saved object.
+     */
+    public Waypoint saveOrderWaypoint(int orderID, String waypointCity, String waypointFreightName) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query orderQuery = session.createQuery("from Order where id = :orderID");
+        orderQuery.setInteger("orderID", orderID);
+        Order order = (Order) orderQuery.uniqueResult();
+
+        // get a location object of the chosen city
+        Query locationQuery = session.createQuery("from Location where city = :waypointCity");
+        locationQuery.setString("waypointCity", waypointCity);
+        Location dbLocation = (Location) locationQuery.uniqueResult();
+        int locationID = dbLocation.getId();
+
+        // get a freight object of the chosen freight name
+        Query freightQuery = session.createQuery("from Freight where name = :waypointFreightName");
+        freightQuery.setString("waypointFreightName", waypointFreightName);
+        Freight dbFreight = (Freight) freightQuery.uniqueResult();
+        int FreightID = dbFreight.getId();
+
+        Query waypointQuery = session.createQuery("from Waypoint where location_id = :locationID and freight_id = :FreightID");
+        waypointQuery.setInteger("locationID", locationID);
+        waypointQuery.setInteger("FreightID", FreightID);
+        Waypoint waypoint = (Waypoint) waypointQuery.list().get(0);  // may be two similar freight in two similar cities!
+
+        // assign an waypoint to the order and update the order in the database
+        Set<Waypoint> waypointSet = order.getWaypoints();
+        waypointSet.add(waypoint);
+        order.setWaypoints(waypointSet);
+        session.update(order);
+
+        return waypoint;
     }
 }

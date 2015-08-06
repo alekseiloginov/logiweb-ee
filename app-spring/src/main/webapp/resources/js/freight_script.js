@@ -2,8 +2,7 @@
 
 $(document).ready(function () {
     $('#FreightTableContainer').jtable({
-        title: 'Table of freights',
-        sorting: true,
+        title: 'Available freights',
         actions: {
             listAction: 'FreightList.do',
             createAction: 'FreightSave.do',

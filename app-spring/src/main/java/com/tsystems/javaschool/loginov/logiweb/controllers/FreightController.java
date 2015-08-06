@@ -1,12 +1,13 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.models.Freight;
 import com.tsystems.javaschool.loginov.logiweb.services.FreightService;
 import com.tsystems.javaschool.loginov.logiweb.utils.GsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,27 +21,11 @@ import java.util.Map;
 @Controller
 public class FreightController {
 
+    @Autowired
     private FreightService freightService;
 
-    @Autowired(required=true)
-    @Qualifier(value="freightService")
-    public void setFreightService(FreightService freightService){
-        this.freightService = freightService;
-    }
-
-//    private ListService listService;
-//    private SaveService saveService;
-//    private UpdateService updateService;
-//    private DeleteService deleteService;
-//    private OptionService optionService;
-//
-//    public FreightController() {
-//        listService = ListService.getInstance();
-//        saveService = SaveService.getInstance();
-//        updateService = UpdateService.getInstance();
-//        deleteService = DeleteService.getInstance();
-//        optionService = OptionService.getInstance();
-//    }
+    @Autowired
+    private GsonParser gsonParser;
 
     /**
      * Redirects user to the freights page.
@@ -51,103 +36,74 @@ public class FreightController {
     }
 
     /**
-     * Fetches a list of all freights using the FreightService and puts it to the response map.
+     * Fetches a list of all freights using the FreightService and puts it to the result map.
      */
     @RequestMapping(value = "/FreightList.do", method = RequestMethod.POST)
     public void getAllFreights(HttpServletResponse resp) throws IOException {
-
         List freightList = freightService.listFreights();
-
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("data", freightList);
-
-        new GsonParser().parse(resultMap, resp);
+        gsonParser.parse(resultMap, resp);
     }
 
-//    /**
-//     * Fetches a list of all freights using the ListService and puts it to the response map.
-//     */
-//    @RequestInfo(value = "FreightList.do", method = "POST")
-//    public Map<String, Object> getAllFreights(Map requestParameters) {
-//        String sorting = null;
-//
-//        if (requestParameters.containsKey("jtSorting")) {
-//            sorting = ((String[]) requestParameters.get("jtSorting"))[0];
-//        }
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        List freightList = listService.getAllItems("Freight", sorting);
-//        response.put("data", freightList);
-//        return response;
-//    }
-//
-//    /**
-//     * Adds a freight to the database using the SaveService and puts the saved freight back to the response map.
-//     */
-//    @RequestInfo(value = "FreightSave.do", method = "POST")
-//    public Map<String, Object> saveFreight(Map requestParameters) {
-//        String name = ((String[]) requestParameters.get("name"))[0];
-//        int weight = Integer.parseInt(((String[]) requestParameters.get("weight"))[0]);
-//        String loadingLocation = ((String[]) requestParameters.get("loading"))[0];
-//        String unloadingLocation = ((String[]) requestParameters.get("unloading"))[0];
-//        String status = ((String[]) requestParameters.get("status"))[0];
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        Object savedFreight = saveService.saveFreight(name, weight, loadingLocation, unloadingLocation, status);
-//
-//        response.put("datum", savedFreight);
-//        return response;
-//    }
-//
-//    /**
-//     * Fetches all valid freight options using the OptionService and puts a returned JSON string to the response map.
-//     */
-//    @RequestInfo(value = "FreightOptions.do", method = "POST")
-//    public Map<String, Object> getAllFreightOptions(Map requestParameters) {
-//        int orderID = Integer.parseInt(((String[]) requestParameters.get("orderID"))[0]);
-//        String city = ((String[]) requestParameters.get("city"))[0];
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        String freightOptionJSONList = optionService.getFreightOptions(orderID, city);
-//        response.put("options", freightOptionJSONList);
-//        return response;
-//    }
-//
-//    /**
-//     * Updates a freight in the database using the UpdateService and puts the updated freight back to the response map.
-//     */
-//    @RequestInfo(value = "FreightUpdate.do", method = "POST")
-//    public Map<String, Object> updateFreight(Map requestParameters) {
-//        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
-//        String name = ((String[]) requestParameters.get("name"))[0];
-//        int weight = Integer.parseInt(((String[]) requestParameters.get("weight"))[0]);
-//        String loadingLocation = ((String[]) requestParameters.get("loading"))[0];
-//        String unloadingLocation = ((String[]) requestParameters.get("unloading"))[0];
-//        String status = ((String[]) requestParameters.get("status"))[0];
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        Object updatedFreight =
-//                updateService.updateFreight(id, name, weight, loadingLocation, unloadingLocation, status);
-//
-//        response.put("datum", updatedFreight);
-//        return response;
-//    }
-//
-//    /**
-//     * Deletes a freight from the database using the DeleteService and puts "OK" back to the response map.
-//     */
-//    @RequestInfo(value = "FreightDelete.do", method = "POST")
-//    public Map<String, Object> deleteFreight(Map requestParameters) {
-//        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
-//        Map<String, Object> response = new HashMap<>();
-//
-//        deleteService.deleteItem("Freight", id);
-//
-//        response.put("OK", "OK");
-//        return response;
-//    }
+    /**
+     * Adds a freight to the database using the FreightService and puts the saved freight back to the result map.
+     */
+    @RequestMapping(value = "/FreightSave.do", method = RequestMethod.POST)
+    public void saveFreight(@RequestParam(value = "name") String name,
+                            @RequestParam(value = "weight") int weight,
+                            @RequestParam(value = "status") String status,
+                            @RequestParam(value = "loading") String loadingLocation,
+                            @RequestParam(value = "unloading") String unloadingLocation,
+                            HttpServletResponse resp) throws IOException {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        Freight savedFreight = freightService.addFreight(new Freight(name, weight, status, loadingLocation, unloadingLocation));
+        resultMap.put("datum", savedFreight);
+        gsonParser.parse(resultMap, resp);
+    }
+
+    /**
+     * Updates a freight in the database using the FreightService and puts the updated freight back to the result map.
+     */
+    @RequestMapping(value = "/FreightUpdate.do", method = RequestMethod.POST)
+    public void updateFreight(@RequestParam(value = "id") int id,
+                              @RequestParam(value = "name") String name,
+                              @RequestParam(value = "weight") int weight,
+                              @RequestParam(value = "status") String status,
+                              @RequestParam(value = "loading") String loadingLocation,
+                              @RequestParam(value = "unloading") String unloadingLocation,
+                              HttpServletResponse resp) throws IOException {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        Freight updatedFreight =
+                freightService.updateFreight(new Freight(id, name, weight, status, loadingLocation, unloadingLocation));
+        resultMap.put("datum", updatedFreight);
+        gsonParser.parse(resultMap, resp);
+    }
+
+    /**
+     * Deletes a freight from the database using the FreightService and puts "OK" back to the result map.
+     */
+    @RequestMapping(value = "/FreightDelete.do", method = RequestMethod.POST)
+    public void deleteFreight(@RequestParam(value = "id") int id, HttpServletResponse resp) throws IOException {
+        Map<String, Object> resultMap = new HashMap<>();
+        freightService.removeFreight(id);
+        resultMap.put("OK", "OK");
+        gsonParser.parse(resultMap, resp);
+    }
+
+    /**
+     * Fetches all valid freight options using the FreightService and puts a returned JSON string to the result map.
+     */
+    @RequestMapping(value = "/FreightOptions.do", method = RequestMethod.POST)
+    public void getAllFreightOptions(@RequestParam(value = "orderID") int orderID,
+                                     @RequestParam(value = "city") String city,
+                                     HttpServletResponse resp) throws IOException {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        String freightOptionJSONList = freightService.getFreightOptions(orderID, city);
+        resultMap.put("options", freightOptionJSONList);
+        gsonParser.parse(resultMap, resp);
+    }
 }

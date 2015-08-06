@@ -3,10 +3,12 @@ package com.tsystems.javaschool.loginov.logiweb.services;
 import com.tsystems.javaschool.loginov.logiweb.dao.OrderDao;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Order;
+import com.tsystems.javaschool.loginov.logiweb.models.Waypoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service class that uses Hibernate DAO classes to work with Order objects.
@@ -21,13 +23,13 @@ public class OrderService {
     }
 
     @Transactional
-    public void addOrder(Order order) {
-        this.orderDao.addOrder(order);
+    public Order addOrder(Order order) {
+        return this.orderDao.addOrder(order);
     }
 
     @Transactional
-    public void updateOrder(Order order) {
-        this.orderDao.updateOrder(order);
+    public Order updateOrder(Order order) {
+        return this.orderDao.updateOrder(order);
     }
 
     @Transactional
@@ -48,5 +50,15 @@ public class OrderService {
     @Transactional
     public void removeOrder(int id) {
         this.orderDao.removeOrder(id);
+    }
+
+    @Transactional
+    public Set<Waypoint> getAllOrderWaypoints(Integer orderID) {
+        return this.orderDao.getAllOrderWaypoints(orderID);
+    }
+
+    @Transactional
+    public Waypoint saveOrderWaypoint(int orderID, String waypointCity, String waypointFreightName) {
+        return this.orderDao.saveOrderWaypoint(orderID, waypointCity, waypointFreightName);
     }
 }

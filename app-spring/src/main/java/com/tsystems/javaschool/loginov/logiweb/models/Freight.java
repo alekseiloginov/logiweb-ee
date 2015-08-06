@@ -31,6 +31,15 @@ public class Freight {
         this.unloading = unloading;
     }
 
+    public Freight(int id, String name, int weight, String status, String loading, String unloading) {
+        this.id = id;
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+        this.loading = loading;
+        this.unloading = unloading;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)

@@ -90,6 +90,14 @@
         <beans:property name="freightDao" ref="freightDao" />
     </beans:bean>
 
+    <!-- Location DAO & Service beans -->
+    <beans:bean id="locationDao" class="com.tsystems.javaschool.loginov.logiweb.dao.LocationDaoImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="locationService" class="com.tsystems.javaschool.loginov.logiweb.services.LocationService">
+        <beans:property name="locationDao" ref="locationDao" />
+    </beans:bean>
+
     <!-- DriverStatusChange DAO & Service beans -->
     <beans:bean id="driverStatusChangeDao" class="com.tsystems.javaschool.loginov.logiweb.dao.DriverStatusChangeDaoImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />

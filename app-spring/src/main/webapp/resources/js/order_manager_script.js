@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
     $('#OrderTableContainer').jtable({
-        title: 'Table of orders',
+        title: 'Available orders',
         sorting: true,
         actions: {
             listAction: 'OrderList.do',

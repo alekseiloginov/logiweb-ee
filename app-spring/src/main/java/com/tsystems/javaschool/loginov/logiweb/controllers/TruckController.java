@@ -1,13 +1,17 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectException;
+import com.tsystems.javaschool.loginov.logiweb.models.Location;
+import com.tsystems.javaschool.loginov.logiweb.models.Truck;
 import com.tsystems.javaschool.loginov.logiweb.services.TruckService;
 import com.tsystems.javaschool.loginov.logiweb.utils.GsonParser;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,27 +26,11 @@ import java.util.Map;
 public class TruckController {
     private static Logger logger = Logger.getLogger(TruckController.class);
 
+    @Autowired
     private TruckService truckService;
 
-    @Autowired(required=true)
-    @Qualifier(value="truckService")
-    public void setTruckService(TruckService truckService){
-        this.truckService = truckService;
-    }
-
-//    private ListService listService;
-//    private SaveService saveService;
-//    private UpdateService updateService;
-//    private DeleteService deleteService;
-//    private OptionService optionService;
-//
-//    public TruckController() {
-//        listService = ListService.getInstance();
-//        saveService = SaveService.getInstance();
-//        updateService = UpdateService.getInstance();
-//        deleteService = DeleteService.getInstance();
-//        optionService = OptionService.getInstance();
-//    }
+    @Autowired
+    private GsonParser gsonParser;
 
     /**
      * Redirects user to the truck page.
@@ -53,117 +41,94 @@ public class TruckController {
     }
 
     /**
-     * Fetches a list of all trucks using the TruckService and puts it to the response map.
+     * Fetches a list of all trucks using the TruckService and puts it to the result map.
      */
     @RequestMapping(value = "/TruckList.do", method = RequestMethod.POST)
     public void getAllTrucks(HttpServletResponse resp) throws IOException {
-
         List truckList = truckService.listTrucks();
-
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("data", truckList);
-
-        new GsonParser().parse(resultMap, resp);
+        gsonParser.parse(resultMap, resp);
     }
 
-//    /**
-//     * Fetches a list of all trucks using the ListService and puts it to the response map.
-//     */
-//    @RequestInfo(value = "TruckList.do", method = "POST")
-//    public Map<String, Object> getAllTrucks(Map requestParameters) {
-//        String sorting = null;
-//
-//        if (requestParameters.containsKey("jtSorting")) {
-//            sorting = ((String[]) requestParameters.get("jtSorting"))[0];
-//        }
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        List truckList = listService.getAllItems("Truck", sorting);
-//        response.put("data", truckList);
-//        return response;
-//    }
-//
-//    /**
-//     * Adds a truck to the database using the SaveService and puts the saved object back to the response map.
-//     */
-//    @RequestInfo(value = "TruckSave.do", method = "POST")
-//    public Map<String, Object> saveTruck(Map requestParameters) {
-//        String plate_number = ((String[]) requestParameters.get("plate_number"))[0];
-//        int driver_number = Integer.parseInt(((String[]) requestParameters.get("driver_number"))[0]);
-//        int capacity = Integer.parseInt(((String[]) requestParameters.get("capacity"))[0]);
-//        int drivable = Integer.parseInt(((String[]) requestParameters.get("drivable"))[0]);
-//        String city = ((String[]) requestParameters.get("location"))[0];
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        try {
-//            Object savedTruck = saveService.saveTruck(plate_number, driver_number, capacity, drivable, city);
-//            response.put("datum", savedTruck);
-//
-//        } catch (PlateNumberIncorrectException e) {
-//            logger.error("Plate number incorrect: " + plate_number, e);
-//            response.put("jTableError", "Plate number should contain 2 letters and 5 digits.");
-//        } catch (DuplicateEntryException e) {
-//            logger.error("Duplicate entry: " + plate_number, e);
-//            response.put("jTableError", "Plate number is unique and this one is already present in the database.");
-//        }
-//
-//        return response;
-//    }
-//
-//    /**
-//     * Updates a truck in the database using the UpdateService and puts the updated truck back to the response map.
-//     */
-//    @RequestInfo(value = "TruckUpdate.do", method = "POST")
-//    public Map<String, Object> updateTruck(Map requestParameters) {
-//        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
-//        String plate_number = ((String[]) requestParameters.get("plate_number"))[0];
-//        int driver_number = Integer.parseInt(((String[]) requestParameters.get("driver_number"))[0]);
-//        int capacity = Integer.parseInt(((String[]) requestParameters.get("capacity"))[0]);
-//        int drivable = Integer.parseInt(((String[]) requestParameters.get("drivable"))[0]);
-//        String city = ((String[]) requestParameters.get("location"))[0];
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        try {
-//            Object updatedTruck = updateService.updateTruck(id, plate_number, driver_number, capacity, drivable, city);
-//            response.put("datum", updatedTruck);
-//
-//        } catch (PlateNumberIncorrectException e) {
-//            logger.error("Plate number incorrect: " + plate_number, e);
-//            response.put("jTableError", "Plate number should contain 2 letters and 5 digits.");
-//        } catch (DuplicateEntryException e) {
-//            logger.error("Duplicate entry: " + plate_number, e);
-//            response.put("jTableError", "Plate number is unique and this one is already present in the database.");
-//        }
-//
-//        return response;
-//    }
-//
-//    /**
-//     * Deletes a truck from the database using the DeleteService and puts "OK" back to the response map.
-//     */
-//    @RequestInfo(value = "TruckDelete.do", method = "POST")
-//    public Map<String, Object> deleteTruck(Map requestParameters) {
-//        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
-//        Map<String, Object> response = new HashMap<>();
-//
-//        deleteService.deleteItem("Truck", id);
-//
-//        response.put("OK", "OK");
-//        return response;
-//    }
-//
-//    /**
-//     * Fetches a list of valid truck options using the OptionService and puts a returned JSON string to the response map.
-//     */
-//    @RequestInfo(value = "TruckOptions.do", method = "POST")
-//    public Map<String, Object> getAllTruckOptions(Map requestParameters) {
-//        Map<String, Object> response = new HashMap<>();
-//
-//        String truckOptionJSONList = optionService.getTruckOptions();
-//        response.put("options", truckOptionJSONList);
-//        return response;
-//    }
+    /**
+     * Adds a truck to the database using the TruckService and puts the saved object back to the result map.
+     */
+    @RequestMapping(value = "/TruckSave.do", method = RequestMethod.POST)
+    public void saveTruck(@RequestParam(value = "plate_number") String plate_number,
+                          @RequestParam(value = "driver_number") int driver_number,
+                          @RequestParam(value = "capacity") int capacity,
+                          @RequestParam(value = "drivable") int drivable,
+                          @RequestParam(value = "location") String city,
+                          HttpServletResponse resp) throws IOException {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            Truck savedTruck =
+                    truckService.addTruck(new Truck(plate_number, driver_number, capacity, drivable, new Location(city)));
+            resultMap.put("datum", savedTruck);
+
+        } catch (PlateNumberIncorrectException e) {
+            logger.error("Plate number incorrect: " + plate_number, e);
+            resultMap.put("jTableError", "Plate number should contain 2 letters and 5 digits.");
+        } catch (DuplicateEntryException e) {
+            logger.error("Duplicate entry: " + plate_number, e);
+            resultMap.put("jTableError", "Plate number is unique and this one is already present in the database.");
+        }
+
+        gsonParser.parse(resultMap, resp);
+    }
+
+    /**
+     * Updates a truck in the database using the TruckService and puts the updated truck back to the result map.
+     */
+    @RequestMapping(value = "/TruckUpdate.do", method = RequestMethod.POST)
+    public void updateTruck(@RequestParam(value = "id") int id,
+                            @RequestParam(value = "plate_number") String plate_number,
+                            @RequestParam(value = "driver_number") int driver_number,
+                            @RequestParam(value = "capacity") int capacity,
+                            @RequestParam(value = "drivable") int drivable,
+                            @RequestParam(value = "location") String city,
+                            HttpServletResponse resp) throws IOException {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            Truck updatedTruck =
+                    truckService.updateTruck(new Truck(id, plate_number, driver_number, capacity, drivable, new Location(city)));
+            resultMap.put("datum", updatedTruck);
+
+        } catch (PlateNumberIncorrectException e) {
+            logger.error("Plate number incorrect: " + plate_number, e);
+            resultMap.put("jTableError", "Plate number should contain 2 letters and 5 digits.");
+        } catch (DuplicateEntryException e) {
+            logger.error("Duplicate entry: " + plate_number, e);
+            resultMap.put("jTableError", "Plate number is unique and this one is already present in the database.");
+        }
+
+        gsonParser.parse(resultMap, resp);
+    }
+
+    /**
+     * Deletes a truck from the database using the TruckService and puts "OK" back to the result map.
+     */
+    @RequestMapping(value = "/TruckDelete.do", method = RequestMethod.POST)
+    public void deleteTruck(@RequestParam(value = "id") int id, HttpServletResponse resp) throws IOException {
+        Map<String, Object> resultMap = new HashMap<>();
+        truckService.removeTruck(id);
+        resultMap.put("OK", "OK");
+        gsonParser.parse(resultMap, resp);
+    }
+
+    /**
+     * Fetches a list of valid truck options using the TruckService and puts a returned JSON string to the result map.
+     */
+    @RequestMapping(value = "/TruckOptions.do", method = RequestMethod.POST)
+    public void getAllTruckOptions(HttpServletResponse resp) throws IOException {
+        Map<String, Object> resultMap = new HashMap<>();
+        String truckOptionJSONList = truckService.getTruckOptions();
+        resultMap.put("options", truckOptionJSONList);
+        gsonParser.parse(resultMap, resp);
+    }
 }

@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
     $('#DriverTableContainer').jtable({
-        title: 'Table of drivers',
+        title: 'Available drivers',
         actions: {
             listAction: 'DriverList.do',
             createAction: 'DriverSave.do',
@@ -48,7 +48,7 @@ $(document).ready(function () {
                 title: 'Status',
                 width: '10%',
                 type: 'radiobutton',
-                options: { 'free': 'free', 'in shift': 'in shift', 'driving': 'driving' },
+                options: { 'free': 'free', 'shift': 'shift', 'driving': 'driving' },
                 defaultValue: 'free'
             },
             location: {

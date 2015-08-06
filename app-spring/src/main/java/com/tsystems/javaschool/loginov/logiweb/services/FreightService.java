@@ -20,13 +20,13 @@ public class FreightService {
     }
 
     @Transactional
-    public void addFreight(Freight freight) {
-        this.freightDao.addFreight(freight);
+    public Freight addFreight(Freight freight) {
+        return this.freightDao.addFreight(freight);
     }
 
     @Transactional
-    public void updateFreight(Freight freight) {
-        this.freightDao.updateFreight(freight);
+    public Freight updateFreight(Freight freight) {
+        return this.freightDao.updateFreight(freight);
     }
 
     @Transactional
@@ -47,5 +47,10 @@ public class FreightService {
     @Transactional
     public void removeFreight(int id) {
         this.freightDao.removeFreight(id);
+    }
+
+    @Transactional
+    public String getFreightOptions(int orderID, String city) {
+        return this.freightDao.getFreightOptions(orderID, city);
     }
 }

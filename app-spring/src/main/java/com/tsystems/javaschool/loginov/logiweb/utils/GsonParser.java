@@ -2,6 +2,7 @@ package com.tsystems.javaschool.loginov.logiweb.utils;
 
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.Map;
 /**
  * Utility class which provides GSON parsing for jTable.
  */
+@Component
 public class GsonParser {
     private static Logger logger = Logger.getLogger(GsonParser.class);
     private Gson gson = new Gson();

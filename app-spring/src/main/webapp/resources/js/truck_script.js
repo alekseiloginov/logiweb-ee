@@ -2,8 +2,7 @@
 
 $(document).ready(function () {
     $('#TruckTableContainer').jtable({
-        title: 'Table of trucks',
-        sorting: true,
+        title: 'Available trucks',
         actions: {
             listAction: 'TruckList.do',
             createAction: 'TruckSave.do',

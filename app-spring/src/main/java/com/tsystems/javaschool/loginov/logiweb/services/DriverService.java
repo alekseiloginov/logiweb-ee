@@ -1,11 +1,14 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 import com.tsystems.javaschool.loginov.logiweb.dao.DriverDao;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberNotFoundException;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service class that uses Hibernate DAO classes to work with Driver objects.
@@ -20,13 +23,13 @@ public class DriverService {
     }
 
     @Transactional
-    public void addDriver(Driver driver) {
-        this.driverDao.addDriver(driver);
+    public Driver addDriver(Driver driver) throws PlateNumberNotFoundException, DuplicateEntryException {
+        return this.driverDao.addDriver(driver);
     }
 
     @Transactional
-    public void updateDriver(Driver driver) {
-        this.driverDao.updateDriver(driver);
+    public Driver updateDriver(Driver driver) throws PlateNumberNotFoundException, DuplicateEntryException {
+        return this.driverDao.updateDriver(driver);
     }
 
     @Transactional
@@ -47,5 +50,20 @@ public class DriverService {
     @Transactional
     public void removeDriver(int id) {
         this.driverDao.removeDriver(id);
+    }
+
+    @Transactional
+    public Set<Driver> getAllOrderDrivers(int orderID) {
+        return this.driverDao.getAllOrderDrivers(orderID);
+    }
+
+    @Transactional
+    public Driver saveOrderDriver(int orderID, String driverEmail) {
+        return this.driverDao.saveOrderDriver(orderID, driverEmail);
+    }
+
+    @Transactional
+    public String getDriverOptions(int orderID) {
+        return this.driverDao.getDriverOptions(orderID);
     }
 }

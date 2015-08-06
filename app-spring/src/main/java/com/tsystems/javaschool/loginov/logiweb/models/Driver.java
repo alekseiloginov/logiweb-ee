@@ -27,6 +27,19 @@ public class Driver {
         this.truck = truck;
     }
 
+    public Driver(int id, String name, String surname, String email, String password,
+                  int worked_hours, String status, Location location, Truck truck) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.worked_hours = worked_hours;
+        this.status = status;
+        this.location = location;
+        this.truck = truck;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)

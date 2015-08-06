@@ -15,7 +15,20 @@ public class Truck {
 
     public Truck() {}
 
+    public Truck(String plate_number) {
+        this.plate_number = plate_number;
+    }
+
     public Truck(String plate_number, int driver_number, int capacity, int drivable, Location location) {
+        this.plate_number = plate_number;
+        this.driver_number = driver_number;
+        this.capacity = capacity;
+        this.drivable = drivable;
+        this.location = location;
+    }
+
+    public Truck(int id, String plate_number, int driver_number, int capacity, int drivable, Location location) {
+        this.id = id;
         this.plate_number = plate_number;
         this.driver_number = driver_number;
         this.capacity = capacity;
