@@ -20,16 +20,10 @@ public class DriverWebServiceImpl implements DriverWebService {
     @Autowired
     private DriverService driverService;
 
-//    @Autowired(required=true)
-//    @Qualifier(value="driverStatusChangeService")
-//    @Required
-//    public void setDriverStatusChangeService(DriverStatusChangeService driverStatusChangeService){
-//        this.driverStatusChangeService = driverStatusChangeService;
-//    }
-
     /**
      * Takes an id and a status of a driver and responses with the driver status using SOAP webservice.
      */
+    @Override
     public String setDriverStatus(Integer driverId, String driverStatus) {
 
         Driver driver = new Driver();
@@ -47,6 +41,7 @@ public class DriverWebServiceImpl implements DriverWebService {
     /**
      * Takes a driver id and gets his/her status using SOAP webservice.
      */
+    @Override
     public String getDriverStatus(Integer driverId) {
         return driverService.getDriverById(driverId).getStatus();
     }

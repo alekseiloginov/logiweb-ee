@@ -20,7 +20,7 @@ import java.util.Set;
  */
 @Repository
 public class TruckDaoImpl implements TruckDao {
-    private static Logger logger = Logger.getLogger(TruckDaoImpl.class);
+    private static final Logger LOG = Logger.getLogger(TruckDaoImpl.class);
 
     private SessionFactory sessionFactory;
 
@@ -28,6 +28,7 @@ public class TruckDaoImpl implements TruckDao {
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
     public Truck addTruck(Truck truck) throws PlateNumberIncorrectException, DuplicateEntryException {
 
         if (!truck.getPlate_number().matches("^[a-zA-Z]{2}[0-9]{5}$")) {
@@ -57,11 +58,12 @@ public class TruckDaoImpl implements TruckDao {
         Query truckQuery = session.createQuery("from Truck where id = :savedTruckID");
         truckQuery.setInteger("savedTruckID", savedTruckID);
         Truck savedTruck = (Truck) truckQuery.uniqueResult();
-        logger.info("Truck saved successfully, Truck details=" + savedTruck);
+        LOG.info("Truck saved successfully, Truck details=" + savedTruck);
 
         return savedTruck;
     }
 
+    @Override
     public Truck updateTruck(Truck truck) throws PlateNumberIncorrectException, DuplicateEntryException {
 
         if (!truck.getPlate_number().matches("^[a-zA-Z]{2}[0-9]{5}$")) {
@@ -108,37 +110,41 @@ public class TruckDaoImpl implements TruckDao {
 
         // multiple times usage of the created query
         Truck updatedTruck = (Truck) truckQuery.uniqueResult();
-        logger.info("Truck updated successfully, Truck details=" + updatedTruck);
+        LOG.info("Truck updated successfully, Truck details=" + updatedTruck);
 
         return updatedTruck;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public List<Truck> listTrucks() {
         Session session = this.sessionFactory.getCurrentSession();
         List<Truck> truckList = session.createQuery("from Truck").list();
         for (Truck truck : truckList) {
-            logger.info("Truck list::" + truck);
+            LOG.info("Truck list::" + truck);
         }
         return truckList;
     }
 
+    @Override
     public Truck getTruckById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Truck truck = (Truck) session.get(Truck.class, id);
-        logger.info("Truck loaded successfully, Truck details=" + truck);
+        LOG.info("Truck loaded successfully, Truck details=" + truck);
         return truck;
     }
 
+    @Override
     public void removeTruck(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Truck truck = (Truck) session.get(Truck.class, id);
         if (truck != null) {
             session.delete(truck);
         }
-        logger.info("Truck deleted successfully, Truck details=" + truck);
+        LOG.info("Truck deleted successfully, Truck details=" + truck);
     }
 
+    @Override
     public String getTruckOptions() {
         Session session = sessionFactory.getCurrentSession();
 
@@ -170,7 +176,7 @@ public class TruckDaoImpl implements TruckDao {
         int optionCount = 0;
         String truckOptionJSONList = "[";
 
-        if (validTruckSet.size() == 0) {
+        if (validTruckSet.isEmpty()) {
             truckOptionJSONList += "]";
 
         } else {

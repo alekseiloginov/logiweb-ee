@@ -15,7 +15,7 @@ import java.util.Set;
  */
 @Repository
 public class OrderDaoImpl implements OrderDao {
-    private static Logger logger = Logger.getLogger(OrderDaoImpl.class);
+    private static final Logger LOG = Logger.getLogger(OrderDaoImpl.class);
 
     private SessionFactory sessionFactory;
 
@@ -23,6 +23,7 @@ public class OrderDaoImpl implements OrderDao {
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
     public Order addOrder(Order order) {
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -36,11 +37,12 @@ public class OrderDaoImpl implements OrderDao {
         Query orderQuery = session.createQuery("from Order where id = :savedOrderID");
         orderQuery.setInteger("savedOrderID", savedOrderID);
         Order savedOrder = (Order) orderQuery.uniqueResult();
-        logger.info("Order saved successfully, Order details=" + savedOrder);
+        LOG.info("Order saved successfully, Order details=" + savedOrder);
 
         return savedOrder;
     }
 
+    @Override
     public Order updateOrder(Order order) {
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -57,28 +59,31 @@ public class OrderDaoImpl implements OrderDao {
         session.update(orderToUpdate);
 
         Order updatedOrder = (Order) orderQuery.uniqueResult();
-        logger.info("Order updated successfully, Order details=" + updatedOrder);
+        LOG.info("Order updated successfully, Order details=" + updatedOrder);
 
         return updatedOrder;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public List<Order> listOrders() {
         Session session = this.sessionFactory.getCurrentSession();
         List<Order> orderList = session.createQuery("from Order").list();
         for (Order order : orderList) {
-            logger.info("Order list::" + order);
+            LOG.info("Order list::" + order);
         }
         return orderList;
     }
 
+    @Override
     public Order getOrderById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Order order = (Order) session.get(Order.class, id);
-        logger.info("Order by id loaded successfully, Order details=" + order);
+        LOG.info("Order by id loaded successfully, Order details=" + order);
         return order;
     }
 
+    @Override
     public Order getOrderByDriver(Driver driver) {
         Order order = null;
         Session session = this.sessionFactory.getCurrentSession();
@@ -90,25 +95,27 @@ public class OrderDaoImpl implements OrderDao {
         if (!orderIdList.isEmpty()) {
             int orderId = (int) orderIdList.get(0);
             order = (Order) session.get(Order.class, orderId);
-            logger.info("Order by driver loaded successfully, Order details=" + order);
+            LOG.info("Order by driver loaded successfully, Order details=" + order);
         } else {
-            logger.info("No freights found for the Drivers=" + driver);
+            LOG.info("No freights found for the Drivers=" + driver);
         }
         return order;
     }
 
+    @Override
     public void removeOrder(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Order order = (Order) session.load(Order.class, new Integer(id));
         if (order != null){
             session.delete(order);
         }
-        logger.info("Order deleted successfully, Order details=" + order);
+        LOG.info("Order deleted successfully, Order details=" + order);
     }
 
     /**
      * Gets all waypoints for the provided order ID from the database and returns them as a set of waypoints.
      */
+    @Override
     public Set<Waypoint> getAllOrderWaypoints(Integer orderID) {
         Session session = sessionFactory.getCurrentSession();
         Query orderQuery = session.createQuery("from Order where id = :orderID");
@@ -120,6 +127,7 @@ public class OrderDaoImpl implements OrderDao {
     /**
      * Saves a waypoint to the database and returns saved object.
      */
+    @Override
     public Waypoint saveOrderWaypoint(int orderID, String waypointCity, String waypointFreightName) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -137,11 +145,11 @@ public class OrderDaoImpl implements OrderDao {
         Query freightQuery = session.createQuery("from Freight where name = :waypointFreightName");
         freightQuery.setString("waypointFreightName", waypointFreightName);
         Freight dbFreight = (Freight) freightQuery.uniqueResult();
-        int FreightID = dbFreight.getId();
+        int freightID = dbFreight.getId();
 
         Query waypointQuery = session.createQuery("from Waypoint where location_id = :locationID and freight_id = :FreightID");
         waypointQuery.setInteger("locationID", locationID);
-        waypointQuery.setInteger("FreightID", FreightID);
+        waypointQuery.setInteger("FreightID", freightID);
         Waypoint waypoint = (Waypoint) waypointQuery.list().get(0);  // may be two similar freight in two similar cities!
 
         // assign an waypoint to the order and update the order in the database

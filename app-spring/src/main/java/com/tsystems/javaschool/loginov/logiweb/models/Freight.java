@@ -15,31 +15,6 @@ import java.util.Date;
 @XmlRootElement(name="Freight")
 public class Freight {
 
-    public Freight() {}
-
-    public Freight(String name, int weight, String status) {
-        this.name = name;
-        this.weight = weight;
-        this.status = status;
-    }
-
-    public Freight(String name, int weight, String status, String loading, String unloading) {
-        this.name = name;
-        this.weight = weight;
-        this.status = status;
-        this.loading = loading;
-        this.unloading = unloading;
-    }
-
-    public Freight(int id, String name, int weight, String status, String loading, String unloading) {
-        this.id = id;
-        this.name = name;
-        this.weight = weight;
-        this.status = status;
-        this.loading = loading;
-        this.unloading = unloading;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -67,6 +42,33 @@ public class Freight {
     private String loading;
     @Transient
     private String unloading;
+
+    public Freight() {
+
+    }
+
+    public Freight(String name, int weight, String status) {
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+    }
+
+    public Freight(String name, int weight, String status, String loading, String unloading) {
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+        this.loading = loading;
+        this.unloading = unloading;
+    }
+
+    public Freight(int id, String name, int weight, String status, String loading, String unloading) {
+        this.id = id;
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+        this.loading = loading;
+        this.unloading = unloading;
+    }
 
     public String getLoading() {
         return loading;

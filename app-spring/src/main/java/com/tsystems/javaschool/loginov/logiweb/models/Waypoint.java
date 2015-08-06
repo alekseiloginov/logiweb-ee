@@ -13,14 +13,6 @@ import java.util.Date;
 @Table(name = "waypoints", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class Waypoint {
 
-    public Waypoint() {}
-
-    public Waypoint(String operation, Location location, Freight freight) {
-        this.operation = operation;
-        this.location = location;
-        this.freight = freight;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -44,6 +36,16 @@ public class Waypoint {
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "freight_id", nullable = false)
     private Freight freight;
+
+    public Waypoint() {
+
+    }
+
+    public Waypoint(String operation, Location location, Freight freight) {
+        this.operation = operation;
+        this.location = location;
+        this.freight = freight;
+    }
 
     public int getId() {
         return id;

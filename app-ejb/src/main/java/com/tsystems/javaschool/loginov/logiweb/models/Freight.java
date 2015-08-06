@@ -5,6 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,23 +14,7 @@ import java.util.Date;
 @Entity
 @Table(name = "freights", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement(name="Freight")
-public class Freight {
-
-    public Freight() {}
-
-    public Freight(String name, int weight, String status) {
-        this.name = name;
-        this.weight = weight;
-        this.status = status;
-    }
-
-    public Freight(String name, int weight, String status, String loading, String unloading) {
-        this.name = name;
-        this.weight = weight;
-        this.status = status;
-        this.loading = loading;
-        this.unloading = unloading;
-    }
+public class Freight implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -58,6 +43,24 @@ public class Freight {
     private String loading;
     @Transient
     private String unloading;
+
+    public Freight() {
+
+    }
+
+    public Freight(String name, int weight, String status) {
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+    }
+
+    public Freight(String name, int weight, String status, String loading, String unloading) {
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+        this.loading = loading;
+        this.unloading = unloading;
+    }
 
     public String getLoading() {
         return loading;

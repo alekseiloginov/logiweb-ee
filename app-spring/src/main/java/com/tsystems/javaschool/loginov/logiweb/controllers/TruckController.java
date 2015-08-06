@@ -24,7 +24,9 @@ import java.util.Map;
  */
 @Controller
 public class TruckController {
-    private static Logger logger = Logger.getLogger(TruckController.class);
+    private static final Logger LOG = Logger.getLogger(TruckController.class);
+    private static final String JTABLE_ERROR_MESSAGE = "jTableError";
+    private static final String DATUM = "datum";
 
     @Autowired
     private TruckService truckService;
@@ -67,14 +69,14 @@ public class TruckController {
         try {
             Truck savedTruck =
                     truckService.addTruck(new Truck(plate_number, driver_number, capacity, drivable, new Location(city)));
-            resultMap.put("datum", savedTruck);
+            resultMap.put(DATUM, savedTruck);
 
         } catch (PlateNumberIncorrectException e) {
-            logger.error("Plate number incorrect: " + plate_number, e);
-            resultMap.put("jTableError", "Plate number should contain 2 letters and 5 digits.");
+            LOG.error("Plate number incorrect: " + plate_number, e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number should contain 2 letters and 5 digits.");
         } catch (DuplicateEntryException e) {
-            logger.error("Duplicate entry: " + plate_number, e);
-            resultMap.put("jTableError", "Plate number is unique and this one is already present in the database.");
+            LOG.error("Duplicate entry: " + plate_number, e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number is unique and this one is already present in the database.");
         }
 
         gsonParser.parse(resultMap, resp);
@@ -97,14 +99,14 @@ public class TruckController {
         try {
             Truck updatedTruck =
                     truckService.updateTruck(new Truck(id, plate_number, driver_number, capacity, drivable, new Location(city)));
-            resultMap.put("datum", updatedTruck);
+            resultMap.put(DATUM, updatedTruck);
 
         } catch (PlateNumberIncorrectException e) {
-            logger.error("Plate number incorrect: " + plate_number, e);
-            resultMap.put("jTableError", "Plate number should contain 2 letters and 5 digits.");
+            LOG.error("Plate number incorrect: " + plate_number, e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number should contain 2 letters and 5 digits.");
         } catch (DuplicateEntryException e) {
-            logger.error("Duplicate entry: " + plate_number, e);
-            resultMap.put("jTableError", "Plate number is unique and this one is already present in the database.");
+            LOG.error("Duplicate entry: " + plate_number, e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number is unique and this one is already present in the database.");
         }
 
         gsonParser.parse(resultMap, resp);

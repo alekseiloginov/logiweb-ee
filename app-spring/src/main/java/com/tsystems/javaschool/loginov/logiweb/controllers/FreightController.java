@@ -20,6 +20,7 @@ import java.util.Map;
  */
 @Controller
 public class FreightController {
+    private static final String DATUM = "datum";
 
     @Autowired
     private FreightService freightService;
@@ -59,7 +60,7 @@ public class FreightController {
 
         Map<String, Object> resultMap = new HashMap<>();
         Freight savedFreight = freightService.addFreight(new Freight(name, weight, status, loadingLocation, unloadingLocation));
-        resultMap.put("datum", savedFreight);
+        resultMap.put(DATUM, savedFreight);
         gsonParser.parse(resultMap, resp);
     }
 
@@ -78,7 +79,7 @@ public class FreightController {
         Map<String, Object> resultMap = new HashMap<>();
         Freight updatedFreight =
                 freightService.updateFreight(new Freight(id, name, weight, status, loadingLocation, unloadingLocation));
-        resultMap.put("datum", updatedFreight);
+        resultMap.put(DATUM, updatedFreight);
         gsonParser.parse(resultMap, resp);
     }
 

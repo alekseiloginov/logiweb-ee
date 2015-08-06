@@ -13,12 +13,6 @@ import java.util.Date;
 @Table(name = "locations", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "city"})})
 public class Location {
 
-    public Location() {}
-
-    public Location(String city) {
-        this.city = city;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -35,6 +29,13 @@ public class Location {
     @Column(name = "last_modified_time")
     private Date last_modified_time;
 
+    public Location() {
+
+    }
+
+    public Location(String city) {
+        this.city = city;
+    }
 
     public int getId() {
         return id;

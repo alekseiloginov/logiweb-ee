@@ -13,29 +13,6 @@ import java.util.Date;
 @Table(name = "trucks", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "plate_number"})})
 public class Truck {
 
-    public Truck() {}
-
-    public Truck(String plate_number) {
-        this.plate_number = plate_number;
-    }
-
-    public Truck(String plate_number, int driver_number, int capacity, int drivable, Location location) {
-        this.plate_number = plate_number;
-        this.driver_number = driver_number;
-        this.capacity = capacity;
-        this.drivable = drivable;
-        this.location = location;
-    }
-
-    public Truck(int id, String plate_number, int driver_number, int capacity, int drivable, Location location) {
-        this.id = id;
-        this.plate_number = plate_number;
-        this.driver_number = driver_number;
-        this.capacity = capacity;
-        this.drivable = drivable;
-        this.location = location;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -65,6 +42,30 @@ public class Truck {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
+    public Truck() {
+
+    }
+
+    public Truck(String plate_number) {
+        this.plate_number = plate_number;
+    }
+
+    public Truck(String plate_number, int driver_number, int capacity, int drivable, Location location) {
+        this.plate_number = plate_number;
+        this.driver_number = driver_number;
+        this.capacity = capacity;
+        this.drivable = drivable;
+        this.location = location;
+    }
+
+    public Truck(int id, String plate_number, int driver_number, int capacity, int drivable, Location location) {
+        this.id = id;
+        this.plate_number = plate_number;
+        this.driver_number = driver_number;
+        this.capacity = capacity;
+        this.drivable = drivable;
+        this.location = location;
+    }
 
     public int getId() {
         return id;

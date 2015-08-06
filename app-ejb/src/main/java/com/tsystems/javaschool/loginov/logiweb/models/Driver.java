@@ -13,20 +13,6 @@ import java.util.Date;
 @Table(name = "drivers", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "email"})})
 public class Driver {
 
-    public Driver() {}
-
-    public Driver(String name, String surname, String email, String password,
-                  int worked_hours, String status, Location location, Truck truck) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        this.worked_hours = worked_hours;
-        this.status = status;
-        this.location = location;
-        this.truck = truck;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -66,6 +52,21 @@ public class Driver {
     @JoinColumn(name = "truck_id")
     private Truck truck;
 
+    public Driver() {
+
+    }
+
+    public Driver(String name, String surname, String email, String password,
+                  int worked_hours, String status, Location location, Truck truck) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.worked_hours = worked_hours;
+        this.status = status;
+        this.location = location;
+        this.truck = truck;
+    }
 
     public int getId() {
         return id;
@@ -153,22 +154,5 @@ public class Driver {
 
     public void setTruck(Truck truck) {
         this.truck = truck;
-    }
-
-    @Override
-    public String toString() {
-        return "Driver{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", worked_hours=" + worked_hours +
-                ", status='" + status + '\'' +
-                ", created_time=" + created_time +
-                ", last_modified_time=" + last_modified_time +
-                ", location=" + location +
-                ", truck=" + truck +
-                '}';
     }
 }

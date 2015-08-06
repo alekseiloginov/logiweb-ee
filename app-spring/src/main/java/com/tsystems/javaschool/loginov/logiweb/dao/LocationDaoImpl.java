@@ -2,7 +2,6 @@ package com.tsystems.javaschool.loginov.logiweb.dao;
 
 import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -14,7 +13,6 @@ import java.util.List;
  */
 @Repository
 public class LocationDaoImpl implements LocationDao {
-    private static Logger logger = Logger.getLogger(LocationDaoImpl.class);
 
     private SessionFactory sessionFactory;
 
@@ -22,22 +20,27 @@ public class LocationDaoImpl implements LocationDao {
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
     public Location addLocation(Location location) throws DuplicateEntryException {
         return null;
     }
 
+    @Override
     public void updateLocation(Location location) {
 
     }
 
+    @Override
     public List<Location> listLocations() {
         return null;
     }
 
+    @Override
     public Location getLocationById(int id) {
         return null;
     }
 
+    @Override
     public void removeLocation(int id) {
 
     }
@@ -45,6 +48,7 @@ public class LocationDaoImpl implements LocationDao {
     /**
      * Fetches all valid location options from the database and returns them as a JSON string suitable for JTable.
      */
+    @Override
     public String getLocationOptions() {
         Session session = this.sessionFactory.getCurrentSession();
 

@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 @ManagedBean
 @SessionScoped
 public class FreightStatusBean implements Serializable {
-    private static Logger logger = Logger.getLogger(FreightStatusBean.class);
+    private static final Logger LOG = Logger.getLogger(FreightStatusBean.class);
     private Freight freight;
 
     @EJB
@@ -39,7 +40,7 @@ public class FreightStatusBean implements Serializable {
         this.freight = freight;
     }
 
-    public List<Freight> getFreights(int driverId) throws Exception {
+    public List<Freight> getFreights(int driverId) throws IOException {
         return statusEJB.getFreightList(driverId);
     }
 
@@ -55,13 +56,13 @@ public class FreightStatusBean implements Serializable {
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Can't set this freight status with the mentioned freight id.", null);
-                logger.error("Exception while setting a new freight status");
+                LOG.error("Exception while setting a new freight status");
             }
 
         } catch (Exception e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Can't set this freight status with the mentioned freight id.", null);
-            logger.error("Exception while setting a new freight status", e);
+            LOG.error("Exception while setting a new freight status", e);
         }
         FacesContext.getCurrentInstance().addMessage("freightStatusForm", message);
 
@@ -71,11 +72,11 @@ public class FreightStatusBean implements Serializable {
     public List<String> getFreightStatusList(String freightStatus) {
         List<String> freightStatusList = new ArrayList<>();
 
-        if (freightStatus.equalsIgnoreCase("prepared")) {
+        if ("prepared".equalsIgnoreCase(freightStatus)) {
             freightStatusList.add("shipped");
             freightStatusList.add("delivered");
 
-        } else if (freightStatus.equalsIgnoreCase("shipped")) {
+        } else if ("shipped".equalsIgnoreCase(freightStatus)) {
             freightStatusList.add("delivered");
         }
 

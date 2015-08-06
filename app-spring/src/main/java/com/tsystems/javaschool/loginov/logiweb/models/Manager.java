@@ -13,15 +13,6 @@ import java.util.Date;
 @Table(name = "managers", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "email"})})
 public class Manager {
 
-    public Manager() {}
-
-    public Manager(String name, String surname, String email, String password) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -46,6 +37,17 @@ public class Manager {
     @UpdateTimestamp
     @Column(name = "last_modified_time")
     private Date last_modified_time;
+
+    public Manager() {
+
+    }
+
+    public Manager(String name, String surname, String email, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+    }
 
 
     public int getId() {
@@ -90,18 +92,5 @@ public class Manager {
 
     public Date getLast_modified_time() {
         return last_modified_time;
-    }
-
-    @Override
-    public String toString() {
-        return "Manager{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", created_time=" + created_time +
-                ", last_modified_time=" + last_modified_time +
-                '}';
     }
 }

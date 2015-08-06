@@ -14,26 +14,6 @@ import java.util.Set;
 @Table(name = "orders", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class Order {
 
-    public Order() {}
-
-    public Order(int completed, Truck truck) {
-        this.completed = completed;
-        this.truck = truck;
-    }
-
-    public Order(int id, int completed, Truck truck) {
-        this.id = id;
-        this.completed = completed;
-        this.truck = truck;
-    }
-
-    public Order(int completed, Truck truck, Set<Driver> drivers, Set<Waypoint> waypoints) {
-        this.completed = completed;
-        this.truck = truck;
-        this.drivers = drivers;
-        this.waypoints = waypoints;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -63,6 +43,28 @@ public class Order {
     @JoinTable(name = "order_waypoints", joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "waypoint_id"))
     private Set<Waypoint> waypoints;
+
+    public Order() {
+
+    }
+
+    public Order(int completed, Truck truck) {
+        this.completed = completed;
+        this.truck = truck;
+    }
+
+    public Order(int id, int completed, Truck truck) {
+        this.id = id;
+        this.completed = completed;
+        this.truck = truck;
+    }
+
+    public Order(int completed, Truck truck, Set<Driver> drivers, Set<Waypoint> waypoints) {
+        this.completed = completed;
+        this.truck = truck;
+        this.drivers = drivers;
+        this.waypoints = waypoints;
+    }
 
     public int getId() {
         return id;

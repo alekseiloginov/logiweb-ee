@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @Repository
 public class DriverStatusChangeDaoImpl implements DriverStatusChangeDao {
-    private static Logger logger = Logger.getLogger(DriverStatusChangeDaoImpl.class);
+    private static final Logger LOG = Logger.getLogger(DriverStatusChangeDaoImpl.class);
 
     private SessionFactory sessionFactory;
 
@@ -23,6 +23,7 @@ public class DriverStatusChangeDaoImpl implements DriverStatusChangeDao {
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
     public void saveOrUpdateDriverStatus(DriverStatusChange driverStatusChange) {
         Session session = this.sessionFactory.getCurrentSession();
         int driverId = driverStatusChange.getDriver().getId();
@@ -39,12 +40,12 @@ public class DriverStatusChangeDaoImpl implements DriverStatusChangeDao {
         if (dbDriverStatusChange != null) {
             dbDriverStatusChange.setLast_modified_time(new Date());
             session.update(dbDriverStatusChange);
-            logger.info("DriverStatusChange updated successfully, DriverStatusChange details=" + driverStatusChange);
+            LOG.info("DriverStatusChange updated successfully, DriverStatusChange details=" + driverStatusChange);
 
         } else {
             driverStatusChange.setDriver(dbDriver);
             session.save(driverStatusChange);
-            logger.info("DriverStatusChange saved successfully, DriverStatusChange details=" + driverStatusChange);
+            LOG.info("DriverStatusChange saved successfully, DriverStatusChange details=" + driverStatusChange);
         }
     }
 }

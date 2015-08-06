@@ -21,7 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Repository
 public class FreightDaoImpl implements FreightDao {
-    private static Logger logger = Logger.getLogger(FreightDaoImpl.class);
+    private static final Logger LOG = Logger.getLogger(FreightDaoImpl.class);
+    private static final String LOADING = "loading";
 
     private SessionFactory sessionFactory;
 
@@ -29,6 +30,7 @@ public class FreightDaoImpl implements FreightDao {
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
     public Freight addFreight(Freight freight) {
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -37,7 +39,7 @@ public class FreightDaoImpl implements FreightDao {
         Query freightQuery = session.createQuery("from Freight where id = :savedFreightID");
         freightQuery.setInteger("savedFreightID", savedFreightID);
         Freight savedFreight = (Freight) freightQuery.uniqueResult();
-        logger.info("Freight saved successfully, Freight details=" + savedFreight);
+        LOG.info("Freight saved successfully, Freight details=" + savedFreight);
 
         // Now we need to save waypoints associated with the freight's loading and unloading
 
@@ -51,7 +53,7 @@ public class FreightDaoImpl implements FreightDao {
         Location dbUnloadingLocation = (Location) locationQuery.uniqueResult();
 
         // save associated waypoints
-        Waypoint waypoint = new Waypoint("loading", dbLoadingLocation, savedFreight);
+        Waypoint waypoint = new Waypoint(LOADING, dbLoadingLocation, savedFreight);
         session.save(waypoint);
 
         waypoint = new Waypoint("unloading", dbUnloadingLocation, savedFreight);
@@ -64,6 +66,7 @@ public class FreightDaoImpl implements FreightDao {
         return savedFreight;
     }
 
+    @Override
     public Freight updateFreight(Freight freight) {
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -80,11 +83,12 @@ public class FreightDaoImpl implements FreightDao {
         session.update(freightToUpdate);
 
         Freight updatedFreight = (Freight) freightQuery.uniqueResult();
-        logger.info("Freight updated successfully, Freight details=" + updatedFreight);
+        LOG.info("Freight updated successfully, Freight details=" + updatedFreight);
 
         return updatedFreight;
     }
 
+    @Override
     public void updateFreightStatus(Freight freight) {
         Session session = this.sessionFactory.getCurrentSession();
         int freightId = freight.getId();
@@ -97,10 +101,11 @@ public class FreightDaoImpl implements FreightDao {
         dbFreight.setStatus(newFreightStatus);
 
         session.update(dbFreight);
-        logger.info("Freight status updated successfully, Freight details=" + dbFreight);
+        LOG.info("Freight status updated successfully, Freight details=" + dbFreight);
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public List<Freight> listFreights() {
         Session session = this.sessionFactory.getCurrentSession();
         List<Freight> freightList = session.createQuery("from Freight").list();
@@ -112,7 +117,7 @@ public class FreightDaoImpl implements FreightDao {
             Query waypointQuery =
                     session.createQuery("from Waypoint where freight_id = :freight_id and operation = :operation");
             waypointQuery.setInteger("freight_id", freightID);
-            waypointQuery.setString("operation", "loading");
+            waypointQuery.setString("operation", LOADING);
             Waypoint dbLoadingWaypoint = (Waypoint) waypointQuery.uniqueResult();
 
             // get a waypoint object of the freight unloading
@@ -125,30 +130,33 @@ public class FreightDaoImpl implements FreightDao {
             freight.setLoading(loadingLocation);
             freight.setUnloading(unloadingLocation);
 
-            logger.info("Freight list::" + freight);
+            LOG.info("Freight list::" + freight);
         }
         return freightList;
     }
 
+    @Override
     public Freight getFreightById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Freight freight = (Freight) session.get(Freight.class, id);
-        logger.info("Freight by id loaded, Freight details=" + freight);
+        LOG.info("Freight by id loaded, Freight details=" + freight);
         return freight;
     }
 
+    @Override
     public void removeFreight(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Freight freight = (Freight) session.get(Freight.class, id);
         if (freight != null) {
             session.delete(freight);
-            logger.info("Freight deleted successfully, Freight details=" + freight);
+            LOG.info("Freight deleted successfully, Freight details=" + freight);
         }
     }
 
     /**
      * Fetches all valid freight options from the database and returns them as a JSON string suitable for JTable.
      */
+    @Override
     public String getFreightOptions(int orderID, String city) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -198,7 +206,7 @@ public class FreightDaoImpl implements FreightDao {
 
         for (Waypoint chosenOrderWaypoint : chosenOrderWaypointSet) {
             if (chosenOrderWaypoint.getLocation().getCity().equals(city)
-                    && chosenOrderWaypoint.getOperation().equals("loading")) {
+                    && LOADING.equals(chosenOrderWaypoint.getOperation())) {
                 orderAssignedFreightsWeight += chosenOrderWaypoint.getFreight().getWeight();
             }
         }
@@ -211,9 +219,9 @@ public class FreightDaoImpl implements FreightDao {
         for (Waypoint validCityWaypointOption : validCityWaypointSet) {
             freightWeight = validCityWaypointOption.getFreight().getWeight();
 
-            if (!validCityWaypointOption.getFreight().getStatus().equals("prepared") ||
-                    validCityWaypointOption.getOperation().equals("loading") &&
-                            validCityWaypointOption.getFreight().getStatus().equals("prepared") &&
+            if (!"prepared".equals(validCityWaypointOption.getFreight().getStatus()) ||
+                    LOADING.equals(validCityWaypointOption.getOperation()) &&
+                            "prepared".equals(validCityWaypointOption.getFreight().getStatus()) &&
                             freeFreightWeight < freightWeight) {
 
                 validCityWaypointSet.remove(validCityWaypointOption);
@@ -224,7 +232,7 @@ public class FreightDaoImpl implements FreightDao {
         int optionCount = 0;
         String freightOptionJSONList = "[";
 
-        if (validCityWaypointSet.size() == 0) {
+        if (validCityWaypointSet.isEmpty()) {
             freightOptionJSONList += "]";
 
         } else {

@@ -8,6 +8,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 @ManagedBean(name="driverBean")
 @SessionScoped
 public class DriverManagedBean {
-    private static Logger logger = Logger.getLogger(DriverManagedBean.class);
+    private static final Logger LOG = Logger.getLogger(DriverManagedBean.class);
     private FacesMessage message;
     private String result = null;
 
@@ -41,17 +42,10 @@ public class DriverManagedBean {
             return;
         }
 
-        try {
-            result = statusEJB.setDriverStatus(driverId, driverStatus);
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, result + " Current status of driver with id #"
-                                        + driverId + " now is " + driverStatus.toUpperCase(), null);
+        result = statusEJB.setDriverStatus(driverId, driverStatus);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, result + " Current status of driver with id #"
+                + driverId + " now is " + driverStatus.toUpperCase(), null);
 
-        } catch (Exception e) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                        "Can't set this driver status with the current driver id.", null);
-            logger.error("Exception while setting a new driver status", e);
-            e.printStackTrace();
-        }
         FacesContext.getCurrentInstance().addMessage("driverStatusForm", message);
     }
 
@@ -71,14 +65,13 @@ public class DriverManagedBean {
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Can't set this freight status with the mentioned freight id.", null);
-                logger.error("Exception while setting a new freight status");
+                LOG.error("Exception while setting a new freight status");
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                         "Can't set this freight status with the mentioned freight id.", null);
-            logger.error("Exception while setting a new freight status", e);
-            e.printStackTrace();
+            LOG.error("Exception while setting a new freight status", e);
         }
         FacesContext.getCurrentInstance().addMessage("freightStatusForm", message);
     }

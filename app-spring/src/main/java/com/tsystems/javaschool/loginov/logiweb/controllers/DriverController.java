@@ -26,7 +26,10 @@ import java.util.Set;
  */
 @Controller
 public class DriverController {
-    private static Logger logger = Logger.getLogger(DriverController.class);
+    private static final Logger LOG = Logger.getLogger(DriverController.class);
+    private static final String JTABLE_ERROR_MESSAGE = "jTableError";
+    private static final String DATUM = "datum";
+    private static final String DATA = "data";
 
     @Autowired
     private DriverService driverService;
@@ -49,7 +52,7 @@ public class DriverController {
     public void getAllDrivers(HttpServletResponse resp) throws IOException {
         List driverList = driverService.listDrivers();
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("data", driverList);
+        resultMap.put(DATA, driverList);
         gsonParser.parse(resultMap, resp);
     }
 
@@ -73,14 +76,14 @@ public class DriverController {
             Driver savedDriver =
                     driverService.addDriver(new Driver(name, surname, email, password, worked_hours, status,
                                             new Location(city), new Truck(plate_number)));
-            resultMap.put("datum", savedDriver);
+            resultMap.put(DATUM, savedDriver);
 
         } catch (DuplicateEntryException e) {
-            logger.error("Duplicate entry: " + email, e);
-            resultMap.put("jTableError", "Email should be unique and this one is already present in the database.");
+            LOG.error("Duplicate entry: " + email, e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, "Email should be unique and this one is already present in the database.");
         } catch (PlateNumberNotFoundException e) {
-            logger.error("Plate number not found: " + plate_number, e);
-            resultMap.put("jTableError", "No truck with the entered plate number, add it first.");
+            LOG.error("Plate number not found: " + plate_number, e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, "No truck with the entered plate number, add it first.");
         }
 
         gsonParser.parse(resultMap, resp);
@@ -106,14 +109,14 @@ public class DriverController {
         try {
             Driver updatedDriver = driverService.updateDriver(new Driver(id, name, surname, email, password,
                                     worked_hours, status, new Location(city), new Truck(plate_number)));
-            resultMap.put("datum", updatedDriver);
+            resultMap.put(DATUM, updatedDriver);
 
         } catch (DuplicateEntryException e) {
-            logger.error("Duplicate entry: " + email, e);
-            resultMap.put("jTableError", "Email should be unique and this one is already present in the database.");
+            LOG.error("Duplicate entry: " + email, e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, "Email should be unique and this one is already present in the database.");
         } catch (PlateNumberNotFoundException e) {
-            logger.error("Plate number not found: " + plate_number, e);
-            resultMap.put("jTableError", "No truck with the entered plate number, add it first.");
+            LOG.error("Plate number not found: " + plate_number, e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, "No truck with the entered plate number, add it first.");
         }
 
         gsonParser.parse(resultMap, resp);
@@ -137,7 +140,7 @@ public class DriverController {
     public void getAllOrderTruckDrivers(@RequestParam(value = "orderID") int orderID, HttpServletResponse resp) throws IOException {
         Map<String, Object> resultMap = new HashMap<>();
         Set<Driver> driverSet = driverService.getAllOrderDrivers(orderID);
-        resultMap.put("data", driverSet);
+        resultMap.put(DATA, driverSet);
         gsonParser.parse(resultMap, resp);
     }
 
@@ -151,7 +154,7 @@ public class DriverController {
 
         Map<String, Object> resultMap = new HashMap<>();
         Driver savedOrderDriver = driverService.saveOrderDriver(orderID, driverEmail);
-        resultMap.put("datum", savedOrderDriver);
+        resultMap.put(DATUM, savedOrderDriver);
         gsonParser.parse(resultMap, resp);
     }
 

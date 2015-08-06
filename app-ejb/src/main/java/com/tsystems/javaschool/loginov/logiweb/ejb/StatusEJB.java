@@ -10,6 +10,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 
 import javax.ejb.Stateless;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
  * A simple Status EJB. The EJB does not use an interface.
  */
 @Stateless
-public class StatusEJB {
+public class StatusEJB implements Serializable {
 
     /**
      * This method takes a driver id and status and updates the status them using SOAP webservice.
@@ -61,7 +63,7 @@ public class StatusEJB {
      * @param freightStatus the status to update
      * @return the result message.
      */
-    public String setFreightStatus(Integer freightId, String freightStatus) throws Exception {
+    public String setFreightStatus(Integer freightId, String freightStatus) throws IOException {
 
         String serviceUrl =
                 "http://localhost:8080/logiweb-ee/services/rest/freights/" + freightId + "/statuses/" + freightStatus;
@@ -88,7 +90,7 @@ public class StatusEJB {
      * @param driverId driver id to get his/her freights
      * @return the result message.
      */
-    public List<Freight> getFreightList(Integer driverId) throws Exception {
+    public List<Freight> getFreightList(Integer driverId) throws IOException {
         List<Freight> freightList;
 
         String serviceUrl =

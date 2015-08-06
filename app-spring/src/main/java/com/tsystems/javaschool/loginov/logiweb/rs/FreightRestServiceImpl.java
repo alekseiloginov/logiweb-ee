@@ -27,15 +27,10 @@ public class FreightRestServiceImpl implements FreightRestService {
     @Autowired
     private OrderService orderService;
 
-//    @Autowired(required=true)
-//    @Qualifier(value="freightService")
-//    public void setFreightService(FreightService freightService){
-//        this.freightService = freightService;
-//    }
-
     /**
      * Takes a freight id and freight status and responses with the freight status using RESTful webservice.
      */
+    @Override
     public Response setFreightStatus(Integer freightId, String freightStatus) {
 
         if (freightService.getFreightById(freightId) != null) {
@@ -56,6 +51,7 @@ public class FreightRestServiceImpl implements FreightRestService {
     /**
      * Takes a driver id and responses with the driver's freight list using RESTful webservice.
      */
+    @Override
     public Response getFreightList(Integer driverId) {
         Driver driver = driverService.getDriverById(driverId);
         Order order = orderService.getOrderByDriver(driver);
@@ -67,7 +63,7 @@ public class FreightRestServiceImpl implements FreightRestService {
             for (Waypoint waypoint : waypoints) {
 
                 // freight should not be delivered
-                if (!waypoint.getFreight().getStatus().equalsIgnoreCase("delivered")) {
+                if (!"delivered".equalsIgnoreCase(waypoint.getFreight().getStatus())) {
                     freights.add(waypoint.getFreight());
                 }
             }

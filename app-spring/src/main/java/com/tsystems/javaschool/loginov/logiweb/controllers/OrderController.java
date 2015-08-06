@@ -26,6 +26,8 @@ import java.util.Set;
  */
 @Controller
 public class OrderController {
+    private static final String DATUM = "datum";
+    private static final String DATA = "data";
 
     @Autowired
     private OrderService orderService;
@@ -65,11 +67,11 @@ public class OrderController {
 
 //        if (wrapper.isUserInRole("ROLE_MANAGER")) {
             List orderList = orderService.listOrders();
-            resultMap.put("data", orderList);
+            resultMap.put(DATA, orderList);
 
 //        } else if (wrapper.isUserInRole("ROLE_DRIVER")) {
 //            Order order = orderService.getOrderById(truckID);
-//            resultMap.put("data", order);
+//            resultMap.put(DATA, order);
 //        }
 
         gsonParser.parse(resultMap, resp);
@@ -85,7 +87,7 @@ public class OrderController {
 
         Map<String, Object> resultMap = new HashMap<>();
         Order savedOrder = orderService.addOrder(new Order(completed, new Truck(plate_number)));
-        resultMap.put("datum", savedOrder);
+        resultMap.put(DATUM, savedOrder);
         gsonParser.parse(resultMap, resp);
     }
 
@@ -100,7 +102,7 @@ public class OrderController {
 
         Map<String, Object> resultMap = new HashMap<>();
         Order updatedOrder = orderService.updateOrder(new Order(id, completed, new Truck(plate_number)));
-        resultMap.put("datum", updatedOrder);
+        resultMap.put(DATUM, updatedOrder);
         gsonParser.parse(resultMap, resp);
     }
 
@@ -120,11 +122,11 @@ public class OrderController {
      */
     @RequestMapping(value = "/OrderWaypointList.do", method = RequestMethod.POST)
     public void getAllOrderWaypoints(@RequestParam(value = "orderID", required = false) Integer orderID,
-                                     HttpServletRequest req, HttpServletResponse resp) throws IOException {
+                                     HttpServletResponse resp) throws IOException {
 
         Map<String, Object> resultMap = new HashMap<>();
         Set<Waypoint> waypointSet = orderService.getAllOrderWaypoints(orderID);
-        resultMap.put("data", waypointSet);
+        resultMap.put(DATA, waypointSet);
         gsonParser.parse(resultMap, resp);
     }
 
@@ -139,7 +141,7 @@ public class OrderController {
 
         Map<String, Object> resultMap = new HashMap<>();
         Waypoint savedOrderWaypoint = orderService.saveOrderWaypoint(orderID, waypointCity, waypointFreightName);
-        resultMap.put("datum", savedOrderWaypoint);
+        resultMap.put(DATUM, savedOrderWaypoint);
         gsonParser.parse(resultMap, resp);
     }
 }

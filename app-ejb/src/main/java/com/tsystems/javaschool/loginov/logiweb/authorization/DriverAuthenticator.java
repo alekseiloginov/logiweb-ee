@@ -3,6 +3,7 @@ package com.tsystems.javaschool.loginov.logiweb.authorization;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
 import com.tsystems.javaschool.loginov.logiweb.models.Truck;
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,6 +31,7 @@ import java.util.Properties;
  */
 @PicketLink
 public class DriverAuthenticator extends BaseAuthenticator {
+    private static final Logger LOG = Logger.getLogger(DriverAuthenticator.class);
 
     @Inject
     private DefaultLoginCredentials credentials;
@@ -39,7 +41,7 @@ public class DriverAuthenticator extends BaseAuthenticator {
 
     @Override
     public void authenticate() {
-        int ID = Integer.parseInt(credentials.getUserId());
+        int id = Integer.parseInt(credentials.getUserId());
         String password = credentials.getPassword();
         String encryptedPassword = null;
 
@@ -55,7 +57,7 @@ public class DriverAuthenticator extends BaseAuthenticator {
             }
             encryptedPassword = stringBuilder.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOG.error("NoSuchAlgorithmException", e);
         }
 
         // Creating a Hibernate SessionFactory
@@ -64,7 +66,7 @@ public class DriverAuthenticator extends BaseAuthenticator {
         try {
             properties.load(DriverAuthenticator.class.getResourceAsStream("/db.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("IOException", e);
         }
         configuration.setProperties(properties);
         configuration.addAnnotatedClass(Driver.class);
@@ -78,7 +80,7 @@ public class DriverAuthenticator extends BaseAuthenticator {
         session.beginTransaction();
 
         Criteria criteria = session.createCriteria(Driver.class);
-        criteria.add(Restrictions.eq("id", ID))
+        criteria.add(Restrictions.eq("id", id))
                 .add(Restrictions.eq("password", encryptedPassword))
                 .setMaxResults(1);
         Driver driver = (Driver) criteria.uniqueResult();

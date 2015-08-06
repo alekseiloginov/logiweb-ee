@@ -24,7 +24,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Repository
 public class DriverDaoImpl implements DriverDao {
-    private static Logger logger = Logger.getLogger(DriverDaoImpl.class);
+    private static final Logger LOG = Logger.getLogger(DriverDaoImpl.class);
+    private static final String ORDER_BY_ID_QUERY = "from Order where id = :orderID";
+    private static final String ORDER_ID = "orderID";
 
     private SessionFactory sessionFactory;
 
@@ -32,6 +34,7 @@ public class DriverDaoImpl implements DriverDao {
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
     public Driver addDriver(Driver driver) throws PlateNumberNotFoundException, DuplicateEntryException {
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -58,7 +61,7 @@ public class DriverDaoImpl implements DriverDao {
             }
             encryptedPassword = stringBuilder.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOG.error("NoSuchAlgorithmException", e);
         }
 
         // DB save
@@ -85,11 +88,12 @@ public class DriverDaoImpl implements DriverDao {
         Query driverQuery = session.createQuery("from Driver where id = :savedDriverID");
         driverQuery.setInteger("savedDriverID", savedDriverID);
         Driver savedDriver = (Driver) driverQuery.uniqueResult();
-        logger.info("Driver saved successfully, Driver details=" + savedDriver);
+        LOG.info("Driver saved successfully, Driver details=" + savedDriver);
 
         return savedDriver;
     }
 
+    @Override
     public Driver updateDriver(Driver driver) throws PlateNumberNotFoundException, DuplicateEntryException {
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -106,7 +110,7 @@ public class DriverDaoImpl implements DriverDao {
             }
             encryptedPassword = stringBuilder.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOG.error("NoSuchAlgorithmException", e);
         }
 
         // DB update
@@ -159,11 +163,12 @@ public class DriverDaoImpl implements DriverDao {
         session.update(driverToUpdate);
 
         Driver updatedDriver = (Driver) driverQuery.uniqueResult();
-        logger.info("Driver updated successfully, Driver details=" + updatedDriver);
+        LOG.info("Driver updated successfully, Driver details=" + updatedDriver);
 
         return updatedDriver;
     }
 
+    @Override
     public void updateDriverStatusAndWorkedHours(Driver driver) {
         Session session = this.sessionFactory.getCurrentSession();
         int driverId = driver.getId();
@@ -177,7 +182,7 @@ public class DriverDaoImpl implements DriverDao {
         String lastDriverStatus = dbDriver.getStatus();
 
         // if statuses are the same or last one is FREE, don't update driver's worked hours
-        if (!newDriverStatus.equalsIgnoreCase(lastDriverStatus) && !lastDriverStatus.equalsIgnoreCase("free")) {
+        if (!newDriverStatus.equalsIgnoreCase(lastDriverStatus) && !"free".equalsIgnoreCase(lastDriverStatus)) {
 
             DriverStatusChange lastDriverStatusChange =
                     (DriverStatusChange) session.createCriteria(DriverStatusChange.class)
@@ -188,8 +193,6 @@ public class DriverDaoImpl implements DriverDao {
             long statusLastModifiedTimeInMillis = lastDriverStatusChange.getLast_modified_time().getTime();
 
             long newWorkedHoursInMillis = (new Date()).getTime() - statusLastModifiedTimeInMillis;
-
-//            int newWorkedHours1 = (int) ((newWorkedHoursInMillis / (1000 * 60 * 60)) % 24);
 
             int newWorkedHours = (int) TimeUnit.MILLISECONDS.toHours(newWorkedHoursInMillis);
 
@@ -202,42 +205,46 @@ public class DriverDaoImpl implements DriverDao {
         dbDriver.setStatus(newDriverStatus);
 
         session.update(dbDriver);
-        logger.info("Driver status updated successfully, Driver details=" + dbDriver);
+        LOG.info("Driver status updated successfully, Driver details=" + dbDriver);
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public List<Driver> listDrivers() {
         Session session = this.sessionFactory.getCurrentSession();
         List<Driver> driverList = session.createQuery("from Driver").list();
         for (Driver driver : driverList) {
-            logger.info("Driver list::" + driver);
+            LOG.info("Driver list::" + driver);
         }
         return driverList;
     }
 
+    @Override
     public Driver getDriverById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Driver driver = (Driver) session.load(Driver.class, new Integer(id));
-        logger.info("Driver loaded successfully, Driver details=" + driver);
+        LOG.info("Driver loaded successfully, Driver details=" + driver);
         return driver;
     }
 
+    @Override
     public void removeDriver(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Driver driver = (Driver) session.load(Driver.class, new Integer(id));
         if (driver != null){
             session.delete(driver);
         }
-        logger.info("Driver deleted successfully, Driver details=" + driver);
+        LOG.info("Driver deleted successfully, Driver details=" + driver);
     }
 
     /**
      * Gets all drivers for the provided order ID from the database and returns them as a set of drivers.
      */
+    @Override
     public Set<Driver> getAllOrderDrivers(int orderID) {
         Session session = sessionFactory.getCurrentSession();
-        Query orderQuery = session.createQuery("from Order where id = :orderID");
-        orderQuery.setInteger("orderID", orderID);
+        Query orderQuery = session.createQuery(ORDER_BY_ID_QUERY);
+        orderQuery.setInteger(ORDER_ID, orderID);
         Order order = (Order) orderQuery.uniqueResult();
 
         return order.getDrivers();
@@ -246,11 +253,12 @@ public class DriverDaoImpl implements DriverDao {
     /**
      * Saves a driver to the database and returns saved object.
      */
+    @Override
     public Driver saveOrderDriver(int orderID, String driverEmail) {
         Session session = sessionFactory.getCurrentSession();
 
-        Query orderQuery = session.createQuery("from Order where id = :orderID");
-        orderQuery.setInteger("orderID", orderID);
+        Query orderQuery = session.createQuery(ORDER_BY_ID_QUERY);
+        orderQuery.setInteger(ORDER_ID, orderID);
         Order order = (Order) orderQuery.uniqueResult();
 
         Query driverQuery = session.createQuery("from Driver where email = :driverEmail");
@@ -273,12 +281,13 @@ public class DriverDaoImpl implements DriverDao {
     /**
      * Fetches all valid driver options from the database and returns them as a JSON string suitable for JTable.
      */
+    @Override
     public String getDriverOptions(int orderID) {
         Session session = sessionFactory.getCurrentSession();
 
         // Fetch the order with the given orderID from the database
-        Query orderQuery = session.createQuery("from Order where id = :orderID");
-        orderQuery.setInteger("orderID", orderID);
+        Query orderQuery = session.createQuery(ORDER_BY_ID_QUERY);
+        orderQuery.setInteger(ORDER_ID, orderID);
         Order order = (Order) orderQuery.uniqueResult();
 
         String orderTruckCity = order.getTruck().getLocation().getCity();
@@ -341,7 +350,7 @@ public class DriverDaoImpl implements DriverDao {
                         .waypoints(waypointCities)
                         .await();
             } catch (Exception e) {
-                logger.error("Problem with the routes request using Google Maps API.", e);
+                LOG.error("Problem with the routes request using Google Maps API.", e);
             }
 
             DirectionsLeg[] legs = routes[0].legs;
@@ -399,7 +408,7 @@ public class DriverDaoImpl implements DriverDao {
         int optionCount = 0;
         String driverOptionJSONList = "[";
 
-        if (validDriverSet.size() == 0) {
+        if (validDriverSet.isEmpty()) {
             driverOptionJSONList += "]";
 
         } else {

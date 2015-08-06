@@ -13,13 +13,6 @@ import java.util.Date;
 @Table(name = "driver_status_changes", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class DriverStatusChange {
 
-    public DriverStatusChange() {}
-
-    public DriverStatusChange(String status, Driver driver) {
-        this.status = status;
-        this.driver = driver;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -39,6 +32,15 @@ public class DriverStatusChange {
     @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "driver_id", nullable = false)
     private Driver driver;
+
+    public DriverStatusChange() {
+
+    }
+
+    public DriverStatusChange(String status, Driver driver) {
+        this.status = status;
+        this.driver = driver;
+    }
 
     public int getId() {
         return id;
