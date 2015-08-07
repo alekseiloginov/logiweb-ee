@@ -3,7 +3,7 @@
 <log4j:configuration>
 
     <appender name="LOG-WARN-FILE-APPENDER" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="app-spring/target/test-logs/error.log"/>
+        <param name="file" value="app-ejb/target/test-logs/error.log"/>
         <param name="Append"            value="true"/>
         <param name="ImmediateFlush"    value="true"/>
         <param name="MaxFileSize"       value="20MB"/>
@@ -18,7 +18,7 @@
     </appender>
 
     <appender name="LOG-INFO-FILE-APPENDER" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="app-spring/target/test-logs/info.log"/>
+        <param name="file" value="app-ejb/target/test-logs/info.log"/>
         <param name="Append"            value="true"/>
         <param name="ImmediateFlush"    value="true"/>
         <param name="MaxFileSize"       value="20MB"/>
@@ -33,7 +33,7 @@
     </appender>
 
     <appender name="LOG-DEBUG-FILE-APPENDER" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="app-spring/target/test-logs/debug.log"/>
+        <param name="file" value="app-ejb/target/test-logs/debug.log"/>
         <param name="Append"            value="true"/>
         <param name="ImmediateFlush"    value="true"/>
         <param name="MaxFileSize"       value="20MB"/>
@@ -48,7 +48,7 @@
     </appender>
 
     <appender name="LOG-FILE-APPENDER" class="org.apache.log4j.FileAppender">
-        <param name="file" value="app-spring/target/test-logs/all.log"/>
+        <param name="file" value="app-ejb/target/test-logs/all.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{ISO8601} [%5p] %c %m at %l%n"/>
         </layout>
