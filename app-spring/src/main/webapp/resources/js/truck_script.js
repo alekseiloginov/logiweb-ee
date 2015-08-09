@@ -62,12 +62,12 @@ $(document).ready(function () {
             });
 
             // THIS BLOCK FOR PRESENTATION ONLY
-            $( "button" ).click(function() {
-                //event.preventDefault();
-                $( "#Edit-plate_number" ).val( "YZ09876" );
-                $( "#Edit-driver_number" ).val( "2" );
-                $( "#Edit-capacity" ).val( "3" );
-            });
+            //$( "button" ).click(function() {
+            //    //event.preventDefault();
+            //    $( "#Edit-plate_number" ).val( "YZ09876" );
+            //    $( "#Edit-driver_number" ).val( "2" );
+            //    $( "#Edit-capacity" ).val( "3" );
+            //});
         },
         formSubmitting: function (event, data) {
             //Validate form when it is being submitted

@@ -1,5 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
+import com.tsystems.javaschool.loginov.logiweb.dao.DriverDao;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberNotFoundException;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
@@ -8,16 +9,19 @@ import com.tsystems.javaschool.loginov.logiweb.models.Truck;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 /**
  * DriverService unit tests.
  */
 public class DriverServiceTest {
+    private DriverService driverService;
+    private Location location;
+    private Truck truck;
+    private Driver driver;
 
-    DriverService driverService;
-    Location location;
-    Truck truck;
-    Driver driver;
+    @Mock
+    private DriverDao driverDao;
 
     @Before
     public void setUp() throws Exception {

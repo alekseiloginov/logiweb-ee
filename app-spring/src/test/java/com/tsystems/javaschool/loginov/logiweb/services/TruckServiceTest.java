@@ -1,5 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
+import com.tsystems.javaschool.loginov.logiweb.dao.TruckDao;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectException;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
@@ -7,15 +8,18 @@ import com.tsystems.javaschool.loginov.logiweb.models.Truck;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 /**
  * TruckService unit tests.
  */
 public class TruckServiceTest {
+    private TruckService truckService;
+    private Location location;
+    private Truck truck;
 
-    TruckService truckService;
-    Location location;
-    Truck truck;
+    @Mock
+    private TruckDao truckDao;
 
     @Before
     public void setUp() throws Exception {
