@@ -10,8 +10,7 @@ import com.tsystems.javaschool.loginov.logiweb.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.core.Response;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * CXF RESTful webservice implementation to manage freight status changes from the client app.
@@ -62,12 +61,22 @@ public class FreightRestServiceImpl implements FreightRestService {
 
             for (Waypoint waypoint : waypoints) {
 
-                // freight should not be delivered
+                // freight should not be in status "delivered"
                 if (!"delivered".equalsIgnoreCase(waypoint.getFreight().getStatus())) {
                     freights.add(waypoint.getFreight());
                 }
             }
-            return Response.ok(freights).build();
+
+            List<Freight> freightList = new ArrayList<>(freights);
+
+            // Sort freights by id using custom Comparator
+            Collections.sort(freightList, new Comparator<Freight>() {
+                public int compare(Freight one, Freight other) {
+                    return one.getId() - other.getId();
+                }
+            });
+
+            return Response.ok(freightList).build();
         }
         return Response.ok().build();
     }

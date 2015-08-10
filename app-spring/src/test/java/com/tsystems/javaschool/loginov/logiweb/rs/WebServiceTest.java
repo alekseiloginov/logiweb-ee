@@ -34,11 +34,11 @@ public class WebServiceTest {
         this.mockMvc = webAppContextSetup(this.wac).build();
     }
 
-//    @Test
-//    public void setFreightStatusTest() throws Exception {
-//        mockMvc.perform(post("/logiweb-ee/services/rest/freights/9/statuses/shipped"))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    public void setFreightStatusTest() throws Exception {
+        mockMvc.perform(post("/logiweb-ee/services/rest/freights/9/statuses/shipped"))
+                .andExpect(status().isOk());
+    }
 
 //    @Test
 //    public void getFreightListTest() throws Exception {
@@ -46,10 +46,10 @@ public class WebServiceTest {
 //                .andExpect(status().isOk());
 //    }
 
-    @Test
-    public void simple() throws Exception {
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("landing"));
-    }
+//    @Test
+//    public void simple() throws Exception {
+//        mockMvc.perform(get("/"))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("landing"));
+//    }
 }

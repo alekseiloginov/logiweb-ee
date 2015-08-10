@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/test-context.xml")
+@ContextConfiguration("file:src/test/resources/test-context.xml")
 public class DriverControllerTest {
     private MockMvc mockMvc;
 
