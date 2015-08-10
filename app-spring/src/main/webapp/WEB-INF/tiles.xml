@@ -11,12 +11,12 @@
         <put-attribute name="footer" value="/WEB-INF/tiles/facade/footer.jsp" />
     </definition>
 
-	<definition name="base.definition" template="/WEB-INF/tiles/layout.jsp">
+	<definition name="base.definition" template="/WEB-INF/tiles/main/layout.jsp">
         <put-attribute name="title" value="" />
-        <put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
-        <put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
+        <put-attribute name="header" value="/WEB-INF/tiles/main/header.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/tiles/main/menu.jsp" />
         <put-attribute name="body" value="" />
-        <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/tiles/main/footer.jsp" />
 	</definition>
 
 	<definition name="landing" extends="facade.definition">
@@ -72,5 +72,10 @@
     <definition name="secure/driver/orders" extends="base.definition">
         <put-attribute name="title" value="Orders" />
         <put-attribute name="body" value="/WEB-INF/views/secure/driver/orders.jsp" />
+    </definition>
+
+    <definition name="gmaps"  template="/WEB-INF/tiles/blank_layout.jsp" >
+        <put-attribute name="title" value="Order's Map" />
+        <put-attribute name="body" value="/WEB-INF/views/gmaps.jsp" />
     </definition>
 </tiles-definitions>

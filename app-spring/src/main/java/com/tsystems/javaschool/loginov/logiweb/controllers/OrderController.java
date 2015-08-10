@@ -1,5 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.google.gson.Gson;
 import com.tsystems.javaschool.loginov.logiweb.models.Order;
 import com.tsystems.javaschool.loginov.logiweb.models.Truck;
 import com.tsystems.javaschool.loginov.logiweb.models.Waypoint;
@@ -8,6 +9,7 @@ import com.tsystems.javaschool.loginov.logiweb.utils.GsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,10 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Spring MVC Controller to work with the order data.
@@ -143,5 +143,49 @@ public class OrderController {
         Waypoint savedOrderWaypoint = orderService.saveOrderWaypoint(orderID, waypointCity, waypointFreightName);
         resultMap.put(DATUM, savedOrderWaypoint);
         gsonParser.parse(resultMap, resp);
+    }
+
+    /**
+     * Redirects to the order's map page.
+     */
+    @RequestMapping(value = "/orders/{orderId}/map", method = RequestMethod.GET)
+    public ModelAndView showOrderOnMap(@PathVariable("orderId") int orderId, ModelAndView model) {
+
+        Order order = orderService.getOrderById(orderId);
+
+        if (order.getTruck().getLocation().getCity() != null) {
+
+            String mainCity = order.getTruck().getLocation().getCity();
+
+            Set<Waypoint> waypointSet = order.getWaypoints();
+
+            Set<Waypoint> waypointConcurrentSet = Collections.newSetFromMap(new ConcurrentHashMap<Waypoint, Boolean>());
+
+            waypointConcurrentSet.addAll(waypointSet);
+
+            Set<String> citySet = new HashSet<>();
+
+            // remove main (start/end) waypoint
+            for (Waypoint waypoint : waypointConcurrentSet) {
+                if (mainCity.equals(waypoint.getLocation().getCity())) {
+                    waypointSet.remove(waypoint);
+                    continue;
+                }
+
+                citySet.add(waypoint.getLocation().getCity());
+            }
+
+            Gson gson = new Gson();
+
+            String waypoints = gson.toJson(citySet);
+
+            model.addObject("mainCity", mainCity);
+
+            model.addObject("waypoints", waypoints);
+        }
+
+        model.setViewName("gmaps");
+
+        return model;
     }
 }

@@ -196,6 +196,31 @@ $(document).ready(function () {
                 type: 'radiobutton',
                 options: { '1': 'Yes', '0': 'No' },
                 defaultValue: '0'
+            },
+            map: {
+                title: 'On Map',
+                width: '5%',
+                sorting: false,
+                edit: false,
+                create: false,
+                display: function (orderData) {
+                    //Create an image that will be used to open child table
+                    var $img = $('<img src="resources/images/map-icon.png" title="View drivers" />');
+                    //Open gmaps when user clicks the image
+                    $img.click(function () {
+
+                        // redirect to a map page
+                        window.location.href='orders/' + orderData.record.id + '/map';
+
+                        //$('#OrderTableContainer').jtable('openChildTable',
+                        //    $img.closest('tr'),
+                        //    {}, function (data) { //opened handler
+                        //        data.childTable.jtable('load');
+                        //    });
+                    });
+                    //Return image to show on the order row
+                    return $img;
+                }
             }
         }
     }).jtable('load');
