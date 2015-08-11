@@ -1,7 +1,5 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
-import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
-import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectException;
 import com.tsystems.javaschool.loginov.logiweb.models.Truck;
 
 import java.util.List;
@@ -11,15 +9,17 @@ import java.util.List;
  */
 public interface TruckDao {
 
-    Truck addTruck(Truck truck) throws PlateNumberIncorrectException, DuplicateEntryException;
+    Truck addTruck(Truck truck);
 
-    Truck updateTruck(Truck truck) throws PlateNumberIncorrectException, DuplicateEntryException;
+    Truck updateTruck(Truck truck);
 
     List<Truck> listTrucks();
 
     Truck getTruckById(int id);
 
+    Truck getTruckByPlateNumber(String plateNumber);
+
     void removeTruck(int id);
 
-    String getTruckOptions();
+    List getDrivableTrucks();
 }

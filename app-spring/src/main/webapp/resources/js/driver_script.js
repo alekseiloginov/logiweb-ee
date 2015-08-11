@@ -84,15 +84,15 @@ $(document).ready(function () {
             });
 
             // THIS BLOCK FOR PRESENTATION ONLY
-            //$( "button" ).click(function() {
-            //    //event.preventDefault();
-            //    $( "#Edit-name" ).val( "Vasya" );
-            //    $( "#Edit-surname" ).val( "Pupkin" );
-            //    $( "#Edit-email" ).val( "vas@abc.com" );
-            //    $( "#Edit-password" ).val( "1234" );
-            //    $( "#Edit-worked_hours" ).val( "50" );
-            //    $( "#Edit-truck" ).val( "DE98765" );
-            //});
+            $( "button" ).click(function() {
+                //event.preventDefault();
+                $( "#Edit-name" ).val( "Vasya" );
+                $( "#Edit-surname" ).val( "Pupkin" );
+                $( "#Edit-email" ).val( "vas@abc.com" );
+                $( "#Edit-password" ).val( "1234" );
+                $( "#Edit-worked_hours" ).val( "50" );
+                $( "#Edit-truck" ).val( "DE98765" );
+            });
         },
         formSubmitting: function (event, data) {
             //Validate form when it is being submitted

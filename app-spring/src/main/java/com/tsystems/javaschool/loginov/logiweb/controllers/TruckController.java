@@ -1,13 +1,14 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
-import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectException;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
 import com.tsystems.javaschool.loginov.logiweb.models.Truck;
 import com.tsystems.javaschool.loginov.logiweb.services.TruckService;
 import com.tsystems.javaschool.loginov.logiweb.utils.GsonParser;
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -74,9 +75,9 @@ public class TruckController {
         } catch (PlateNumberIncorrectException e) {
             LOG.error("Plate number incorrect: " + plate_number, e);
             resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number should contain 2 letters and 5 digits.");
-        } catch (DuplicateEntryException e) {
-            LOG.error("Duplicate entry: " + plate_number, e);
-            resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number is unique and this one is already present in the database.");
+        } catch (ConstraintViolationException e) {
+            LOG.error("Problem with Truck saving", e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, e.getCause().getMessage());
         }
 
         gsonParser.parse(resultMap, resp);
@@ -104,9 +105,9 @@ public class TruckController {
         } catch (PlateNumberIncorrectException e) {
             LOG.error("Plate number incorrect: " + plate_number, e);
             resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number should contain 2 letters and 5 digits.");
-        } catch (DuplicateEntryException e) {
-            LOG.error("Duplicate entry: " + plate_number, e);
-            resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number is unique and this one is already present in the database.");
+        } catch (DataIntegrityViolationException e) {
+            LOG.error("Problem with Truck updating", e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, e.getRootCause().getMessage());
         }
 
         gsonParser.parse(resultMap, resp);

@@ -1,5 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
+import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.DriverStatusChange;
 
 /**
@@ -7,5 +8,9 @@ import com.tsystems.javaschool.loginov.logiweb.models.DriverStatusChange;
  */
 public interface DriverStatusChangeDao {
 
-    void saveOrUpdateDriverStatus(DriverStatusChange driverStatusChange);
+    void saveDriverStatus(DriverStatusChange driverStatusChange);
+
+    void updateDriverStatus(DriverStatusChange driverStatusChange);
+
+    DriverStatusChange getDriverStatusChange(Driver driver, String driverStatus);
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile">
+
+
+<h:body>
+    <pm:page id="edit">
+        <pm:header title="LOGIWEB" swatch="b">
+            <p:button styleClass="ui-btn-left ui-btn-inline" value="Back" icon="ui-icon-arrow-l" outcome="pm:list?transition=flip"/>
+        </pm:header>
+
+        <pm:content>
+            <div class="container">
+                <h:form id="editForm">
+                    <p:outputPanel id="editFormPanel">
+                        <pm:field>
+                            <h4>Freight ID:</h4>
+                            <h4>#{freightStatusBean.freight.id}</h4>
+                        </pm:field>
+
+                        <pm:field>
+                            <h4>Freight Title:</h4>
+                            <h4>#{freightStatusBean.freight.name}</h4>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:selectOneMenu id="status" value="#{freightStatusBean.freight.status}">
+                                <f:selectItem itemValue=""
+                                              itemLabel="Status: #{freightStatusBean.freight.status}" />
+                                <f:selectItems
+                                        value="#{freightStatusBean.getFreightStatusList(freightStatusBean.freight.status)}"/>
+                            </p:selectOneMenu>
+                        </pm:field>
+                    </p:outputPanel>
+
+                    <p:commandButton value="✔ Save" update=":list:listForm:freightsList"
+                                     action="#{freightStatusBean.updateFreight(freightStatusBean.freight.id,
+                                                                                freightStatusBean.freight.status)}"/>
+                </h:form>
+            </div>
+
+        </pm:content>
+    </pm:page>
+</h:body>
+
+</html>

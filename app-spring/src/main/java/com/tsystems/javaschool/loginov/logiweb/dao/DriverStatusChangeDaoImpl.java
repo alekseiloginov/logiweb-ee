@@ -8,8 +8,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-
 /**
  * Hibernate specific DAO implementation for driver status changes.
  */
@@ -24,28 +22,25 @@ public class DriverStatusChangeDaoImpl implements DriverStatusChangeDao {
     }
 
     @Override
-    public void saveOrUpdateDriverStatus(DriverStatusChange driverStatusChange) {
+    public void saveDriverStatus(DriverStatusChange driverStatusChange) {
         Session session = this.sessionFactory.getCurrentSession();
-        int driverId = driverStatusChange.getDriver().getId();
-        String driverStatus = driverStatusChange.getStatus();
+        session.save(driverStatusChange);
+        LOG.info("DriverStatusChange saved successfully, DriverStatusChange details=" + driverStatusChange);
+    }
 
-        Driver dbDriver =
-                (Driver) session.createCriteria(Driver.class).add(Restrictions.eq("id", driverId)).uniqueResult();
+    @Override
+    public void updateDriverStatus(DriverStatusChange driverStatusChange) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.update(driverStatusChange);
+        LOG.info("DriverStatusChange updated successfully, DriverStatusChange details=" + driverStatusChange);
+    }
 
-        DriverStatusChange dbDriverStatusChange = (DriverStatusChange) session.createCriteria(DriverStatusChange.class)
-                .add(Restrictions.eq("driver", dbDriver))
+    @Override
+    public DriverStatusChange getDriverStatusChange(Driver driver, String driverStatus) {
+        Session session = this.sessionFactory.getCurrentSession();
+        return (DriverStatusChange) session.createCriteria(DriverStatusChange.class)
+                .add(Restrictions.eq("driver", driver))
                 .add(Restrictions.eq("status", driverStatus))
                 .uniqueResult();
-
-        if (dbDriverStatusChange != null) {
-            dbDriverStatusChange.setLast_modified_time(new Date());
-            session.update(dbDriverStatusChange);
-            LOG.info("DriverStatusChange updated successfully, DriverStatusChange details=" + driverStatusChange);
-
-        } else {
-            driverStatusChange.setDriver(dbDriver);
-            session.save(driverStatusChange);
-            LOG.info("DriverStatusChange saved successfully, DriverStatusChange details=" + driverStatusChange);
-        }
     }
 }

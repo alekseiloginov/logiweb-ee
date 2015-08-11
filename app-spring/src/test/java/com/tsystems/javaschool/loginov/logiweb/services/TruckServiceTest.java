@@ -34,13 +34,13 @@ public class TruckServiceTest {
     }
 
     @Test(expected = PlateNumberIncorrectException.class)
-    public void plateNumberIncorrectExceptionTest() throws PlateNumberIncorrectException, DuplicateEntryException {
+    public void plateNumberIncorrectExceptionTest() throws Exception {
         truck.setPlate_number("ABC1234");
         truckService.addTruck(truck);
     }
 
     @Test(expected = DuplicateEntryException.class)
-    public void duplicateEntryExceptionTest() throws PlateNumberIncorrectException, DuplicateEntryException {
+    public void duplicateEntryExceptionTest() throws Exception {
         // mock this call to the db
         truckService.addTruck(truck);
     }

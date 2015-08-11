@@ -18,10 +18,7 @@ public interface LocationDao {
 
     Location getLocationById(int id);
 
-    void removeLocation(int id);
+    Location getLocationByCity(String city);
 
-    /**
-     * Fetches all valid location options from the database and returns them as a JSON string suitable for JTable.
-     */
-    String getLocationOptions();
+    void removeLocation(int id);
 }

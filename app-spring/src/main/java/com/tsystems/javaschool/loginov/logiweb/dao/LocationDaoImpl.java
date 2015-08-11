@@ -2,6 +2,7 @@ package com.tsystems.javaschool.loginov.logiweb.dao;
 
 import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,6 @@ import java.util.List;
  */
 @Repository
 public class LocationDaoImpl implements LocationDao {
-
     private SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory){
@@ -32,7 +32,8 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public List<Location> listLocations() {
-        return null;
+        Session session = this.sessionFactory.getCurrentSession();
+        return session.createQuery("from Location").list();
     }
 
     @Override
@@ -41,42 +42,15 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public void removeLocation(int id) {
-
+    public Location getLocationByCity(String city) {
+        Session session = this.sessionFactory.getCurrentSession();
+        Query locationQuery = session.createQuery("from Location where city = :city");
+        locationQuery.setString("city", city);
+        return (Location) locationQuery.uniqueResult();
     }
 
-    /**
-     * Fetches all valid location options from the database and returns them as a JSON string suitable for JTable.
-     */
     @Override
-    public String getLocationOptions() {
-        Session session = this.sessionFactory.getCurrentSession();
+    public void removeLocation(int id) {
 
-        List locationList = session.createQuery("from Location").list();
-
-        // Creating a JSON string
-        int optionCount = 0;
-        String locationOptionJSONList = "[";
-
-        if (locationList.size() == 0) {
-            locationOptionJSONList += "]";
-
-        } else {
-
-            for (Object location : locationList) {
-                locationOptionJSONList += "{\"DisplayText\":\"";
-                locationOptionJSONList += ((Location) location).getCity();
-                locationOptionJSONList += "\",\"Value\":\"";
-                locationOptionJSONList += ((Location) location).getCity();
-                ++optionCount;
-
-                if (optionCount < locationList.size()) {
-                    locationOptionJSONList += "\"},";
-                } else {
-                    locationOptionJSONList += "\"}]";
-                }
-            }
-        }
-        return locationOptionJSONList;
     }
 }

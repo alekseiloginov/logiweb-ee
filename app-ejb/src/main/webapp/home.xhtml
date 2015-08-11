@@ -114,43 +114,7 @@
         </pm:content>
     </pm:page>
 
-    <pm:page id="edit">
-        <pm:header title="LOGIWEB" swatch="b">
-            <p:button styleClass="ui-btn-left ui-btn-inline" value="Back" icon="ui-icon-arrow-l" outcome="pm:list?transition=flip"/>
-        </pm:header>
-
-        <pm:content>
-            <div class="container">
-                <h:form id="editForm">
-                    <p:outputPanel id="editFormPanel">
-                        <pm:field>
-                            <h4>Freight ID:</h4>
-                            <h4>#{freightStatusBean.freight.id}</h4>
-                        </pm:field>
-
-                        <pm:field>
-                            <h4>Freight Title:</h4>
-                            <h4>#{freightStatusBean.freight.name}</h4>
-                        </pm:field>
-
-                        <pm:field>
-                            <p:selectOneMenu id="status" value="#{freightStatusBean.freight.status}">
-                                <f:selectItem itemValue=""
-                                              itemLabel="Status: #{freightStatusBean.freight.status}" />
-                                <f:selectItems
-                                        value="#{freightStatusBean.getFreightStatusList(freightStatusBean.freight.status)}"/>
-                            </p:selectOneMenu>
-                        </pm:field>
-                    </p:outputPanel>
-
-                    <p:commandButton value="✔ Save" update=":list:listForm:freightsList"
-                                     action="#{freightStatusBean.updateFreight(freightStatusBean.freight.id,
-                                                                                freightStatusBean.freight.status)}"/>
-                </h:form>
-            </div>
-
-        </pm:content>
-    </pm:page>
+    <ui:include src="editfreightstatus.xhtml" />
 </h:body>
 
 </html>

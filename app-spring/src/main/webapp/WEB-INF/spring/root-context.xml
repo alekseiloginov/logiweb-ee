@@ -68,6 +68,8 @@
     </beans:bean>
     <beans:bean id="truckService" class="com.tsystems.javaschool.loginov.logiweb.services.TruckService">
         <beans:property name="truckDao" ref="truckDao" />
+        <beans:property name="locationDao" ref="locationDao" />
+        <beans:property name="orderDao" ref="orderDao" />
     </beans:bean>
 
     <!-- Driver DAO & Service beans -->
@@ -76,6 +78,10 @@
     </beans:bean>
     <beans:bean id="driverService" class="com.tsystems.javaschool.loginov.logiweb.services.DriverService">
         <beans:property name="driverDao" ref="driverDao" />
+        <beans:property name="locationDao" ref="locationDao" />
+        <beans:property name="truckDao" ref="truckDao" />
+        <beans:property name="orderDao" ref="orderDao" />
+        <beans:property name="driverStatusChangeDao" ref="driverStatusChangeDao" />
     </beans:bean>
 
     <!-- Order DAO & Service beans -->
@@ -84,6 +90,10 @@
     </beans:bean>
     <beans:bean id="orderService" class="com.tsystems.javaschool.loginov.logiweb.services.OrderService">
         <beans:property name="orderDao" ref="orderDao" />
+        <beans:property name="truckDao" ref="truckDao" />
+        <beans:property name="locationDao" ref="locationDao" />
+        <beans:property name="freightDao" ref="freightDao" />
+        <beans:property name="waypointDao" ref="waypointDao" />
     </beans:bean>
 
     <!-- Freight DAO & Service beans -->
@@ -92,7 +102,18 @@
     </beans:bean>
     <beans:bean id="freightService" class="com.tsystems.javaschool.loginov.logiweb.services.FreightService">
         <beans:property name="freightDao" ref="freightDao" />
+        <beans:property name="locationDao" ref="locationDao" />
+        <beans:property name="waypointDao" ref="waypointDao" />
+        <beans:property name="orderDao" ref="orderDao" />
     </beans:bean>
+
+    <!-- Waypoint DAO & Service beans -->
+    <beans:bean id="waypointDao" class="com.tsystems.javaschool.loginov.logiweb.dao.WaypointDaoImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <!--<beans:bean id="waypointService" class="com.tsystems.javaschool.loginov.logiweb.services.WaypointService">-->
+        <!--<beans:property name="waypointDao" ref="waypointDao" />-->
+    <!--</beans:bean>-->
 
     <!-- Location DAO & Service beans -->
     <beans:bean id="locationDao" class="com.tsystems.javaschool.loginov.logiweb.dao.LocationDaoImpl">
@@ -108,6 +129,7 @@
     </beans:bean>
     <beans:bean id="driverStatusChangeService" class="com.tsystems.javaschool.loginov.logiweb.services.DriverStatusChangeService">
         <beans:property name="driverStatusChangeDao" ref="driverStatusChangeDao" />
+        <beans:property name="driverDao" ref="driverDao" />
     </beans:bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

@@ -13,7 +13,6 @@ import java.util.List;
  */
 @Service
 public class LocationService {
-
     private LocationDao locationDao;
 
     public void setLocationDao(LocationDao locationDao) {
@@ -47,6 +46,31 @@ public class LocationService {
 
     @Transactional
     public String getLocationOptions() {
-        return this.locationDao.getLocationOptions();
+        List locationList = locationDao.listLocations();
+
+        // Creating a JSON string
+        int optionCount = 0;
+        String locationOptionJSONList = "[";
+
+        if (locationList.size() == 0) {
+            locationOptionJSONList += "]";
+
+        } else {
+
+            for (Object location : locationList) {
+                locationOptionJSONList += "{\"DisplayText\":\"";
+                locationOptionJSONList += ((Location) location).getCity();
+                locationOptionJSONList += "\",\"Value\":\"";
+                locationOptionJSONList += ((Location) location).getCity();
+                ++optionCount;
+
+                if (optionCount < locationList.size()) {
+                    locationOptionJSONList += "\"},";
+                } else {
+                    locationOptionJSONList += "\"}]";
+                }
+            }
+        }
+        return locationOptionJSONList;
     }
 }

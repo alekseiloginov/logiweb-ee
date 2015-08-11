@@ -19,7 +19,7 @@ public interface FreightDao {
 
     Freight getFreightById(int id);
 
-    void removeFreight(int id);
+    Freight getFreightByName(String name);
 
-    String getFreightOptions(int orderID, String city);
+    void removeFreight(int id);
 }

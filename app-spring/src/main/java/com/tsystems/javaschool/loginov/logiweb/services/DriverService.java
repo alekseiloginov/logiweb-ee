@@ -1,40 +1,153 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
-import com.tsystems.javaschool.loginov.logiweb.dao.DriverDao;
-import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
+import com.tsystems.javaschool.loginov.logiweb.dao.*;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberNotFoundException;
-import com.tsystems.javaschool.loginov.logiweb.models.Driver;
+import com.tsystems.javaschool.loginov.logiweb.models.*;
+import com.tsystems.javaschool.loginov.logiweb.utils.Gmaps;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service class that uses Hibernate DAO classes to work with Driver objects.
  */
 @Service
 public class DriverService {
-
     private DriverDao driverDao;
+    private LocationDao locationDao;
+    private TruckDao truckDao;
+    private OrderDao orderDao;
+    private DriverStatusChangeDao driverStatusChangeDao;
+
+    @Autowired
+    private Gmaps gmaps;
 
     public void setDriverDao(DriverDao driverDao) {
         this.driverDao = driverDao;
     }
 
+    public void setLocationDao(LocationDao locationDao) {
+        this.locationDao = locationDao;
+    }
+
+    public void setTruckDao(TruckDao truckDao) {
+        this.truckDao = truckDao;
+    }
+
+    public void setOrderDao(OrderDao orderDao) {
+        this.orderDao = orderDao;
+    }
+
+    public void setDriverStatusChangeDao(DriverStatusChangeDao driverStatusChangeDao) {
+        this.driverStatusChangeDao = driverStatusChangeDao;
+    }
+
     @Transactional
-    public Driver addDriver(Driver driver) throws PlateNumberNotFoundException, DuplicateEntryException {
+    public Driver addDriver(Driver driver) throws PlateNumberNotFoundException, ConstraintViolationException {
+
+        // Password encryption using MD5
+        String encryptedPassword = null;
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(driver.getPassword().getBytes());
+            byte[] bytes = messageDigest.digest();
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (byte aByte : bytes) {
+                stringBuilder.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+            encryptedPassword = stringBuilder.toString();
+        } catch (NoSuchAlgorithmException e) {
+//            LOG.error("NoSuchAlgorithmException", e);
+        }
+
+        driver.setPassword(encryptedPassword);
+
+        Location location = locationDao.getLocationByCity(driver.getLocation().getCity());
+        driver.setLocation(location);
+
+        Truck truck = truckDao.getTruckByPlateNumber(driver.getTruck().getPlate_number());
+
+        // plate number can be empty, we don't need to throw exception in that case
+        if (!driver.getTruck().getPlate_number().isEmpty() && truck == null) {
+            throw new PlateNumberNotFoundException("Entered plate number is not found in the database",
+                    "Plate number not found");
+        }
+        driver.setTruck(truck);
+
         return this.driverDao.addDriver(driver);
     }
 
     @Transactional
-    public Driver updateDriver(Driver driver) throws PlateNumberNotFoundException, DuplicateEntryException {
-        return this.driverDao.updateDriver(driver);
+    public Driver updateDriver(Driver driver) throws PlateNumberNotFoundException, DataIntegrityViolationException {
+
+        // Password encryption using MD5
+        String encryptedPassword = null;
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(driver.getPassword().getBytes());
+            byte[] bytes = messageDigest.digest();
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (byte aByte : bytes) {
+                stringBuilder.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+            encryptedPassword = stringBuilder.toString();
+        } catch (NoSuchAlgorithmException e) {
+//            LOG.error("NoSuchAlgorithmException", e);
+        }
+
+        Driver driverToUpdate = driverDao.getDriverById(driver.getId());
+        driverToUpdate.setName(driver.getName());
+        driverToUpdate.setSurname(driver.getSurname());
+        driverToUpdate.setEmail(driver.getEmail());
+        driverToUpdate.setPassword(encryptedPassword);
+        driverToUpdate.setWorked_hours(driver.getWorked_hours());
+        driverToUpdate.setStatus(driver.getStatus());
+
+        Location location = locationDao.getLocationByCity(driver.getLocation().getCity());
+        driverToUpdate.setLocation(location);
+
+        Truck truck = truckDao.getTruckByPlateNumber(driver.getTruck().getPlate_number());
+
+        // plate number can be empty, we don't need to throw exception in that case
+        if (!driver.getTruck().getPlate_number().isEmpty() && truck == null) {
+            throw new PlateNumberNotFoundException("Entered plate number is not found in the database",
+                    "Plate number not found");
+        }
+        driverToUpdate.setTruck(truck);
+
+        return this.driverDao.updateDriver(driverToUpdate);
     }
 
     @Transactional
     public void updateDriverStatusAndWorkedHours(Driver driver) {
-        this.driverDao.updateDriverStatusAndWorkedHours(driver);
+        String newDriverStatus = driver.getStatus();
+        Driver dbDriver = driverDao.getDriverById(driver.getId());
+        String lastDriverStatus = dbDriver.getStatus();
+
+        // if statuses are the same or last one is FREE, don't update driver's worked hours
+        if (!newDriverStatus.equalsIgnoreCase(lastDriverStatus) && !"free".equalsIgnoreCase(lastDriverStatus)) {
+
+            DriverStatusChange lastDriverStatusChange =
+                    driverStatusChangeDao.getDriverStatusChange(dbDriver, lastDriverStatus);
+
+            long statusLastModifiedTimeInMillis = lastDriverStatusChange.getLast_modified_time().getTime();
+            long newWorkedHoursInMillis = (new Date()).getTime() - statusLastModifiedTimeInMillis;
+            int newWorkedHours = (int) TimeUnit.MILLISECONDS.toHours(newWorkedHoursInMillis);
+            dbDriver.setWorked_hours(dbDriver.getWorked_hours() + newWorkedHours);
+        }
+
+        dbDriver.setStatus(newDriverStatus);
+
+        this.driverDao.updateDriverStatusAndWorkedHours(dbDriver);
     }
 
     @Transactional
@@ -54,16 +167,134 @@ public class DriverService {
 
     @Transactional
     public Set<Driver> getAllOrderDrivers(int orderID) {
-        return this.driverDao.getAllOrderDrivers(orderID);
+        Order order = orderDao.getOrderById(orderID);
+        return order.getDrivers();
     }
 
     @Transactional
     public Driver saveOrderDriver(int orderID, String driverEmail) {
-        return this.driverDao.saveOrderDriver(orderID, driverEmail);
+        Order order = orderDao.getOrderById(orderID);
+        Driver driver = driverDao.getDriverByEmail(driverEmail);
+
+        // assign an order truck to the driver and update in the database
+        driver.setTruck(order.getTruck());
+        driverDao.updateDriver(driver);
+
+        // assign an driver to the order and update in the database
+        order.getDrivers().add(driver);
+        orderDao.updateOrder(order);
+
+        return driver;
     }
 
     @Transactional
     public String getDriverOptions(int orderID) {
-        return this.driverDao.getDriverOptions(orderID);
+
+        Order order = orderDao.getOrderById(orderID);
+
+        String mainCity = order.getTruck().getLocation().getCity();
+        int orderTruckDriverNumber = order.getTruck().getDriver_number();
+        int orderOccupiedTruckDriverNumber = order.getDrivers().size();
+        int orderTruckDriverLeft = orderTruckDriverNumber - orderOccupiedTruckDriverNumber;
+        String freeDriverStatus = "free";
+        List driversInCity = null;
+
+        // if there is a space in the truck's shift for another driver
+        if (orderTruckDriverLeft > 0) {
+
+            // get a location ID of the truck's city
+            int locationID = locationDao.getLocationByCity(mainCity).getId();
+
+            // get all FREE drivers from the same city
+            driversInCity = driverDao.getFreeDriversInCity(locationID, freeDriverStatus);
+        }
+
+        Set<Driver> validDriverSet = new HashSet<>();
+        Driver driverInCity;
+
+        if (driversInCity != null && order.getWaypoints() != null) {
+
+            // get all cities associated with this order and put them to the city set (excluding the origin city)
+            Set<Waypoint> orderWaypointSet = order.getWaypoints();
+            Set<String> citySet = new HashSet<>();
+
+            for (Waypoint orderWaypoint : orderWaypointSet) {
+
+                if (!orderWaypoint.getLocation().getCity().equals(mainCity)) {
+                    citySet.add( orderWaypoint.getLocation().getCity() );
+                }
+            }
+
+            long durationInSeconds = gmaps.calculateTripDurationInSeconds(citySet, mainCity);
+
+            long orderDurationInHoursLong = Math.round(durationInSeconds / 60.0 / 60.0);
+            int orderDurationInHoursInThisMonthInt = (int) orderDurationInHoursLong;
+
+            // Check month changes during the order, start - this moment (if it start later - it'll pass too)
+
+            // Start of the order DATE:TIME
+            Date orderStartDate = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(orderStartDate);
+            int orderStartMonth = cal.get(Calendar.MONTH);
+            long orderStartLong = orderStartDate.getTime();
+
+            // Start of a new month DATE:TIME
+            Date date = new Date();
+            cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.MONTH, orderStartMonth + 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            Date startOfTheNextMonthDate = cal.getTime();
+            long startOfTheNextMonthLong = startOfTheNextMonthDate.getTime();
+            long diffInMilliesLong = startOfTheNextMonthLong - orderStartLong;
+            long diffInHoursLong = TimeUnit.HOURS.convert(diffInMilliesLong, TimeUnit.MILLISECONDS);
+
+            if (diffInHoursLong < orderDurationInHoursLong) {
+                orderDurationInHoursInThisMonthInt = (int) diffInHoursLong;
+            }
+
+            for (Object driverObject : driversInCity) {
+                driverInCity = (Driver) driverObject;
+
+                // check if the driver is FREE + driver's truck is NULL + driver's worked hours in this month <= 176
+                if (driverInCity.getTruck() == null &&
+                        (driverInCity.getWorked_hours() + orderDurationInHoursInThisMonthInt) <= 176) {
+
+                    validDriverSet.add(driverInCity);
+                }
+            }
+        }
+
+        // Creating a JSON string
+        int optionCount = 0;
+        String driverOptionJSONList = "[";
+
+        if (validDriverSet.isEmpty()) {
+            driverOptionJSONList += "]";
+
+        } else {
+
+            for (Driver validDriver : validDriverSet) {
+                driverOptionJSONList += "{\"DisplayText\":\"";
+                driverOptionJSONList += validDriver.getEmail();
+                driverOptionJSONList += "\",\"Value\":\"";
+                driverOptionJSONList += validDriver.getEmail();
+                ++optionCount;
+
+                if (optionCount < validDriverSet.size()) {
+                    driverOptionJSONList += "\"},";
+                } else {
+                    driverOptionJSONList += "\"}]";
+                }
+            }
+        }
+
+        return driverOptionJSONList;
     }
 }

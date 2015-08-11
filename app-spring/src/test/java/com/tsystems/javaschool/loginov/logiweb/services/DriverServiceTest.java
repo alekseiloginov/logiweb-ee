@@ -37,27 +37,27 @@ public class DriverServiceTest {
     }
 
     @Test(expected = PlateNumberNotFoundException.class)
-    public void addDriverPlateNumberNotFoundExceptionTest() throws PlateNumberNotFoundException, DuplicateEntryException {
+    public void addDriverPlateNumberNotFoundExceptionTest() throws Exception {
         truck.setPlate_number("YZ12345");
         driver.setTruck(truck);
         driverService.addDriver(driver);
     }
 
     @Test(expected = DuplicateEntryException.class)
-    public void addDriverDuplicateEntryExceptionTest() throws PlateNumberNotFoundException, DuplicateEntryException {
+    public void addDriverDuplicateEntryExceptionTest() throws Exception {
         driver.setPassword("abc@abc.com");
         driverService.addDriver(driver);
     }
 
     @Test(expected = PlateNumberNotFoundException.class)
-    public void updateDriverPlateNumberNotFoundExceptionTest() throws PlateNumberNotFoundException, DuplicateEntryException {
+    public void updateDriverPlateNumberNotFoundExceptionTest() throws Exception {
         truck.setPlate_number("YZ12345");
         driver.setTruck(truck);
         driverService.updateDriver(driver);
     }
 
     @Test(expected = DuplicateEntryException.class)
-    public void updateDriverDuplicateEntryExceptionTest() throws PlateNumberNotFoundException, DuplicateEntryException {
+    public void updateDriverDuplicateEntryExceptionTest() throws Exception {
         driver.setPassword("abc@abc.com");
         driverService.updateDriver(driver);
     }

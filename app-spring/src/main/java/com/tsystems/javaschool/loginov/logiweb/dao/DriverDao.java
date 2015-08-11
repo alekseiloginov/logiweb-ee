@@ -1,20 +1,17 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
-import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
-import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberNotFoundException;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * DAO interface to declare the methods that we will use in our project to work with the driver data.
  */
 public interface DriverDao {
 
-    Driver addDriver(Driver driver) throws PlateNumberNotFoundException, DuplicateEntryException;
+    Driver addDriver(Driver driver);
 
-    Driver updateDriver(Driver driver) throws PlateNumberNotFoundException, DuplicateEntryException;
+    Driver updateDriver(Driver driver);
 
     void updateDriverStatusAndWorkedHours(Driver driver);
 
@@ -22,11 +19,9 @@ public interface DriverDao {
 
     Driver getDriverById(int id);
 
+    Driver getDriverByEmail(String email);
+
     void removeDriver(int id);
 
-    Set<Driver> getAllOrderDrivers(int orderID);
-
-    Driver saveOrderDriver(int orderID, String driverEmail);
-
-    String getDriverOptions(int orderID);
+    List getFreeDriversInCity(int locationID, String freeDriverStatus);
 }

@@ -1,6 +1,5 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
-import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberNotFoundException;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
@@ -8,7 +7,9 @@ import com.tsystems.javaschool.loginov.logiweb.models.Truck;
 import com.tsystems.javaschool.loginov.logiweb.services.DriverService;
 import com.tsystems.javaschool.loginov.logiweb.utils.GsonParser;
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -78,9 +79,9 @@ public class DriverController {
                                             new Location(city), new Truck(plate_number)));
             resultMap.put(DATUM, savedDriver);
 
-        } catch (DuplicateEntryException e) {
-            LOG.error("Duplicate entry: " + email, e);
-            resultMap.put(JTABLE_ERROR_MESSAGE, "Email should be unique and this one is already present in the database.");
+        } catch (ConstraintViolationException e) {
+            LOG.error("Problem with Driver saving", e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, e.getCause().getMessage());
         } catch (PlateNumberNotFoundException e) {
             LOG.error("Plate number not found: " + plate_number, e);
             resultMap.put(JTABLE_ERROR_MESSAGE, "No truck with the entered plate number, add it first.");
@@ -111,9 +112,9 @@ public class DriverController {
                                     worked_hours, status, new Location(city), new Truck(plate_number)));
             resultMap.put(DATUM, updatedDriver);
 
-        } catch (DuplicateEntryException e) {
-            LOG.error("Duplicate entry: " + email, e);
-            resultMap.put(JTABLE_ERROR_MESSAGE, "Email should be unique and this one is already present in the database.");
+        } catch (DataIntegrityViolationException e) {
+            LOG.error("Problem with Driver updating", e);
+            resultMap.put(JTABLE_ERROR_MESSAGE, e.getRootCause().getMessage());
         } catch (PlateNumberNotFoundException e) {
             LOG.error("Plate number not found: " + plate_number, e);
             resultMap.put(JTABLE_ERROR_MESSAGE, "No truck with the entered plate number, add it first.");

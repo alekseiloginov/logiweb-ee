@@ -1,6 +1,8 @@
 package com.tsystems.javaschool.loginov.logiweb.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,9 @@ public class GsonParser {
     private static final String APPLICATION_JSON = "application/json";
     private static final String UTF8 = "UTF-8";
     private static final String JSON_RESPONSE = "JSON response = ";
-    private Gson gson = new Gson();
+
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    Gson gson = gsonBuilder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create();
 
     public void parse(Map<String, Object> resultMap, HttpServletResponse resp) throws IOException {
 
@@ -47,10 +51,11 @@ public class GsonParser {
         // JSON for JTable: One item fetched from the db ("Record" in response)
         if (resultMap.containsKey("datum")) {
             Object datum = resultMap.get("datum");
+            Driver driver = (Driver) datum;
             resp.setContentType(APPLICATION_JSON);
             resp.setCharacterEncoding(UTF8);
             // Create a JSON object for JTable to parse
-            String response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
+            String response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(driver) + "}";
             LOG.info(JSON_RESPONSE + response);
             resp.getWriter().write(response);
             return;
