@@ -96,6 +96,7 @@
         <beans:property name="locationDao" ref="locationDao" />
         <beans:property name="freightDao" ref="freightDao" />
         <beans:property name="waypointDao" ref="waypointDao" />
+        <beans:property name="userDao" ref="userDao" />
     </beans:bean>
 
     <!-- Freight DAO & Service beans -->

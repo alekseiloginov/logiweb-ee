@@ -3,6 +3,7 @@ package com.tsystems.javaschool.loginov.logiweb.services;
 import com.tsystems.javaschool.loginov.logiweb.dao.*;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Order;
+import com.tsystems.javaschool.loginov.logiweb.models.User;
 import com.tsystems.javaschool.loginov.logiweb.models.Waypoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class OrderService {
     private LocationDao locationDao;
     private FreightDao freightDao;
     private WaypointDao waypointDao;
+    private UserDao userDao;
 
     public void setOrderDao(OrderDao orderDao) {
         this.orderDao = orderDao;
@@ -39,6 +41,10 @@ public class OrderService {
 
     public void setWaypointDao(WaypointDao waypointDao) {
         this.waypointDao = waypointDao;
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     @Transactional
@@ -68,6 +74,12 @@ public class OrderService {
     @Transactional
     public Order getOrderByDriver(Driver driver) {
         return this.orderDao.getOrderByDriver(driver);
+    }
+
+    @Transactional
+    public Order getOrderByDriverUsername(String driverUsername) {
+        User user = userDao.getUserByUsername(driverUsername);
+        return this.orderDao.getOrderByDriver(new Driver(user.getId()));
     }
 
     @Transactional

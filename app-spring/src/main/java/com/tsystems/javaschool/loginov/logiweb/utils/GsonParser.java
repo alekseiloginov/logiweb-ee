@@ -2,7 +2,6 @@ package com.tsystems.javaschool.loginov.logiweb.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +41,12 @@ public class GsonParser {
             resp.setContentType(APPLICATION_JSON);
             resp.setCharacterEncoding(UTF8);
             // Create a JSON object for JTable to parse
-            String response = "{\"Result\":\"OK\",\"Records\":" + gson.toJson(data) + "}";
+            String json = gson.toJson(data);
+            // if there only one object, add brackets like it's a list (JTable requirements)
+            if (json.endsWith("}")) {
+                json = "[" + json + "]";
+            }
+            String response = "{\"Result\":\"OK\",\"Records\":" + json + "}";
             LOG.info(JSON_RESPONSE + response);
             resp.getWriter().write(response);
             return;
@@ -51,11 +55,10 @@ public class GsonParser {
         // JSON for JTable: One item fetched from the db ("Record" in response)
         if (resultMap.containsKey("datum")) {
             Object datum = resultMap.get("datum");
-            Driver driver = (Driver) datum;
             resp.setContentType(APPLICATION_JSON);
             resp.setCharacterEncoding(UTF8);
             // Create a JSON object for JTable to parse
-            String response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(driver) + "}";
+            String response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
             LOG.info(JSON_RESPONSE + response);
             resp.getWriter().write(response);
             return;

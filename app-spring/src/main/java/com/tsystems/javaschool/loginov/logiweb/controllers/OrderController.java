@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,22 +58,19 @@ public class OrderController {
      * Fetches a list of all orders using the OrderService and puts it to the result map.
      */
     @RequestMapping(value = "/OrderList.do", method = RequestMethod.POST)
-    public void getAllOrders(@RequestParam(value = "truckID", required = false) Integer truckID,
-                             HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void getAllOrders(HttpServletRequest req, HttpServletResponse resp, Principal principal) throws IOException {
 
         SecurityContextHolderAwareRequestWrapper wrapper = new SecurityContextHolderAwareRequestWrapper(req, "");
         Map<String, Object> resultMap = new HashMap<>();
 
-        // need to know how to find out driver's truckID on his order page to send it here
-
-//        if (wrapper.isUserInRole("ROLE_MANAGER")) {
+        if (wrapper.isUserInRole("ROLE_MANAGER")) {
             List orderList = orderService.listOrders();
             resultMap.put(DATA, orderList);
 
-//        } else if (wrapper.isUserInRole("ROLE_DRIVER")) {
-//            Order order = orderService.getOrderById(truckID);
-//            resultMap.put(DATA, order);
-//        }
+        } else if (wrapper.isUserInRole("ROLE_DRIVER")) {
+            Order order = orderService.getOrderByDriverUsername(principal.getName());
+            resultMap.put(DATA, order);
+        }
 
         gsonParser.parse(resultMap, resp);
     }

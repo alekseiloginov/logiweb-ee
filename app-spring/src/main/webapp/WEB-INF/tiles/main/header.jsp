@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--<div id="wrapper">--%>
 
     <%--<!-- Navigation -->--%>
@@ -18,6 +19,7 @@
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
                 <ul class="dropdown-menu message-dropdown">
+                    <sec:authorize access="hasRole('ROLE_MANAGER')">
                     <li class="message-preview">
                         <a href="#">
                             <div class="media">
@@ -25,9 +27,9 @@
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
                                     </span>
                                 <div class="media-body">
-                                    <h5 class="media-heading"><strong>Grisha Pokrishkin</strong>
+                                    <h5 class="media-heading"><strong>Grisha Chichvarkin</strong>
                                     </h5>
-                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:31 PM</p>
                                     <p>Just finished the last order...</p>
                                 </div>
                             </div>
@@ -40,7 +42,7 @@
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
                                     </span>
                                 <div class="media-body">
-                                    <h5 class="media-heading"><strong>Grisha Pokrishkin</strong>
+                                    <h5 class="media-heading"><strong>Grisha Chichvarkin</strong>
                                     </h5>
                                     <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                                     <p>Ready for a new one!</p>
@@ -55,14 +57,32 @@
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
                                     </span>
                                 <div class="media-body">
-                                    <h5 class="media-heading"><strong>Grisha Pokrishkin</strong>
+                                    <h5 class="media-heading"><strong>Grisha Chichvarkin</strong>
                                     </h5>
-                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:33 PM</p>
                                     <p>Please, give me that one with the coffee!!!</p>
                                 </div>
                             </div>
                         </a>
                     </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_DRIVER')">
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading"><strong>Aleksei Loginov</strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Sorry, no weekends this week!</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </sec:authorize>
                     <li class="message-footer">
                         <a href="#">Read All New Messages</a>
                     </li>
@@ -71,32 +91,33 @@
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
                 <ul class="dropdown-menu alert-dropdown">
-                    <li>
-                        <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">View All</a>
-                    </li>
+                    <sec:authorize access="hasRole('ROLE_MANAGER')">
+                        <li>
+                            <a href="freights">New Freights <span class="label label-warning">5</span></a>
+                        </li>
+                        <li>
+                            <a href="trucks">Free Trucks <span class="label label-success">2</span></a>
+                        </li>
+                        <li>
+                            <a href="drivers">Free Drivers <span class="label label-success">1</span></a>
+                        </li>
+                        <li>
+                            <a href="orders">Active Orders <span class="label label-info">3</span></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="welcome">View All</a>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_DRIVER')">
+                        <li>
+                            <a href="orders">Waiting Orders <span class="label label-info">1</span></a>
+                        </li>
+                    </sec:authorize>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Alex Loginov <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> ${pageContext.request.userPrincipal.name} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="welcome"><i class="fa fa-fw fa-user"></i> Profile</a>

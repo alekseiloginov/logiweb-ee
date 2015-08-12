@@ -1,5 +1,6 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -37,16 +38,33 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<h1 class="page-header">
-						Dashboard
-						<%--<small>Statistics Overview</small>--%>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/welcome'}">
+                            <i class="fa fa-fw fa-home"></i> Home
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/trucks'}">
+                            <i class="fa fa-fw fa-bus"></i> Trucks
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/drivers'}">
+                            <i class="fa fa-fw fa-user"></i> Drivers
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/freights'}">
+                            <i class="fa fa-fw fa-cube"></i> Freights
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/orders'}">
+                            <i class="fa fa-fw fa-file-text-o"></i> Orders
+                        </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/locations'}">
+                            <i class="fa fa-fw fa-map-marker"></i> Locations
+                        </c:if>
+
 					</h1>
 					<ol class="breadcrumb">
 						<li class="active">
-							<i class="fa fa-dashboard"></i> Dashboard
-						</li>
+                            <i class="fa fa-fw fa-home"></i> Home
+                        </li>
                         <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/welcome'}">
                             <li>
-                                <a href="welcome"><i class="fa fa-fw fa-home"></i> Home</a>
+                                <a href="welcome"><i class="fa fa-dashboard"></i> Dashboard</a>
                             </li>
                         </c:if>
                         <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/trucks'}">
@@ -85,22 +103,22 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/welcome'}">
-                                    <i class="fa fa-fw fa-home"></i> Home
+                                    <i class="fa fa-dashboard"></i> Dashboard
                                 </c:if>
                                 <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/trucks'}">
-                                    <i class="fa fa-fw fa-bus"></i> Trucks
+                                    <i class="fa fa-fw fa-table"></i> Truck list
                                 </c:if>
                                 <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/drivers'}">
-                                    <i class="fa fa-fw fa-user"></i> Drivers
+                                    <i class="fa fa-fw fa-table"></i> Driver list
                                 </c:if>
                                 <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/freights'}">
-                                    <i class="fa fa-fw fa-cube"></i> Freights
+                                    <i class="fa fa-fw fa-table"></i> Freight list
                                 </c:if>
                                 <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/orders'}">
-                                    <i class="fa fa-fw fa-file-text-o"></i> Orders
+                                    <i class="fa fa-fw fa-table"></i> Order list
                                 </c:if>
                                 <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/locations'}">
-                                    <i class="fa fa-fw fa-map-marker"></i> Locations
+                                    <i class="fa fa-fw fa-table"></i> Location list
                                 </c:if>
                             </h3>
                         </div>
@@ -144,15 +162,23 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
 <!-- jTable script file -->
 <script src="<c:url value="/resources/jtable/jquery.jtable.min.js"/>" type="text/javascript"></script>
-<!-- jTable: Javascript files for validation engine -->
-<script src="<c:url value="/resources/js/jquery.validationEngine.js"/>" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/jquery.validationEngine-en.js"/>" type="text/javascript"></script>
-<!-- My jTable script files -->
-<script src="<c:url value="/resources/js/truck_script.js"/>" type="text/javascript" charset="utf-8"></script>
-<script src="<c:url value="/resources/js/driver_script.js"/>" type="text/javascript" charset="utf-8"></script>
-<script src="<c:url value="/resources/js/order_manager_script.js"/>" type="text/javascript" charset="utf-8"></script>
-<script src="<c:url value="/resources/js/freight_script.js"/>" type="text/javascript" charset="utf-8"></script>
-<script src="<c:url value="/resources/js/location_script.js"/>" type="text/javascript" charset="utf-8"></script>
+
+<sec:authorize access="hasRole('ROLE_MANAGER')">
+    <!-- jTable: Javascript files for validation engine -->
+    <script src="<c:url value="/resources/js/jquery.validationEngine.js"/>" type="text/javascript"></script>
+    <script src="<c:url value="/resources/js/jquery.validationEngine-en.js"/>" type="text/javascript"></script>
+    <!-- My jTable script files -->
+    <script src="<c:url value="/resources/js/truck_script.js"/>" type="text/javascript" charset="utf-8"></script>
+    <script src="<c:url value="/resources/js/driver_script.js"/>" type="text/javascript" charset="utf-8"></script>
+    <script src="<c:url value="/resources/js/order_manager_script.js"/>" type="text/javascript" charset="utf-8"></script>
+    <script src="<c:url value="/resources/js/freight_script.js"/>" type="text/javascript" charset="utf-8"></script>
+    <script src="<c:url value="/resources/js/location_script.js"/>" type="text/javascript" charset="utf-8"></script>
+</sec:authorize>
+
+<sec:authorize access="hasRole('ROLE_DRIVER')">
+    <!-- My JTable script file -->
+    <script src="<c:url value="/resources/js/order_driver_script.js"/>" type="text/javascript" charset="utf-8"></script>
+</sec:authorize>
 
 </body>
 </html>

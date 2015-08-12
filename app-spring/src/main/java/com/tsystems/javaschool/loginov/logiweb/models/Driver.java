@@ -54,6 +54,10 @@ public class Driver {
     public Driver() {
     }
 
+    public Driver(int id) {
+        this.id = id;
+    }
+
     public Driver(String name, String surname, String email, String password,
                   int worked_hours, String status, Location location, Truck truck) {
         this.name = name;
