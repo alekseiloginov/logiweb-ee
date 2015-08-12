@@ -24,6 +24,11 @@
 		<put-attribute name="body" value="/WEB-INF/views/landing.jsp" />
 	</definition>
 
+    <definition name="403" extends="facade.definition">
+        <put-attribute name="title" value="403" />
+        <put-attribute name="body" value="/WEB-INF/views/403.jsp" />
+    </definition>
+
     <definition name="registration" extends="facade.definition">
         <put-attribute name="title" value="Registration" />
         <put-attribute name="body" value="/WEB-INF/views/registration.jsp" />
@@ -62,6 +67,11 @@
     <definition name="secure/manager/freights" extends="base.definition">
         <put-attribute name="title" value="Freights" />
         <put-attribute name="body" value="/WEB-INF/views/secure/manager/freights.jsp" />
+    </definition>
+
+    <definition name="secure/manager/locations" extends="base.definition">
+        <put-attribute name="title" value="Locations" />
+        <put-attribute name="body" value="/WEB-INF/views/secure/manager/locations.jsp" />
     </definition>
 
     <definition name="secure/manager/orders" extends="base.definition">

@@ -1,7 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
-import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +14,7 @@ import java.util.List;
  */
 @Repository
 public class LocationDaoImpl implements LocationDao {
+    private static final Logger LOG = Logger.getLogger(LocationDaoImpl.class);
     private SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory){
@@ -21,15 +22,22 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Location addLocation(Location location) throws DuplicateEntryException {
-        return null;
+    public Location addLocation(Location location) {
+        Session session = this.sessionFactory.getCurrentSession();
+        int savedLocationID = (int) session.save(location);
+        LOG.info("Location saved successfully, Location details=" + location);
+        return getLocationById(savedLocationID);
     }
 
     @Override
-    public void updateLocation(Location location) {
-
+    public Location updateLocation(Location location) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.update(location);
+        LOG.info("Location updated successfully, Location details=" + location);
+        return getLocationById(location.getId());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Location> listLocations() {
         Session session = this.sessionFactory.getCurrentSession();
@@ -38,7 +46,8 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public Location getLocationById(int id) {
-        return null;
+        Session session = this.sessionFactory.getCurrentSession();
+        return (Location) session.get(Location.class, id);
     }
 
     @Override
@@ -51,6 +60,11 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public void removeLocation(int id) {
-
+        Session session = this.sessionFactory.getCurrentSession();
+        Location location = getLocationById(id);
+        if (location != null) {
+            session.delete(location);
+            LOG.info("Location deleted successfully, Location details=" + location);
+        }
     }
 }

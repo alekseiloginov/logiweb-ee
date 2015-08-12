@@ -69,6 +69,11 @@
                                 <a href="orders"><i class="fa fa-fw fa-file-text-o"></i> Orders</a>
                             </li>
                         </c:if>
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/locations'}">
+                            <li>
+                                <a href="locations"><i class="fa fa-fw fa-map-marker"></i> Locations</a>
+                            </li>
+                        </c:if>
 					</ol>
 				</div>
 			</div>
@@ -93,6 +98,9 @@
                                 </c:if>
                                 <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/orders'}">
                                     <i class="fa fa-fw fa-file-text-o"></i> Orders
+                                </c:if>
+                                <c:if test="${requestScope['javax.servlet.forward.request_uri'] == '/logiweb-ee/locations'}">
+                                    <i class="fa fa-fw fa-map-marker"></i> Locations
                                 </c:if>
                             </h3>
                         </div>
@@ -144,6 +152,7 @@
 <script src="<c:url value="/resources/js/driver_script.js"/>" type="text/javascript" charset="utf-8"></script>
 <script src="<c:url value="/resources/js/order_manager_script.js"/>" type="text/javascript" charset="utf-8"></script>
 <script src="<c:url value="/resources/js/freight_script.js"/>" type="text/javascript" charset="utf-8"></script>
+<script src="<c:url value="/resources/js/location_script.js"/>" type="text/javascript" charset="utf-8"></script>
 
 </body>
 </html>

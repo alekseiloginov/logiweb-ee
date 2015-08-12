@@ -115,4 +115,15 @@ public class ArrivalController {
 
         return model;
     }
+
+    /**
+     * Redirects a user to the 403 (Access Denied) page.
+     */
+    @RequestMapping(value = {"/403"}, method = RequestMethod.GET)
+    public ModelAndView accessDenied(ModelAndView model) {
+
+        model.setViewName("403");
+
+        return model;
+    }
 }

@@ -12,6 +12,7 @@
     <include file="order_driver.xml" relativeToChangelogFile="true"/>
     <include file="order_waypoint.xml" relativeToChangelogFile="true"/>
     <include file="truck.xml" relativeToChangelogFile="true"/>
+    <include file="user.xml" relativeToChangelogFile="true"/>
     <include file="waypoint.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

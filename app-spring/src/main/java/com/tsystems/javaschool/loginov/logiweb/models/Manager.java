@@ -14,7 +14,6 @@ import java.util.Date;
 public class Manager {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
@@ -49,9 +48,20 @@ public class Manager {
         this.password = password;
     }
 
+    public Manager(int id, String name, String surname, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+    }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -90,7 +100,15 @@ public class Manager {
         return created_time;
     }
 
+    public void setCreated_time(Date created_time) {
+        this.created_time = created_time;
+    }
+
     public Date getLast_modified_time() {
         return last_modified_time;
+    }
+
+    public void setLast_modified_time(Date last_modified_time) {
+        this.last_modified_time = last_modified_time;
     }
 }

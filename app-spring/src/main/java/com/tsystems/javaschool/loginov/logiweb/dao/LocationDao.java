@@ -1,6 +1,5 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
-import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
 
 import java.util.List;
@@ -10,9 +9,9 @@ import java.util.List;
  */
 public interface LocationDao {
 
-    Location addLocation(Location location) throws DuplicateEntryException;
+    Location addLocation(Location location);
 
-    void updateLocation(Location location);
+    Location updateLocation(Location location);
 
     List<Location> listLocations();
 

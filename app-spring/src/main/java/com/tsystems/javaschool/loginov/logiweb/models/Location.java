@@ -37,6 +37,10 @@ public class Location {
         this.city = city;
     }
 
+    public Location(int id, String city) {
+        this.id = id;
+        this.city = city;
+    }
 
     public int getId() {
         return id;
@@ -56,11 +60,5 @@ public class Location {
 
     public Date getLast_modified_time() {
         return last_modified_time;
-    }
-
-
-    @Override
-    public String toString() {
-        return city;
     }
 }

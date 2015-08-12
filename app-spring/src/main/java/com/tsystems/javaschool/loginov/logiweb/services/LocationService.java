@@ -1,7 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 import com.tsystems.javaschool.loginov.logiweb.dao.LocationDao;
-import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +19,13 @@ public class LocationService {
     }
 
     @Transactional
-    public Location addLocation(Location location) throws DuplicateEntryException {
+    public Location addLocation(Location location) {
         return this.locationDao.addLocation(location);
     }
 
     @Transactional
-    public void updateLocation(Location location) {
-        this.locationDao.updateLocation(location);
+    public Location updateLocation(Location location) {
+        return this.locationDao.updateLocation(location);
     }
 
     @Transactional

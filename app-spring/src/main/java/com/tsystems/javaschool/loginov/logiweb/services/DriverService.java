@@ -7,11 +7,10 @@ import com.tsystems.javaschool.loginov.logiweb.utils.Gmaps;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -52,21 +51,9 @@ public class DriverService {
     @Transactional
     public Driver addDriver(Driver driver) throws PlateNumberNotFoundException, ConstraintViolationException {
 
-        // Password encryption using MD5
-        String encryptedPassword = null;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(driver.getPassword().getBytes());
-            byte[] bytes = messageDigest.digest();
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (byte aByte : bytes) {
-                stringBuilder.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
-            }
-            encryptedPassword = stringBuilder.toString();
-        } catch (NoSuchAlgorithmException e) {
-//            LOG.error("NoSuchAlgorithmException", e);
-        }
+        // Password encryption using BCrypt
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encryptedPassword = passwordEncoder.encode(driver.getPassword());
 
         driver.setPassword(encryptedPassword);
 
@@ -88,21 +75,9 @@ public class DriverService {
     @Transactional
     public Driver updateDriver(Driver driver) throws PlateNumberNotFoundException, DataIntegrityViolationException {
 
-        // Password encryption using MD5
-        String encryptedPassword = null;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(driver.getPassword().getBytes());
-            byte[] bytes = messageDigest.digest();
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (byte aByte : bytes) {
-                stringBuilder.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
-            }
-            encryptedPassword = stringBuilder.toString();
-        } catch (NoSuchAlgorithmException e) {
-//            LOG.error("NoSuchAlgorithmException", e);
-        }
+        // Password encryption using BCrypt
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encryptedPassword = passwordEncoder.encode(driver.getPassword());
 
         Driver driverToUpdate = driverDao.getDriverById(driver.getId());
         driverToUpdate.setName(driver.getName());

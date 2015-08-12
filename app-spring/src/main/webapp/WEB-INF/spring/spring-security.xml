@@ -12,6 +12,7 @@
         <intercept-url pattern="/drivers**" access="hasRole('ROLE_MANAGER')" />
         <intercept-url pattern="/orders**" access="hasAnyRole('ROLE_MANAGER', 'ROLE_DRIVER')" />
         <intercept-url pattern="/freights**" access="hasRole('ROLE_MANAGER')" />
+        <intercept-url pattern="/locations**" access="hasRole('ROLE_MANAGER')" />
         <!--<intercept-url pattern="/trucks" access="permitAll" />-->
 
         <form-login login-page="/landing"
@@ -28,36 +29,13 @@
         <csrf disabled="true"/>
 
         <!-- access denied page -->
-        <!--<access-denied-handler error-page="/403" />-->
+        <access-denied-handler error-page="/403" />
     </http>
 
     <authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="Alex" password="1234" authorities="ROLE_MANAGER" />
-                <user name="Grisha" password="1234" authorities="ROLE_DRIVER" />
-            </user-service>
+        <authentication-provider user-service-ref="userService" >
+            <!-- Spring recommends to use BCrypt (BCryptPasswordEncoder), a hashing algorithm with randomly generated salt -->
+            <password-encoder hash="bcrypt" />
         </authentication-provider>
     </authentication-manager>
-
-    <!--<authentication-manager>-->
-        <!--<authentication-provider>-->
-            <!--<jdbc-user-service data-source-ref="dataSource"-->
-                               <!--users-by-username-query="select username,password,enabled from Users where username = ?"-->
-                               <!--authorities-by-username-query="select username,role from Roles where username = ?" />-->
-        <!--</authentication-provider>-->
-    <!--</authentication-manager>-->
-
-    <!--&lt;!&ndash; MySQL DataSource &ndash;&gt;-->
-    <!--<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-        <!--<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
-        <!--<beans:property name="url" value="jdbc:mysql://localhost:3306/TestDB" />-->
-        <!--<beans:property name="username" value="alex" />-->
-        <!--<beans:property name="password" value="1234" />-->
-    <!--</beans:bean>-->
-
-    <!--&lt;!&ndash; MySQL DataSource configured in WildFly &ndash;&gt;-->
-    <!--<beans:bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">-->
-        <!--<beans:property name="jndiName" value="java:comp/env/jdbc/MyLocalDB" />-->
-    <!--</beans:bean>-->
 </beans:beans>

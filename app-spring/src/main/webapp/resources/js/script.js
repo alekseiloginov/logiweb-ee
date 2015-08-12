@@ -9,14 +9,14 @@ $("#myBtn").click(function(){
 $( "#fill-manager" ).click(function() {
     $( "#name" ).val( "Vasya" );
     $( "#surname" ).val( "Pupkin" );
-    $( "#username" ).val( "Alex" );
+    $( "#username" ).val( "aloginov" );
     $( "#password" ).val( "1234" );
 });
 
 $( "#fill-driver" ).click(function() {
     $( "#name" ).val( "Vasya" );
     $( "#surname" ).val( "Pupkin" );
-    $( "#username" ).val( "Grisha" );
+    $( "#username" ).val( "gchichvarkin" );
     $( "#password" ).val( "1234" );
 });
 

@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/test-context.xml")
+@ContextConfiguration("file:src/test/resources/test-rs-context.xml")
 public class WebServiceTest {
     private MockMvc mockMvc;
 
@@ -34,11 +34,11 @@ public class WebServiceTest {
         this.mockMvc = webAppContextSetup(this.wac).build();
     }
 
-    @Test
-    public void setFreightStatusTest() throws Exception {
-        mockMvc.perform(post("/logiweb-ee/services/rest/freights/9/statuses/shipped"))
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    public void setFreightStatusTest() throws Exception {
+//        mockMvc.perform(post("/logiweb-ee/services/rest/freights/9/statuses/shipped"))
+//                .andExpect(status().isOk());
+//    }
 
 //    @Test
 //    public void getFreightListTest() throws Exception {

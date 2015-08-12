@@ -47,7 +47,9 @@
                 <beans:value>com.tsystems.javaschool.loginov.logiweb.models.Location</beans:value>
                 <beans:value>com.tsystems.javaschool.loginov.logiweb.models.Manager</beans:value>
                 <beans:value>com.tsystems.javaschool.loginov.logiweb.models.Order</beans:value>
+                <beans:value>com.tsystems.javaschool.loginov.logiweb.models.Role</beans:value>
                 <beans:value>com.tsystems.javaschool.loginov.logiweb.models.Truck</beans:value>
+                <beans:value>com.tsystems.javaschool.loginov.logiweb.models.User</beans:value>
                 <beans:value>com.tsystems.javaschool.loginov.logiweb.models.Waypoint</beans:value>
             </beans:list>
         </beans:property>
@@ -126,6 +128,14 @@
     <beans:bean id="driverStatusChangeService" class="com.tsystems.javaschool.loginov.logiweb.services.DriverStatusChangeService">
         <beans:property name="driverStatusChangeDao" ref="driverStatusChangeDao" />
         <beans:property name="driverDao" ref="driverDao" />
+    </beans:bean>
+
+    <!-- User DAO & Service beans -->
+    <beans:bean id="userDao" class="com.tsystems.javaschool.loginov.logiweb.dao.UserDaoImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="userService" class="com.tsystems.javaschool.loginov.logiweb.services.UserService">
+        <beans:property name="userDao" ref="userDao" />
     </beans:bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
