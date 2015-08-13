@@ -4,11 +4,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 /**
  * Simple java bean that will hold driver information.
  */
+@XmlRootElement
 @Entity
 @Table(name = "drivers", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "email"})})
 public class Driver {

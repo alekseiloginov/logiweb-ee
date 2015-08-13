@@ -1,7 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.dao;
 
 import com.tsystems.javaschool.loginov.logiweb.models.User;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class UserDaoImpl implements UserDao {
-    private static final Logger LOG = Logger.getLogger(UserDaoImpl.class);
     private SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory){

@@ -84,6 +84,7 @@
 
             <h:form id="loginForm" rendered="#{not identity.loggedIn}">
                 <h:messages globalOnly="true"/>
+                <p:growl id="groowl" />
 
                 <div class="container">
                     <br />
@@ -107,7 +108,7 @@
                     <br />
 
                     <div class="buttons">
-                        <p:commandButton id="login" value="Login" action="#{identity.login}" styleClass="loginButton"/>
+                        <p:commandButton id="login" value="Login" action="#{identity.login}" update="groowl"/>
                     </div>
                 </div>
             </h:form>

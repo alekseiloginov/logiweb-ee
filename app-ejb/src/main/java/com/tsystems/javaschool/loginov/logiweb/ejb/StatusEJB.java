@@ -2,6 +2,7 @@ package com.tsystems.javaschool.loginov.logiweb.ejb;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Freight;
 import com.tsystems.javaschool.loginov.logiweb.ws.DriverWebService;
 import org.apache.commons.httpclient.Header;
@@ -20,6 +21,26 @@ import java.util.List;
  */
 @Stateless
 public class StatusEJB implements Serializable {
+    private static final String WEB_SERVICE_URL = "http://localhost:8080/logiweb-ee/services/soap";
+    private JaxWsProxyFactoryBean factory;
+    private DriverWebService driverWebService;
+
+    /**
+     * This method takes a driver username and password and tries to process authentication using SOAP webservice.
+     *
+     * @param driverId
+     * @param driverPassword
+     * @return the result message
+     */
+    public Driver authenticateDriver(int driverId, String driverPassword) {
+
+        factory = new JaxWsProxyFactoryBean();
+        factory.setServiceClass(DriverWebService.class);
+        factory.setAddress(WEB_SERVICE_URL);
+        driverWebService = (DriverWebService) factory.create();
+
+        return driverWebService.authenticateDriver(driverId, driverPassword);
+    }
 
     /**
      * This method takes a driver id and status and updates the status them using SOAP webservice.
@@ -30,11 +51,10 @@ public class StatusEJB implements Serializable {
      */
     public String setDriverStatus(Integer driverId, String driverStatus) {
 
-        String serviceUrl = "http://localhost:8080/logiweb-ee/services/soap";
-        JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+        factory = new JaxWsProxyFactoryBean();
         factory.setServiceClass(DriverWebService.class);
-        factory.setAddress(serviceUrl);
-        DriverWebService driverWebService = (DriverWebService) factory.create();
+        factory.setAddress(WEB_SERVICE_URL);
+        driverWebService = (DriverWebService) factory.create();
 
         return driverWebService.setDriverStatus(driverId, driverStatus);
     }
@@ -47,11 +67,10 @@ public class StatusEJB implements Serializable {
      */
     public String getDriverStatus(Integer driverId) {
 
-        String serviceUrl = "http://localhost:8080/logiweb-ee/services/soap";
-        JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+        factory = new JaxWsProxyFactoryBean();
         factory.setServiceClass(DriverWebService.class);
-        factory.setAddress(serviceUrl);
-        DriverWebService driverWebService = (DriverWebService) factory.create();
+        factory.setAddress(WEB_SERVICE_URL);
+        driverWebService = (DriverWebService) factory.create();
 
         return driverWebService.getDriverStatus(driverId);
     }

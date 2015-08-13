@@ -27,6 +27,12 @@ public class DriverManagedBean {
     @EJB
     private StatusEJB statusEJB;
 
+    /**
+     * Gets driver status list
+     *
+     * @param driverId
+     * @return
+     */
     public List<String> getDriverStatusList(Integer driverId) {
         List<String> driverStatusList = new ArrayList<>(Arrays.asList(new String[]{"free", "shift", "driving"}));
         String currentDriverStatus = getDriverStatus(driverId).toLowerCase();
@@ -34,6 +40,12 @@ public class DriverManagedBean {
         return driverStatusList;
     }
 
+    /**
+     * Sets driver status
+     *
+     * @param driverId
+     * @param driverStatus
+     */
     public void setDriverStatus(Integer driverId, String driverStatus) {
 
         if (driverStatus.isEmpty()) {
@@ -49,10 +61,21 @@ public class DriverManagedBean {
         FacesContext.getCurrentInstance().addMessage("driverStatusForm", message);
     }
 
+    /**
+     * Gets driver status
+     *
+     * @param driverId
+     * @return
+     */
     public String getDriverStatus(Integer driverId) {
         return statusEJB.getDriverStatus(driverId);
     }
 
+    /**
+     *
+     * @param freightId
+     * @param freightStatus
+     */
     public void setFreightStatus(Integer freightId, String freightStatus) {
 
         try {

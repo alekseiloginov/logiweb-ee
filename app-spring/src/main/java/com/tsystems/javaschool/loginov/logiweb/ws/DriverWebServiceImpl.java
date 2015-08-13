@@ -5,6 +5,7 @@ import com.tsystems.javaschool.loginov.logiweb.models.DriverStatusChange;
 import com.tsystems.javaschool.loginov.logiweb.services.DriverService;
 import com.tsystems.javaschool.loginov.logiweb.services.DriverStatusChangeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.jws.WebService;
 
@@ -24,7 +25,7 @@ public class DriverWebServiceImpl implements DriverWebService {
      * Takes an id and a status of a driver and responses with the driver status using SOAP webservice.
      */
     @Override
-    public String setDriverStatus(Integer driverId, String driverStatus) {
+    public String setDriverStatus(int driverId, String driverStatus) {
 
         Driver driver = new Driver();
         driver.setId(driverId);
@@ -42,7 +43,24 @@ public class DriverWebServiceImpl implements DriverWebService {
      * Takes a driver id and gets his/her status using SOAP webservice.
      */
     @Override
-    public String getDriverStatus(Integer driverId) {
+    public String getDriverStatus(int driverId) {
         return driverService.getDriverById(driverId).getStatus();
+    }
+
+    /**
+     * Takes a driver credentials and processes authentication using SOAP webservice.
+     */
+    @Override
+    public Driver authenticateDriver(int driverId, String driverPassword) {
+        Driver driver = driverService.getDriverById(driverId);
+
+        // check raw password from form with the encrypted one in the database using BCrypt
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (driver != null && encoder.matches(driverPassword, driver.getPassword())) {
+            return driver;
+        }
+
+        return null;
     }
 }
