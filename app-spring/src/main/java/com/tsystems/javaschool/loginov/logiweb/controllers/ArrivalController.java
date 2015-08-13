@@ -1,5 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Spring MVC Controller to manage entrance to the site.
@@ -18,6 +21,9 @@ public class ArrivalController {
     private static final String SUCCESS_MESSAGE = "success";
     private static final String INVALID_EMAIL_OR_LOGIN_ERROR_MESSAGE = "Invalid email address or password";
     private static final String SUCCESSFUL_LOGOUT_MESSAGE = "You've been logged out successfully!";
+
+    @Autowired
+    private UserService userService;
 
     /**
      * Redirects a user to the landing page.
@@ -123,6 +129,30 @@ public class ArrivalController {
     public ModelAndView accessDenied(ModelAndView model) {
 
         model.setViewName("403");
+
+        return model;
+    }
+
+    /**
+     * Redirects a user to the remind forgotten password page.
+     */
+    @RequestMapping(value = {"/remind"}, method = RequestMethod.GET)
+    public ModelAndView remind(ModelAndView model) {
+
+        model.setViewName("remind");
+
+        return model;
+    }
+
+    /**
+     * Sends the forgotten password to user's email.
+     */
+    @RequestMapping(value = {"/sendpass"}, method = RequestMethod.POST)
+    public ModelAndView sendPassword(@RequestParam(value = "email") String email, ModelAndView model) throws UnsupportedEncodingException {
+
+        userService.remindPassword(email);
+        model.addObject(SUCCESS_MESSAGE, "Password successfully sent!");
+        model.setViewName("remind");
 
         return model;
     }

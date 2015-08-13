@@ -135,11 +135,14 @@
         <beans:property name="driverDao" ref="driverDao" />
     </beans:bean>
 
-    <!-- User DAO & Service beans -->
+    <!-- User DAO & Service, UserDetailsService beans -->
     <beans:bean id="userDao" class="com.tsystems.javaschool.loginov.logiweb.dao.UserDaoImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
     </beans:bean>
     <beans:bean id="userService" class="com.tsystems.javaschool.loginov.logiweb.services.UserService">
+        <beans:property name="userDao" ref="userDao" />
+    </beans:bean>
+    <beans:bean id="UserDetailsService" class="com.tsystems.javaschool.loginov.logiweb.services.UserDetailsServiceImpl">
         <beans:property name="userDao" ref="userDao" />
     </beans:bean>
 

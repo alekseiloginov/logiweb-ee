@@ -19,7 +19,7 @@
                     default-target-url="/welcome"
                     authentication-failure-url="/landing?error"
                     login-processing-url="/j_spring_security_check"
-                    username-parameter="email"
+                    username-parameter="username"
                     password-parameter="password"/>
 
         <logout logout-success-url="/landing?logout"
@@ -33,8 +33,9 @@
     </http>
 
     <authentication-manager>
-        <authentication-provider user-service-ref="userService" >
+        <authentication-provider user-service-ref="UserDetailsService" >
             <!-- Spring recommends to use BCrypt (BCryptPasswordEncoder), a hashing algorithm with randomly generated salt -->
+            <!--suppress SpringModelInspection -->
             <password-encoder hash="bcrypt" />
         </authentication-provider>
     </authentication-manager>

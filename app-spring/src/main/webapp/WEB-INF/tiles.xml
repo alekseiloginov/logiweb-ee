@@ -29,19 +29,14 @@
         <put-attribute name="body" value="/WEB-INF/views/403.jsp" />
     </definition>
 
+    <definition name="remind" extends="facade.definition">
+        <put-attribute name="title" value="Remind Password" />
+        <put-attribute name="body" value="/WEB-INF/views/remind.jsp" />
+    </definition>
+
     <definition name="registration" extends="facade.definition">
         <put-attribute name="title" value="Registration" />
         <put-attribute name="body" value="/WEB-INF/views/registration.jsp" />
-    </definition>
-
-    <definition name="login_manager" extends="facade.definition">
-        <put-attribute name="title" value="Manager Login" />
-        <put-attribute name="body" value="/WEB-INF/views/login_manager.jsp" />
-    </definition>
-
-    <definition name="login_driver" extends="facade.definition">
-        <put-attribute name="title" value="Driver Login" />
-        <put-attribute name="body" value="/WEB-INF/views/login_driver.jsp" />
     </definition>
 
     <definition name="secure/manager/welcome" extends="base.definition">

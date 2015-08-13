@@ -28,7 +28,7 @@
 
                         <div class="form-group">
                             <label for="username"><span class="glyphicon glyphicon-user"></span> Username</label>
-                            <input type="text" class="form-control" id="username" name="email" placeholder="Enter username" required autofocus>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required autofocus>
                         </div>
 
                         <div class="form-group">
@@ -67,7 +67,7 @@
                     <p>Not a member? <a href="registration">Sign Up</a></p>
 
                     <%-- Forgot Password Link --%>
-                    <p>Forgot <a href="#">Password?</a></p>
+                    <p>Forgot <a href="remind">Password?</a></p>
                 </div>
             </div>
 
