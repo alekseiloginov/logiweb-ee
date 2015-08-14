@@ -205,7 +205,7 @@ $(document).ready(function () {
                 create: false,
                 display: function (orderData) {
                     //Create an image that will be used to open child table
-                    var $img = $('<img src="resources/images/map-icon.png" title="View drivers" />');
+                    var $img = $('<img id="map" src="resources/images/map-icon.png" title="Order On Map" />');
                     //Open gmaps when user clicks the image
                     $img.click(function () {
 
