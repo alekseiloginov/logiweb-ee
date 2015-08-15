@@ -208,15 +208,8 @@ $(document).ready(function () {
                     var $img = $('<img id="map" src="resources/images/map-icon.png" title="Order On Map" />');
                     //Open gmaps when user clicks the image
                     $img.click(function () {
-
                         // redirect to a map page
                         window.location.href='orders/' + orderData.record.id + '/map';
-
-                        //$('#OrderTableContainer').jtable('openChildTable',
-                        //    $img.closest('tr'),
-                        //    {}, function (data) { //opened handler
-                        //        data.childTable.jtable('load');
-                        //    });
                     });
                     //Return image to show on the order row
                     return $img;

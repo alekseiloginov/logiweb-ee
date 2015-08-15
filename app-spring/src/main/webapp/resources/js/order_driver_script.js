@@ -187,15 +187,25 @@ $(document).ready(function () {
                 type: 'radiobutton',
                 options: { '1': 'Yes', '0': 'No' },
                 defaultValue: '0'
+            },
+            map: {
+                title: 'On Map',
+                width: '15%',
+                sorting: false,
+                edit: false,
+                create: false,
+                display: function (orderData) {
+                    //Create an image that will be used to open child table
+                    var $img = $('<img id="map" src="resources/images/map-icon.png" title="Order On Map" />');
+                    //Open gmaps when user clicks the image
+                    $img.click(function () {
+                        // redirect to a map page
+                        window.location.href='orders/' + orderData.record.id + '/map';
+                    });
+                    //Return image to show on the order row
+                    return $img;
+                }
             }
-        },
-        formCreated: function (event, data) {
-            var $dialogDiv = data.form.closest('.ui-dialog');
-            $dialogDiv.position({
-                my: "top",
-                at: "top",
-                of: window
-            });
         }
     }).jtable('load');
 });
