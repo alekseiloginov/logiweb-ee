@@ -80,11 +80,11 @@ public class OrderController {
      */
     @RequestMapping(value = "/OrderSave.do", method = RequestMethod.POST)
     public void saveOrder(@RequestParam(value = "completed") int completed,
-                          @RequestParam(value = "truck") String plate_number,
+                          @RequestParam(value = "truck") String plateNumber,
                           HttpServletResponse resp) throws IOException {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Order savedOrder = orderService.addOrder(new Order(completed, new Truck(plate_number)));
+        Order savedOrder = orderService.addOrder(new Order(completed, new Truck(plateNumber)));
         resultMap.put(DATUM, savedOrder);
         gsonParser.parse(resultMap, resp);
     }
@@ -95,11 +95,11 @@ public class OrderController {
     @RequestMapping(value = "/OrderUpdate.do", method = RequestMethod.POST)
     public void updateOrder(@RequestParam(value = "id") int id,
                             @RequestParam(value = "completed") int completed,
-                            @RequestParam(value = "truck") String plate_number,
+                            @RequestParam(value = "truck") String plateNumber,
                             HttpServletResponse resp) throws IOException {
 
         Map<String, Object> resultMap = new HashMap<>();
-        Order updatedOrder = orderService.updateOrder(new Order(id, completed, new Truck(plate_number)));
+        Order updatedOrder = orderService.updateOrder(new Order(id, completed, new Truck(plateNumber)));
         resultMap.put(DATUM, updatedOrder);
         gsonParser.parse(resultMap, resp);
     }

@@ -1,11 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.models;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
 
 /**
  * Simple java bean that will hold driver information.
@@ -13,10 +9,9 @@ import java.util.Date;
 @XmlRootElement
 @Entity
 @Table(name = "drivers", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "email"})})
-public class Driver {
+public class Driver extends AbstractModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
@@ -33,18 +28,10 @@ public class Driver {
     private String password;
 
     @Column(name = "worked_hours", nullable = false)
-    private int worked_hours;
+    private int workedHours;
 
     @Column(name = "status", nullable = false, length = 255)
     private String status;
-
-    @CreationTimestamp
-    @Column(name = "created_time")
-    private Date created_time;
-
-    @UpdateTimestamp
-    @Column(name = "last_modified_time")
-    private Date last_modified_time;
 
     @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "location_id", nullable = false)
@@ -55,19 +42,6 @@ public class Driver {
     private Truck truck;
 
     public Driver() {
-
-    }
-
-    public Driver(String name, String surname, String email, String password,
-                  int worked_hours, String status, Location location, Truck truck) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        this.worked_hours = worked_hours;
-        this.status = status;
-        this.location = location;
-        this.truck = truck;
     }
 
     public int getId() {
@@ -110,12 +84,12 @@ public class Driver {
         this.password = password;
     }
 
-    public int getWorked_hours() {
-        return worked_hours;
+    public int getWorkedHours() {
+        return workedHours;
     }
 
-    public void setWorked_hours(int worked_hours) {
-        this.worked_hours = worked_hours;
+    public void setWorkedHours(int workedHours) {
+        this.workedHours = workedHours;
     }
 
     public String getStatus() {
@@ -124,22 +98,6 @@ public class Driver {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Date getCreated_time() {
-        return created_time;
-    }
-
-    public void setCreated_time(Date created_time) {
-        this.created_time = created_time;
-    }
-
-    public Date getLast_modified_time() {
-        return last_modified_time;
-    }
-
-    public void setLast_modified_time(Date last_modified_time) {
-        this.last_modified_time = last_modified_time;
     }
 
     public Location getLocation() {

@@ -14,6 +14,11 @@
     <h:outputStylesheet name="grid/grid.css" library="primefaces" />
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <style>
+        .ui-header {
+            height: 42px;
+        }
+    </style>
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
 </h:head>
@@ -31,7 +36,7 @@
 
                     <p:separator />
 
-                    <h4><i class="fa fa-fw fa-user"/> #{identity.account.firstName} - Driver # #{identity.account.loginName}</h4>
+                    <h4><i class="fa fa-fw fa-user"/> #{identity.account.firstName} - driver # #{identity.account.loginName}</h4>
 
                     <h:form id="driverStatusForm">
                         <p:growl id="growl" />
@@ -82,36 +87,7 @@
                 </div>
             </p:fragment>
 
-            <h:form id="loginForm" rendered="#{not identity.loggedIn}">
-                <h:messages globalOnly="true"/>
-                <p:growl id="groowl" />
-
-                <div class="container">
-                    <br />
-                    <br />
-                    <br />
-                    <h4 style="text-align: center">Remote status change service</h4>
-                    <br />
-
-                    <div class="loginRow">
-                        <h:inputText id="ID" value="#{loginCredentials.userId}" required="true"/>
-                        <p:watermark for="ID" value="Driver ID" />
-                        <h:message for="ID" style="color: red"/>
-                    </div>
-                    <br />
-
-                    <div class="loginRow">
-                        <h:inputSecret id="password" value="#{loginCredentials.password}" redisplay="true" required="true"/>
-                        <p:watermark for="password" value="Password" />
-                        <h:message for="password" style="color: red"/>
-                    </div>
-                    <br />
-
-                    <div class="buttons">
-                        <p:commandButton id="login" value="Login" action="#{identity.login}" update="groowl"/>
-                    </div>
-                </div>
-            </h:form>
+            <ui:include src="login.xhtml" />
         </pm:content>
     </pm:page>
 

@@ -32,7 +32,7 @@ public class DriverStatusChangeService {
         DriverStatusChange dbDriverStatusChange = driverStatusChangeDao.getDriverStatusChange(driver, driverStatus);
 
         if (dbDriverStatusChange != null) {
-            dbDriverStatusChange.setLast_modified_time(new Date());
+            dbDriverStatusChange.setLastModifiedTime(new Date());
             driverStatusChangeDao.updateDriverStatus(dbDriverStatusChange);
 
         } else {

@@ -49,7 +49,7 @@ public class OrderService {
 
     @Transactional
     public Order addOrder(Order order) {
-        order.setTruck(truckDao.getTruckByPlateNumber(order.getTruck().getPlate_number()));
+        order.setTruck(truckDao.getTruckByPlateNumber(order.getTruck().getPlateNumber()));
         return this.orderDao.addOrder(order);
     }
 
@@ -57,7 +57,7 @@ public class OrderService {
     public Order updateOrder(Order order) {
         Order orderToUpdate = orderDao.getOrderById(order.getId());
         orderToUpdate.setCompleted(order.getCompleted());
-        orderToUpdate.setTruck(truckDao.getTruckByPlateNumber(order.getTruck().getPlate_number()));
+        orderToUpdate.setTruck(truckDao.getTruckByPlateNumber(order.getTruck().getPlateNumber()));
         return this.orderDao.updateOrder(orderToUpdate);
     }
 

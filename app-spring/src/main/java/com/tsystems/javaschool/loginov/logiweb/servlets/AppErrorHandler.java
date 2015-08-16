@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 @WebServlet(name = "AppErrorHandler", urlPatterns = {"/AppErrorHandler"})
 public class AppErrorHandler extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static final String LI_END = "</li>";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,10 +54,10 @@ public class AppErrorHandler extends HttpServlet {
 
         } else {
             out.write("<h2>Exception Details</h2><br><br>");
-            out.write("<ul><li>Servlet Name: " + servletName + "</li>");
-            out.write("<li>Exception Name: " + throwable.getClass().getName() + "</li>");
-            out.write("<li>Requested URI: " + requestUri + "</li>");
-            out.write("<li>Exception Message: " + throwable.getMessage() + "</li>");
+            out.write("<ul><li>Servlet Name: " + servletName + LI_END);
+            out.write("<li>Exception Name: " + throwable.getClass().getName() + LI_END);
+            out.write("<li>Requested URI: " + requestUri + LI_END);
+            out.write("<li>Exception Message: " + throwable.getMessage() + LI_END);
             out.write("</ul>");
         }
         out.write("<br><br>");

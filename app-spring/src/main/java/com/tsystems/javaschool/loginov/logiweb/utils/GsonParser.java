@@ -18,73 +18,77 @@ public class GsonParser {
     private static final String APPLICATION_JSON = "application/json";
     private static final String UTF8 = "UTF-8";
     private static final String JSON_RESPONSE = "JSON response = ";
+    private String response;
 
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    Gson gson = gsonBuilder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create();
+    private GsonBuilder gsonBuilder = new GsonBuilder();
+    private Gson gson = gsonBuilder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create();
 
     public void parse(Map<String, Object> resultMap, HttpServletResponse resp) throws IOException {
+        resp.setContentType(APPLICATION_JSON);
+        resp.setCharacterEncoding(UTF8);
 
-        // Error for JTable: Operation with the database failed ("ERROR" in response)
         if (resultMap.containsKey("jTableError")) {
-            resp.setContentType(APPLICATION_JSON);
-            resp.setCharacterEncoding(UTF8);
-            // JSON object for JTable to parse
-            String response = "{\"Result\":\"ERROR\",\"Message\":\"" + resultMap.get("jTableError") + "\"}";
-            resp.getWriter().write(response);
-            LOG.info(JSON_RESPONSE + response);
-            return;
+            parseError(resultMap);
+
+        } else if (resultMap.containsKey("data")) {
+            parseData(resultMap.get("data"));
+
+        } else if (resultMap.containsKey("datum")) {
+            parseDatum(resultMap.get("datum"));
+
+        } else if (resultMap.containsKey("OK")) {
+            parseOK();
+
+        } else if (resultMap.containsKey("options")) {
+            parseOptions(resultMap.get("options"));
         }
 
-        // JSON for JTable: List of items fetched from the db ("Records" in response)
-        if (resultMap.containsKey("data")) {
-            Object data = resultMap.get("data");
-            resp.setContentType(APPLICATION_JSON);
-            resp.setCharacterEncoding(UTF8);
-            // Create a JSON object for JTable to parse
-            String json = gson.toJson(data);
-            // if there only one object, add brackets like it's a list (JTable requirements)
-            if (json.endsWith("}")) {
-                json = "[" + json + "]";
-            }
-            String response = "{\"Result\":\"OK\",\"Records\":" + json + "}";
-            LOG.info(JSON_RESPONSE + response);
-            resp.getWriter().write(response);
-            return;
-        }
+        LOG.info(JSON_RESPONSE + response);
+        resp.getWriter().write(response);
 
-        // JSON for JTable: One item fetched from the db ("Record" in response)
-        if (resultMap.containsKey("datum")) {
-            Object datum = resultMap.get("datum");
-            resp.setContentType(APPLICATION_JSON);
-            resp.setCharacterEncoding(UTF8);
-            // Create a JSON object for JTable to parse
-            String response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
-            LOG.info(JSON_RESPONSE + response);
-            resp.getWriter().write(response);
-            return;
-        }
+    }
 
-        // JSON for JTable: Operation with the db (deletion) is successful ("OK" in response)
-        if (resultMap.containsKey("OK")) {
-            resp.setContentType(APPLICATION_JSON);
-            resp.setCharacterEncoding(UTF8);
-            // JSON object for JTable to parse
-            String response = "{\"Result\":\"OK\"}";
-            resp.getWriter().write(response);
-            LOG.info(JSON_RESPONSE + response);
-            return;
-        }
+    /**
+     * Error for JTable: Operation with the database failed ("ERROR" in response)
+     * @param resultMap
+     */
+    private void parseError(Map<String, Object> resultMap) {
+        response = "{\"Result\":\"ERROR\",\"Message\":\"" + resultMap.get("jTableError") + "\"}";
+    }
 
-        // JSON for JTable: List of options fetched from the db ("Options" in response)
-        if (resultMap.containsKey("options")) {
-            Object options = resultMap.get("options");
-            resp.setContentType(APPLICATION_JSON);
-            resp.setCharacterEncoding(UTF8);
-            // Create a JSON object for JTable to parse
-            String response = "{\"Result\":\"OK\",\"Options\":" + options + "}";
-            LOG.info(JSON_RESPONSE + response);
-            resp.getWriter().write(response);
+    /**
+     * JSON for JTable: List of items fetched from the db ("Records" in response)
+     * @param data
+     */
+    private void parseData(Object data) {
+        String json = gson.toJson(data);
+        // if there only one object, add brackets like it's a list (JTable requirements)
+        if (json.endsWith("}")) {
+            json = "[" + json + "]";
         }
+        response = "{\"Result\":\"OK\",\"Records\":" + json + "}";
+    }
 
+    /**
+     * JSON for JTable: One item fetched from the db ("Record" in response)
+     * @param datum
+     */
+    private void parseDatum(Object datum) {
+        response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
+    }
+
+    /**
+     * JSON for JTable: Operation with the db (deletion) is successful ("OK" in response)
+     */
+    private void parseOK() {
+        response = "{\"Result\":\"OK\"}";
+    }
+
+    /**
+     * JSON for JTable: List of options fetched from the db ("Options" in response)
+     * @param options
+     */
+    private void parseOptions(Object options) {
+        response = "{\"Result\":\"OK\",\"Options\":" + options + "}";
     }
 }

@@ -71,6 +71,7 @@ public class FreightRestServiceImpl implements FreightRestService {
 
             // Sort freights by id using custom Comparator
             Collections.sort(freightList, new Comparator<Freight>() {
+                @Override
                 public int compare(Freight one, Freight other) {
                     return one.getId() - other.getId();
                 }

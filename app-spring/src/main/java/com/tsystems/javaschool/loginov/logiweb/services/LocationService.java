@@ -51,7 +51,7 @@ public class LocationService {
         int optionCount = 0;
         String locationOptionJSONList = "[";
 
-        if (locationList.size() == 0) {
+        if (locationList.isEmpty()) {
             locationOptionJSONList += "]";
 
         } else {

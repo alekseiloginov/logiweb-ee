@@ -1,17 +1,13 @@
 package com.tsystems.javaschool.loginov.logiweb.models;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Simple java bean that will hold user information.
  */
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "username"})})
-public class User {
+public class User extends AbstractModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,14 +19,6 @@ public class User {
 
     @Column(name = "password", nullable = false, length = 255)
     private String password;
-
-    @CreationTimestamp
-    @Column(name = "created_time")
-    private Date createdTime;
-
-    @UpdateTimestamp
-    @Column(name = "last_modified_time")
-    private Date lastModifiedTime;
 
     @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "role_id", nullable = false)
@@ -68,22 +56,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getLastModifiedTime() {
-        return lastModifiedTime;
-    }
-
-    public void setLastModifiedTime(Date lastModifiedTime) {
-        this.lastModifiedTime = lastModifiedTime;
     }
 
     public Role getRole() {

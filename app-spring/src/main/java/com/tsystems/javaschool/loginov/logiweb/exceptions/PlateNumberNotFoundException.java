@@ -5,14 +5,7 @@ package com.tsystems.javaschool.loginov.logiweb.exceptions;
  */
 public class PlateNumberNotFoundException extends Exception {
 
-    private String errorCode = "Entered plate number is not found in the database";
-
-    public PlateNumberNotFoundException(String message, String errorCode) {
+    public PlateNumberNotFoundException(String message) {
         super(message);
-        this.errorCode = errorCode;
-    }
-
-    public String getErrorCode() {
-        return this.errorCode;
     }
 }

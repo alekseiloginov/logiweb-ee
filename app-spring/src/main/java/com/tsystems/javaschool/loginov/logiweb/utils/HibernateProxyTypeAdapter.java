@@ -21,7 +21,7 @@ public class HibernateProxyTypeAdapter extends TypeAdapter<HibernateProxy> {
         @Override
         @SuppressWarnings("unchecked")
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-            return (HibernateProxy.class.isAssignableFrom(type.getRawType()) ? (TypeAdapter<T>) new HibernateProxyTypeAdapter(gson) : null);
+            return HibernateProxy.class.isAssignableFrom(type.getRawType()) ? (TypeAdapter<T>) new HibernateProxyTypeAdapter(gson) : null;
         }
     };
     private final Gson context;
@@ -47,7 +47,7 @@ public class HibernateProxyTypeAdapter extends TypeAdapter<HibernateProxy> {
         // Get the TypeAdapter of the original class, to delegate the serialization
         TypeAdapter delegate = context.getAdapter(TypeToken.get(baseType));
         // Get a filled instance of the original class
-        Object unproxiedValue = ((HibernateProxy) value).getHibernateLazyInitializer()
+        Object unproxiedValue = value.getHibernateLazyInitializer()
                 .getImplementation();
         // Serialize the value
         delegate.write(out, unproxiedValue);

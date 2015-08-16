@@ -28,7 +28,7 @@ public class TruckServiceTest {
 
     @Test(expected = PlateNumberIncorrectException.class)
     public void addTruckPlateNumberIncorrectExceptionTest() throws Exception {
-        truck.setPlate_number("ABC1234");
+        truck.setPlateNumber("ABC1234");
         truckService.addTruck(truck);
     }
 
@@ -40,7 +40,7 @@ public class TruckServiceTest {
 
     @Test(expected = PlateNumberIncorrectException.class)
     public void updateTruckPlateNumberIncorrectExceptionTest() throws Exception {
-        truck.setPlate_number("ABC1234");
+        truck.setPlateNumber("ABC1234");
         truckService.addTruck(truck);
     }
 

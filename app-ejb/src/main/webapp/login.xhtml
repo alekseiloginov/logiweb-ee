@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile">
+
+<h:form id="loginForm" rendered="#{not identity.loggedIn}">
+    <h:messages globalOnly="true"/>
+    <p:growl id="groowl" />
+
+    <div class="container">
+        <br/>
+        <div align="middle">
+            <h1><i class="fa fa-fw fa-truck"/></h1>
+        </div>
+        <br />
+        <h4 style="text-align: center">Status Change Service</h4>
+        <br />
+
+        <div class="loginRow">
+            <h:inputText id="ID" value="#{loginCredentials.userId}" required="true"/>
+            <p:watermark for="ID" value="Driver ID" />
+            <h:message for="ID" style="color: red"/>
+        </div>
+        <br />
+
+        <div class="loginRow">
+            <h:inputSecret id="password" value="#{loginCredentials.password}" redisplay="true" required="true"/>
+            <p:watermark for="password" value="Password" />
+            <h:message for="password" style="color: red"/>
+        </div>
+        <br />
+
+        <div class="buttons">
+            <p:commandButton id="login" value="Login" action="#{identity.login}" update="groowl"/>
+        </div>
+    </div>
+</h:form>
+</html>

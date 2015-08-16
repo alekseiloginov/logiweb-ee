@@ -106,7 +106,7 @@ $(document).ready(function () {
                 options: 'TruckOptions.do',
                 optionsSorting: 'text',
                 display : function(data) {
-                    return data.record.truck.plate_number;
+                    return data.record.truck.plateNumber;
                 }
             },
             //CHILD TABLE DEFINITION FOR "ORDER TRUCK DRIVERS"
@@ -175,7 +175,7 @@ $(document).ready(function () {
                                             return data.record.location.city;
                                         }
                                     },
-                                    worked_hours: {
+                                    workedHours: {
                                         title: 'Worked hours',
                                         width: '12%',
                                         create: false,

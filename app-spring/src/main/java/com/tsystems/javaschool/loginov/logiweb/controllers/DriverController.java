@@ -65,25 +65,27 @@ public class DriverController {
                            @RequestParam(value = "surname") String surname,
                            @RequestParam(value = "email") String email,
                            @RequestParam(value = "password") String password,
-                           @RequestParam(value = "worked_hours") int worked_hours,
+                           @RequestParam(value = "workedHours") int workedHours,
                            @RequestParam(value = "status") String status,
                            @RequestParam(value = "location") String city,
-                           @RequestParam(value = "truck") String plate_number,
+                           @RequestParam(value = "truck") String plateNumber,
                            HttpServletResponse resp) throws IOException {
 
         Map<String, Object> resultMap = new HashMap<>();
 
+        Driver driverToSave = new Driver(name, surname, email, password, workedHours, status);
+        driverToSave.setLocation(new Location(city));
+        driverToSave.setTruck(new Truck(plateNumber));
+
         try {
-            Driver savedDriver =
-                    driverService.addDriver(new Driver(name, surname, email, password, worked_hours, status,
-                                            new Location(city), new Truck(plate_number)));
+            Driver savedDriver = driverService.addDriver(driverToSave);
             resultMap.put(DATUM, savedDriver);
 
         } catch (ConstraintViolationException e) {
             LOG.error("Problem with Driver saving", e);
             resultMap.put(JTABLE_ERROR_MESSAGE, e.getCause().getMessage());
         } catch (PlateNumberNotFoundException e) {
-            LOG.error("Plate number not found: " + plate_number, e);
+            LOG.error("Plate number not found: " + plateNumber, e);
             resultMap.put(JTABLE_ERROR_MESSAGE, "No truck with the entered plate number, add it first.");
         }
 
@@ -99,24 +101,27 @@ public class DriverController {
                              @RequestParam(value = "surname") String surname,
                              @RequestParam(value = "email") String email,
                              @RequestParam(value = "password") String password,
-                             @RequestParam(value = "worked_hours") int worked_hours,
+                             @RequestParam(value = "workedHours") int workedHours,
                              @RequestParam(value = "status") String status,
                              @RequestParam(value = "location") String city,
-                             @RequestParam(value = "truck") String plate_number,
+                             @RequestParam(value = "truck") String plateNumber,
                              HttpServletResponse resp) throws IOException {
 
         Map<String, Object> resultMap = new HashMap<>();
 
+        Driver driverToUpdate = new Driver(id, name, surname, email, password, workedHours, status);
+        driverToUpdate.setLocation(new Location(city));
+        driverToUpdate.setTruck(new Truck(plateNumber));
+
         try {
-            Driver updatedDriver = driverService.updateDriver(new Driver(id, name, surname, email, password,
-                                    worked_hours, status, new Location(city), new Truck(plate_number)));
+            Driver updatedDriver = driverService.updateDriver(driverToUpdate);
             resultMap.put(DATUM, updatedDriver);
 
         } catch (DataIntegrityViolationException e) {
             LOG.error("Problem with Driver updating", e);
             resultMap.put(JTABLE_ERROR_MESSAGE, e.getRootCause().getMessage());
         } catch (PlateNumberNotFoundException e) {
-            LOG.error("Plate number not found: " + plate_number, e);
+            LOG.error("Plate number not found: " + plateNumber, e);
             resultMap.put(JTABLE_ERROR_MESSAGE, "No truck with the entered plate number, add it first.");
         }
 

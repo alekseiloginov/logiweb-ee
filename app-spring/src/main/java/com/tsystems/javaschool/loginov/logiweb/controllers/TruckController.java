@@ -58,8 +58,8 @@ public class TruckController {
      * Adds a truck to the database using the TruckService and puts the saved object back to the result map.
      */
     @RequestMapping(value = "/TruckSave.do", method = RequestMethod.POST)
-    public void saveTruck(@RequestParam(value = "plate_number") String plate_number,
-                          @RequestParam(value = "driver_number") int driver_number,
+    public void saveTruck(@RequestParam(value = "plateNumber") String plateNumber,
+                          @RequestParam(value = "driverNumber") int driverNumber,
                           @RequestParam(value = "capacity") int capacity,
                           @RequestParam(value = "drivable") int drivable,
                           @RequestParam(value = "location") String city,
@@ -69,11 +69,11 @@ public class TruckController {
 
         try {
             Truck savedTruck =
-                    truckService.addTruck(new Truck(plate_number, driver_number, capacity, drivable, new Location(city)));
+                    truckService.addTruck(new Truck(plateNumber, driverNumber, capacity, drivable, new Location(city)));
             resultMap.put(DATUM, savedTruck);
 
         } catch (PlateNumberIncorrectException e) {
-            LOG.error("Plate number incorrect: " + plate_number, e);
+            LOG.error("Plate number incorrect: " + plateNumber, e);
             resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number should contain 2 letters and 5 digits.");
         } catch (ConstraintViolationException e) {
             LOG.error("Problem with Truck saving", e);
@@ -88,8 +88,8 @@ public class TruckController {
      */
     @RequestMapping(value = "/TruckUpdate.do", method = RequestMethod.POST)
     public void updateTruck(@RequestParam(value = "id") int id,
-                            @RequestParam(value = "plate_number") String plate_number,
-                            @RequestParam(value = "driver_number") int driver_number,
+                            @RequestParam(value = "plateNumber") String plateNumber,
+                            @RequestParam(value = "driverNumber") int driverNumber,
                             @RequestParam(value = "capacity") int capacity,
                             @RequestParam(value = "drivable") int drivable,
                             @RequestParam(value = "location") String city,
@@ -99,11 +99,11 @@ public class TruckController {
 
         try {
             Truck updatedTruck =
-                    truckService.updateTruck(new Truck(id, plate_number, driver_number, capacity, drivable, new Location(city)));
+                    truckService.updateTruck(new Truck(id, plateNumber, driverNumber, capacity, drivable, new Location(city)));
             resultMap.put(DATUM, updatedTruck);
 
         } catch (PlateNumberIncorrectException e) {
-            LOG.error("Plate number incorrect: " + plate_number, e);
+            LOG.error("Plate number incorrect: " + plateNumber, e);
             resultMap.put(JTABLE_ERROR_MESSAGE, "Plate number should contain 2 letters and 5 digits.");
         } catch (DataIntegrityViolationException e) {
             LOG.error("Problem with Truck updating", e);

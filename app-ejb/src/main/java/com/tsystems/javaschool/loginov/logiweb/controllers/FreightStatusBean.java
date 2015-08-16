@@ -72,11 +72,11 @@ public class FreightStatusBean implements Serializable {
     public List<String> getFreightStatusList(String freightStatus) {
         List<String> freightStatusList = new ArrayList<>();
 
-        if ("prepared".equalsIgnoreCase(freightStatus)) {
+        if (freightStatus.contains("prepared")) {
             freightStatusList.add("shipped");
             freightStatusList.add("delivered");
 
-        } else if ("shipped".equalsIgnoreCase(freightStatus)) {
+        } else if (freightStatus.contains("shipped")) {
             freightStatusList.add("delivered");
         }
 

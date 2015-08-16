@@ -1,10 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.models;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -12,7 +8,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "orders", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-public class Order {
+public class Order extends AbstractModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,14 +17,6 @@ public class Order {
 
     @Column(name = "completed", nullable = false)
     private int completed;
-
-    @CreationTimestamp
-    @Column(name = "created_time")
-    private Date created_time;
-
-    @UpdateTimestamp
-    @Column(name = "last_modified_time")
-    private Date last_modified_time;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "truck_id")
@@ -80,22 +68,6 @@ public class Order {
 
     public void setCompleted(int completed) {
         this.completed = completed;
-    }
-
-    public Date getCreated_time() {
-        return created_time;
-    }
-
-    public void setCreated_time(Date created_time) {
-        this.created_time = created_time;
-    }
-
-    public Date getLast_modified_time() {
-        return last_modified_time;
-    }
-
-    public void setLast_modified_time(Date last_modified_time) {
-        this.last_modified_time = last_modified_time;
     }
 
     public Truck getTruck() {

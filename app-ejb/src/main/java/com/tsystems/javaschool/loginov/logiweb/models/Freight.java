@@ -1,12 +1,8 @@
 package com.tsystems.javaschool.loginov.logiweb.models;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Simple java bean that will hold freight information.
@@ -14,7 +10,8 @@ import java.util.Date;
 @Entity
 @Table(name = "freights", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement(name="Freight")
-public class Freight implements Serializable {
+public class Freight extends AbstractModel implements Serializable {
+    private static final long serialVersionUID = 1905122041950251207L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,14 +26,6 @@ public class Freight implements Serializable {
 
     @Column(name = "status", nullable = false, length = 255)
     private String status;
-
-    @CreationTimestamp
-    @Column(name = "created_time")
-    private Date created_time;
-
-    @UpdateTimestamp
-    @Column(name = "last_modified_time")
-    private Date last_modified_time;
 
     // below 2 fields are only for easy data manipulation, not for persistence
     @Transient
@@ -55,6 +44,15 @@ public class Freight implements Serializable {
     }
 
     public Freight(String name, int weight, String status, String loading, String unloading) {
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+        this.loading = loading;
+        this.unloading = unloading;
+    }
+
+    public Freight(int id, String name, int weight, String status, String loading, String unloading) {
+        this.id = id;
         this.name = name;
         this.weight = weight;
         this.status = status;
@@ -108,21 +106,5 @@ public class Freight implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Date getCreated_time() {
-        return created_time;
-    }
-
-    public void setCreated_time(Date created_time) {
-        this.created_time = created_time;
-    }
-
-    public Date getLast_modified_time() {
-        return last_modified_time;
-    }
-
-    public void setLast_modified_time(Date last_modified_time) {
-        this.last_modified_time = last_modified_time;
     }
 }

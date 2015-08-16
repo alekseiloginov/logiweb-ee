@@ -39,7 +39,7 @@ $(document).ready(function () {
                 inputClass: 'validate[required]',
                 list: false
             },
-            worked_hours: {
+            workedHours: {
                 title: 'Worked hours',
                 width: '12%',
                 inputClass: 'validate[required]'
@@ -69,10 +69,10 @@ $(document).ready(function () {
                 title: 'Truck',
                 width: '10%',
                 display : function(data) {
-                    return data.record.truck !== undefined ? data.record.truck.plate_number : "";
+                    return data.record.truck !== undefined ? data.record.truck.plateNumber : "";
                 },
                 input: function (data) {
-                    var plate_number_truck = (!data.record || data.record.truck === undefined) ? "" : data.record.truck.plate_number ;
+                    var plate_number_truck = (!data.record || data.record.truck === undefined) ? "" : data.record.truck.plateNumber ;
                     return '<input type="text" name="truck" value="' + plate_number_truck + '" />';
                 }
             }

@@ -18,12 +18,12 @@ $(document).ready(function () {
                 edit: false,
                 list: false
             },
-            plate_number: {
+            plateNumber: {
                 title: 'Plate number',
                 width: '25%',
                 inputClass: 'validate[required]'
             },
-            driver_number: {
+            driverNumber: {
                 title: 'Driver number',
                 width: '15%',
                 inputClass: 'validate[required]'

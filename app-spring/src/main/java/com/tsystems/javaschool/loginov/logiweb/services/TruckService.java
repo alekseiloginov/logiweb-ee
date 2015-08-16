@@ -7,7 +7,6 @@ import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectEx
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
 import com.tsystems.javaschool.loginov.logiweb.models.Order;
 import com.tsystems.javaschool.loginov.logiweb.models.Truck;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,11 +37,10 @@ public class TruckService {
     }
 
     @Transactional
-    public Truck addTruck(Truck truck) throws PlateNumberIncorrectException, DataIntegrityViolationException {
+    public Truck addTruck(Truck truck) throws PlateNumberIncorrectException {
 
-        if (!truck.getPlate_number().matches(plateNumberPattern)) {
-            throw new PlateNumberIncorrectException("Plate number should contain 2 letters and 5 digits",
-                    "Plate number incorrect");
+        if (!truck.getPlateNumber().matches(plateNumberPattern)) {
+            throw new PlateNumberIncorrectException("Plate number should contain 2 letters and 5 digits");
         }
 
         Location location = locationDao.getLocationByCity(truck.getLocation().getCity());
@@ -52,16 +50,15 @@ public class TruckService {
     }
 
     @Transactional
-    public Truck updateTruck(Truck truck) throws PlateNumberIncorrectException, DataIntegrityViolationException {
+    public Truck updateTruck(Truck truck) throws PlateNumberIncorrectException {
 
-        if (!truck.getPlate_number().matches("^[a-zA-Z]{2}[0-9]{5}$")) {
-            throw new PlateNumberIncorrectException("Plate number should contain 2 letters and 5 digits",
-                    "Plate number incorrect");
+        if (!truck.getPlateNumber().matches("^[a-zA-Z]{2}[0-9]{5}$")) {
+            throw new PlateNumberIncorrectException("Plate number should contain 2 letters and 5 digits");
         }
 
         Truck truckToUpdate = truckDao.getTruckById(truck.getId());
-        truckToUpdate.setPlate_number(truck.getPlate_number());
-        truckToUpdate.setDriver_number(truck.getDriver_number());
+        truckToUpdate.setPlateNumber(truck.getPlateNumber());
+        truckToUpdate.setDriverNumber(truck.getDriverNumber());
         truckToUpdate.setCapacity(truck.getCapacity());
         truckToUpdate.setDrivable(truck.getDrivable());
 
@@ -124,9 +121,9 @@ public class TruckService {
 
             for (Truck validTruck : validTruckSet) {
                 truckOptionJSONList += "{\"DisplayText\":\"";
-                truckOptionJSONList += validTruck.getPlate_number();
+                truckOptionJSONList += validTruck.getPlateNumber();
                 truckOptionJSONList += "\",\"Value\":\"";
-                truckOptionJSONList += validTruck.getPlate_number();
+                truckOptionJSONList += validTruck.getPlateNumber();
                 ++optionCount;
 
                 if (optionCount < validTruckSet.size()) {

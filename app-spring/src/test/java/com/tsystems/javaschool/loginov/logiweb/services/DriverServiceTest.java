@@ -42,7 +42,9 @@ public class DriverServiceTest {
         driverService = new DriverService();
         location = new Location("Moscow");
         truck = new Truck("AB12345", 3, 3, 1, location);
-        driver = new Driver("Vasya", "Pupkin", "abcd@abc.com", "1234", 40, "free", location, truck);
+        driver = new Driver("Vasya", "Pupkin", "abcd@abc.com", "1234", 40, "free");
+        driver.setLocation(location);
+        driver.setTruck(truck);
     }
 
     @After
@@ -52,7 +54,7 @@ public class DriverServiceTest {
 
 //    @Test(expected = PlateNumberNotFoundException.class)
 //    public void addDriverPlateNumberNotFoundExceptionTest() throws Exception {
-//        truck.setPlate_number("YZ12345");
+//        truck.setPlateNumber("YZ12345");
 //        driver.setTruck(truck);
 //        driverService.addDriver(driver);
 //    }
@@ -65,7 +67,7 @@ public class DriverServiceTest {
 //
 //    @Test(expected = PlateNumberNotFoundException.class)
 //    public void updateDriverPlateNumberNotFoundExceptionTest() throws Exception {
-//        truck.setPlate_number("YZ12345");
+//        truck.setPlateNumber("YZ12345");
 //        driver.setTruck(truck);
 //        driverService.updateDriver(driver);
 //    }

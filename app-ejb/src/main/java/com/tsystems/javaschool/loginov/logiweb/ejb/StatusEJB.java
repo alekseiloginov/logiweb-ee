@@ -22,8 +22,8 @@ import java.util.List;
 @Stateless
 public class StatusEJB implements Serializable {
     private static final String WEB_SERVICE_URL = "http://localhost:8080/logiweb-ee/services/soap";
-    private JaxWsProxyFactoryBean factory;
-    private DriverWebService driverWebService;
+    private transient JaxWsProxyFactoryBean factory;
+    private transient DriverWebService driverWebService;
 
     /**
      * This method takes a driver username and password and tries to process authentication using SOAP webservice.
@@ -87,20 +87,7 @@ public class StatusEJB implements Serializable {
         String serviceUrl =
                 "http://localhost:8080/logiweb-ee/services/rest/freights/" + freightId + "/statuses/" + freightStatus;
 
-        HttpClient client = new HttpClient();
-        PostMethod postMethod = new PostMethod(serviceUrl);
-        client.executeMethod(postMethod);
-        Header requestHeader = new Header();
-        requestHeader.setName("content-type");
-        requestHeader.setValue("application/x-www-form-urlencoded");
-        requestHeader.setName("accept");
-        requestHeader.setValue("application/xml");
-        postMethod.addRequestHeader(requestHeader);
-        client.executeMethod(postMethod);
-        String output = postMethod.getResponseBodyAsString();
-        postMethod.releaseConnection();
-
-        return output;
+        return doPostRequest(serviceUrl);
     }
 
     /**
@@ -115,6 +102,28 @@ public class StatusEJB implements Serializable {
         String serviceUrl =
                 "http://localhost:8080/logiweb-ee/services/rest/drivers/" + driverId + "/freights/list";
 
+        String output = doPostRequest(serviceUrl);
+
+        if (!output.isEmpty()) {
+            // parsing JSON string to Java List using Jackson
+            ObjectMapper objectMapper = new ObjectMapper();
+            freightList = objectMapper.readValue(output, new TypeReference<List<Freight>>() {
+            });
+        } else {
+            freightList = new ArrayList<>();
+        }
+
+        return freightList;
+    }
+
+    /**
+     * Makes JSON-based POST request to the RESTful web service using Apache HttpClient.
+     *
+     * @param serviceUrl - target URL
+     * @return String output - acquired response
+     * @throws IOException
+     */
+    private String doPostRequest(String serviceUrl) throws IOException {
         HttpClient client = new HttpClient();
         PostMethod postMethod = new PostMethod(serviceUrl);
         client.executeMethod(postMethod);
@@ -127,16 +136,6 @@ public class StatusEJB implements Serializable {
         client.executeMethod(postMethod);
         String output = postMethod.getResponseBodyAsString();
         postMethod.releaseConnection();
-
-        if (!output.isEmpty()) {
-            // parsing JSON string to Java List using Jackson
-            ObjectMapper objectMapper = new ObjectMapper();
-            freightList = objectMapper.readValue(output, new TypeReference<List<Freight>>() {
-            });
-        } else {
-            freightList = new ArrayList<>();
-        }
-
-        return freightList;
+        return output;
     }
 }

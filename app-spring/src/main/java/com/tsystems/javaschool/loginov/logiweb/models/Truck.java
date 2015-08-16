@@ -1,17 +1,13 @@
 package com.tsystems.javaschool.loginov.logiweb.models;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Simple java bean that will hold truck information.
  */
 @Entity
 @Table(name = "trucks", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "plate_number"})})
-public class Truck {
+public class Truck extends AbstractModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,24 +15,16 @@ public class Truck {
     private int id;
 
     @Column(name = "plate_number", nullable = false, length = 7)
-    private String plate_number;
+    private String plateNumber;
 
     @Column(name = "driver_number", nullable = false)
-    private int driver_number;
+    private int driverNumber;
 
     @Column(name = "capacity", nullable = false)
     private int capacity;
 
     @Column(name = "drivable", nullable = false)
     private int drivable;
-
-    @CreationTimestamp
-    @Column(name = "created_time")
-    private Date created_time;
-
-    @UpdateTimestamp
-    @Column(name = "last_modified_time")
-    private Date last_modified_time;
 
     @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "location_id", nullable = false)
@@ -46,22 +34,22 @@ public class Truck {
 
     }
 
-    public Truck(String plate_number) {
-        this.plate_number = plate_number;
+    public Truck(String plateNumber) {
+        this.plateNumber = plateNumber;
     }
 
-    public Truck(String plate_number, int driver_number, int capacity, int drivable, Location location) {
-        this.plate_number = plate_number;
-        this.driver_number = driver_number;
+    public Truck(String plateNumber, int driverNumber, int capacity, int drivable, Location location) {
+        this.plateNumber = plateNumber;
+        this.driverNumber = driverNumber;
         this.capacity = capacity;
         this.drivable = drivable;
         this.location = location;
     }
 
-    public Truck(int id, String plate_number, int driver_number, int capacity, int drivable, Location location) {
+    public Truck(int id, String plateNumber, int driverNumber, int capacity, int drivable, Location location) {
         this.id = id;
-        this.plate_number = plate_number;
-        this.driver_number = driver_number;
+        this.plateNumber = plateNumber;
+        this.driverNumber = driverNumber;
         this.capacity = capacity;
         this.drivable = drivable;
         this.location = location;
@@ -71,20 +59,20 @@ public class Truck {
         return id;
     }
 
-    public String getPlate_number() {
-        return plate_number;
+    public String getPlateNumber() {
+        return plateNumber;
     }
 
-    public void setPlate_number(String plate_number) {
-        this.plate_number = plate_number;
+    public void setPlateNumber(String plateNumber) {
+        this.plateNumber = plateNumber;
     }
 
-    public int getDriver_number() {
-        return driver_number;
+    public int getDriverNumber() {
+        return driverNumber;
     }
 
-    public void setDriver_number(int driver_number) {
-        this.driver_number = driver_number;
+    public void setDriverNumber(int driverNumber) {
+        this.driverNumber = driverNumber;
     }
 
     public int getCapacity() {
@@ -101,14 +89,6 @@ public class Truck {
 
     public void setDrivable(int drivable) {
         this.drivable = drivable;
-    }
-
-    public Date getCreated_time() {
-        return created_time;
-    }
-
-    public Date getLast_modified_time() {
-        return last_modified_time;
     }
 
     public Location getLocation() {

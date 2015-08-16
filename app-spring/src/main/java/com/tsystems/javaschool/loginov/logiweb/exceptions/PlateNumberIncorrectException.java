@@ -5,14 +5,7 @@ package com.tsystems.javaschool.loginov.logiweb.exceptions;
  */
 public class PlateNumberIncorrectException extends Exception {
 
-    private String errorCode = "Plate number should contain 2 letters and 5 digits";
-
-    public PlateNumberIncorrectException(String message, String errorCode) {
+    public PlateNumberIncorrectException(String message) {
         super(message);
-        this.errorCode = errorCode;
-    }
-
-    public String getErrorCode() {
-        return this.errorCode;
     }
 }

@@ -100,7 +100,7 @@ $(document).ready(function () {
                 options: 'TruckOptions.do',
                 optionsSorting: 'text',
                 display : function(data) {
-                    return data.record.truck.plate_number;
+                    return data.record.truck.plateNumber;
                 }
             },
             //CHILD TABLE DEFINITION FOR "ORDER TRUCK DRIVERS"

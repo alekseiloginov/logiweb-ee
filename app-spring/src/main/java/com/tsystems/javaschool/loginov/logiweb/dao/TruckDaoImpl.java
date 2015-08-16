@@ -54,7 +54,7 @@ public class TruckDaoImpl implements TruckDao {
     public Truck getTruckByPlateNumber(String plateNumber) {
         Session session = this.sessionFactory.getCurrentSession();
         return (Truck) session.createCriteria(Truck.class)
-                .add(Restrictions.eq("plate_number", plateNumber))
+                .add(Restrictions.eq("plateNumber", plateNumber))
                 .uniqueResult();
     }
 

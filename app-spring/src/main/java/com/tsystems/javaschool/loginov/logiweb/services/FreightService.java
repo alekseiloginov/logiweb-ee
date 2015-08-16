@@ -159,7 +159,15 @@ public class FreightService {
             }
         }
 
-        // check that if operation is loading and freight status is 'prepared' - there's enough space for this freight
+        return createJson(checkFreeSpace(chosenOrder, orderAssignedFreightsWeight, validCityWaypointSet));
+    }
+
+    /**
+     * Checks that if operation is loading and freight status is 'prepared' - there's enough space for this freight.
+     *
+     * @return validCityWaypointSet
+     */
+    private Set<Waypoint> checkFreeSpace(Order chosenOrder, int orderAssignedFreightsWeight, Set<Waypoint> validCityWaypointSet) {
         int orderTruckCapacityInTones = chosenOrder.getTruck().getCapacity();
         int freeFreightWeight = (orderTruckCapacityInTones * 1000) - orderAssignedFreightsWeight;  // convert to kilos
         int freightWeight;
@@ -175,8 +183,16 @@ public class FreightService {
                 validCityWaypointSet.remove(validCityWaypointOption);
             }
         }
+        return validCityWaypointSet;
+    }
 
-        // Creating a JSON string
+    /**
+     * Creates a JSON string from the valid city waypoint set.
+     *
+     * @param validCityWaypointSet
+     * @return freightOptionJSONList
+     */
+    private String createJson(Set<Waypoint> validCityWaypointSet) {
         int optionCount = 0;
         String freightOptionJSONList = "[";
 

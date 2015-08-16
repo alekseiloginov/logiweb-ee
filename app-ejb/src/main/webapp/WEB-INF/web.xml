@@ -10,7 +10,7 @@
         <param-value>bootstrap</param-value>
     </context-param>
 
-    <!-- Redirect any 500 Error Code to /error.jsf -->
+     <!--Redirect any 500 Error Code to /error.jsf -->
     <!--<error-page>-->
         <!--<error-code>500</error-code>-->
         <!--<location>/error.jsf</location>-->

@@ -1,6 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
-import com.tsystems.javaschool.loginov.logiweb.dao.UserDao;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -14,15 +14,11 @@ import java.util.Properties;
  */
 @Service
 public class UserService {
-    private UserDao userDao;
-
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    private static final Logger LOG = Logger.getLogger(UserService.class);
 
     public void remindPassword(String email) throws UnsupportedEncodingException {
         final String username = email;
-        final String password = "D25112005d";
+        final String pass = "D25112005d";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -32,8 +28,9 @@ public class UserService {
 
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
+                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
+                        return new PasswordAuthentication(username, pass);
                     }
                 });
 
@@ -48,10 +45,8 @@ public class UserService {
 
             Transport.send(message);
 
-            System.out.println("Done");
-
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            LOG.error("MessagingException", e);
         }
     }
 }

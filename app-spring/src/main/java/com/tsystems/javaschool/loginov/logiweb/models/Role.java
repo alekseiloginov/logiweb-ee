@@ -1,17 +1,13 @@
 package com.tsystems.javaschool.loginov.logiweb.models;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Simple java bean that will hold role information.
  */
 @Entity
 @Table(name = "roles", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "title"})})
-public class Role {
+public class Role extends AbstractModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,14 +16,6 @@ public class Role {
 
     @Column(name = "title", nullable = false, length = 255)
     private String title;
-
-    @CreationTimestamp
-    @Column(name = "created_time")
-    private Date createdTime;
-
-    @UpdateTimestamp
-    @Column(name = "last_modified_time")
-    private Date lastModifiedTime;
 
     public Role() {
 
@@ -51,21 +39,5 @@ public class Role {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getLastModifiedTime() {
-        return lastModifiedTime;
-    }
-
-    public void setLastModifiedTime(Date lastModifiedTime) {
-        this.lastModifiedTime = lastModifiedTime;
     }
 }

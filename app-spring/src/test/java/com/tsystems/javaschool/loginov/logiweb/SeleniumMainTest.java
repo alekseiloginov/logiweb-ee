@@ -23,7 +23,7 @@ public class SeleniumMainTest {
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("webdriver.chrome.driver","/Users/alex/Desktop/chromedriver");
+        System.setProperty("webdriver.chrome.driver","/Users/alex/Desktop/IdeaProjects/logiweb-ee/chromedriver");
         driver = new ChromeDriver();
         baseUrl = "http://localhost:8080";
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -39,12 +39,14 @@ public class SeleniumMainTest {
         driver.findElement(By.id("password")).clear();
         driver.findElement(By.id("password")).sendKeys("1234");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+        // CRUD Trucks
         driver.findElement(By.linkText("Trucks")).click();
         driver.findElement(By.className("jtable-toolbar-item-add-record")).click();
-        driver.findElement(By.id("Edit-plate_number")).clear();
-        driver.findElement(By.id("Edit-plate_number")).sendKeys("ZH12345");
-        driver.findElement(By.id("Edit-driver_number")).clear();
-        driver.findElement(By.id("Edit-driver_number")).sendKeys("2");
+        driver.findElement(By.id("Edit-plateNumber")).clear();
+        driver.findElement(By.id("Edit-plateNumber")).sendKeys("ZH12345");
+        driver.findElement(By.id("Edit-driverNumber")).clear();
+        driver.findElement(By.id("Edit-driverNumber")).sendKeys("2");
         driver.findElement(By.id("Edit-capacity")).clear();
         driver.findElement(By.id("Edit-capacity")).sendKeys("3");
         new Select(driver.findElement(By.id("Edit-location"))).selectByVisibleText("Murmansk");
@@ -52,22 +54,25 @@ public class SeleniumMainTest {
         new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='TruckTableContainer']/div/table/tbody/tr[5]/td[6]/button")));
         driver.findElement(By.xpath("//div[@id='TruckTableContainer']/div/table/tbody/tr[5]/td[6]/button")).click();
         new WebDriverWait(driver, 10)
-                .ignoring(StaleElementReferenceException.class)
+                .ignoring(WebDriverException.class)
                 .until(new Predicate<WebDriver>() {
                     @Override
                     public boolean apply(@Nullable WebDriver driver) {
-                        driver.findElement(By.id("Edit-driver_number")).click();
+                        driver.findElement(By.id("Edit-driverNumber")).click();
                         return true;
                     }
                 });
-        driver.findElement(By.id("Edit-driver_number")).sendKeys("3");
+        driver.findElement(By.id("Edit-driverNumber")).clear();
+        driver.findElement(By.id("Edit-driverNumber")).sendKeys("3");
         driver.findElement(By.id("EditDialogSaveButton")).click();
         new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='TruckTableContainer']/div/table/tbody/tr[5]/td[7]/button")));
         driver.findElement(By.xpath("//div[@id='TruckTableContainer']/div/table/tbody/tr[5]/td[7]/button")).click();
         driver.findElement(By.id("DeleteDialogButton")).click();
+
+        // CRUD Drivers
         driver.findElement(By.linkText("Drivers")).click();
         new WebDriverWait(driver, 10)
-                .ignoring(StaleElementReferenceException.class)
+                .ignoring(WebDriverException.class)
                 .until(new Predicate<WebDriver>() {
                     @Override
                     public boolean apply(@Nullable WebDriver driver) {
@@ -85,12 +90,12 @@ public class SeleniumMainTest {
         driver.findElement(By.id("Edit-email")).sendKeys("vas@abc.com");
         driver.findElement(By.id("Edit-password")).clear();
         driver.findElement(By.id("Edit-password")).sendKeys("1234");
-        driver.findElement(By.id("Edit-worked_hours")).clear();
-        driver.findElement(By.id("Edit-worked_hours")).sendKeys("0");
+        driver.findElement(By.id("Edit-workedHours")).clear();
+        driver.findElement(By.id("Edit-workedHours")).sendKeys("0");
         driver.findElement(By.id("AddRecordDialogSaveButton")).click();
         driver.findElement(By.linkText("Drivers")).click();
         new WebDriverWait(driver, 10)
-                .ignoring(StaleElementReferenceException.class)
+                .ignoring(WebDriverException.class)
                 .until(new Predicate<WebDriver>() {
                     @Override
                     public boolean apply(@Nullable WebDriver driver) {
@@ -103,9 +108,10 @@ public class SeleniumMainTest {
         driver.findElement(By.id("EditDialogSaveButton")).click();
         driver.findElement(By.cssSelector("tr.jtable-data-row.jtable-row-updated > td.jtable-command-column > button.jtable-command-button.jtable-delete-command-button")).click();
         driver.findElement(By.id("DeleteDialogButton")).click();
-        driver.findElement(By.linkText("Freights")).click();
+
+        // ORDER
         new WebDriverWait(driver, 10)
-                .ignoring(StaleElementReferenceException.class)
+                .ignoring(WebDriverException.class)
                 .until(new Predicate<WebDriver>() {
                     @Override
                     public boolean apply(@Nullable WebDriver driver) {
@@ -113,35 +119,226 @@ public class SeleniumMainTest {
                         return true;
                     }
                 });
-        driver.findElement(By.id("map")).click();
-        new WebDriverWait(driver, 15);
-        new WebDriverWait(driver, 20)
-                .ignoring(StaleElementReferenceException.class)
+
+        // add order
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
                 .until(new Predicate<WebDriver>() {
                     @Override
                     public boolean apply(@Nullable WebDriver driver) {
-                        driver.findElement(By.cssSelector("button")).click();
+                        driver.findElement(By.className("jtable-toolbar-item-add-record")).click();
                         return true;
                     }
                 });
-        driver.findElement(By.linkText("aloginov")).click();
-        driver.findElement(By.linkText("Log Out")).click();
-        driver.findElement(By.id("myBtn")).click();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.id("username")));
-        driver.findElement(By.id("username")).clear();
-        driver.findElement(By.id("username")).sendKeys("gchichvarkin");
-        driver.findElement(By.id("password")).clear();
-        driver.findElement(By.id("password")).sendKeys("1234");
-        driver.findElement(By.xpath("//button[@type='submit']")).click();
-        driver.findElement(By.linkText("Orders")).click();
-        driver.get(baseUrl + "/logiweb-ee/drivers");
-        driver.findElement(By.id("myBtn")).click();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.linkText("Password?")));
-        driver.findElement(By.linkText("Password?")).click();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.id("email")));
-        driver.findElement(By.id("email")).clear();
-        driver.findElement(By.id("email")).sendKeys("plus79045568217@gmail.com");
-        driver.findElement(By.xpath("(//button[@type='submit'])[4]")).click();
+        driver.findElement(By.id("AddRecordDialogSaveButton")).click();
+
+        // add waypoints
+        driver.findElement(By.xpath("(//img[@title='View waypoints'])[4]")).click();
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.className("jtable-child-table-container")).findElement(By.className("jtable-toolbar-item-add-record")).click();
+                        return true;
+                    }
+                });
+        new Select(driver.findElement(By.id("Edit-location"))).selectByVisibleText("Moscow");
+        new Select(driver.findElement(By.id("Edit-freight"))).selectByVisibleText("Laptops");
+        driver.findElement(By.xpath("(//button[@id='AddRecordDialogSaveButton'])[2]")).click();
+
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.className("jtable-child-table-container")).findElement(By.className("jtable-toolbar-item-add-record")).click();
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        new Select(driver.findElement(By.id("Edit-location"))).selectByVisibleText("Peterburg");
+                        return true;
+                    }
+                });
+        new Select(driver.findElement(By.id("Edit-freight"))).selectByVisibleText("Laptops");
+        driver.findElement(By.xpath("(//button[@id='AddRecordDialogSaveButton'])[2]")).click();
+
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.className("jtable-child-table-container")).findElement(By.className("jtable-toolbar-item-add-record")).click();
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        new Select(driver.findElement(By.id("Edit-location"))).selectByVisibleText("Peterburg");
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        new Select(driver.findElement(By.id("Edit-freight"))).selectByVisibleText("Books");
+                        return true;
+                    }
+                });
+        driver.findElement(By.xpath("(//button[@id='AddRecordDialogSaveButton'])[2]")).click();
+
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.className("jtable-child-table-container")).findElement(By.className("jtable-toolbar-item-add-record")).click();
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        new Select(driver.findElement(By.id("Edit-location"))).selectByVisibleText("Murmansk");
+                        return true;
+                    }
+                });
+        new Select(driver.findElement(By.id("Edit-freight"))).selectByVisibleText("Books");
+        driver.findElement(By.xpath("(//button[@id='AddRecordDialogSaveButton'])[2]")).click();
+
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.className("jtable-child-table-container")).findElement(By.className("jtable-toolbar-item-add-record")).click();
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        new Select(driver.findElement(By.id("Edit-location"))).selectByVisibleText("Murmansk");
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        new Select(driver.findElement(By.id("Edit-freight"))).selectByVisibleText("Chairs");
+                        return true;
+                    }
+                });
+        driver.findElement(By.xpath("(//button[@id='AddRecordDialogSaveButton'])[2]")).click();
+
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.className("jtable-child-table-container")).findElement(By.className("jtable-toolbar-item-add-record")).click();
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 15)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        new Select(driver.findElement(By.id("Edit-location"))).selectByVisibleText("Moscow");
+                        return true;
+                    }
+                });
+        new Select(driver.findElement(By.id("Edit-freight"))).selectByVisibleText("Chairs");
+        driver.findElement(By.xpath("(//button[@id='AddRecordDialogSaveButton'])[2]")).click();
+
+        // add drivers
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.xpath("(//img[@title='View drivers'])[4]")).click();
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.className("jtable-child-table-container")).findElement(By.className("jtable-toolbar-item-add-record")).click();
+                        return true;
+                    }
+                });
+        new WebDriverWait(driver, 10)
+                .ignoring(WebDriverException.class)
+                .until(new Predicate<WebDriver>() {
+                    @Override
+                    public boolean apply(@Nullable WebDriver driver) {
+                        driver.findElement(By.xpath("(//button[@id='AddRecordDialogSaveButton'])[3]")).click();
+                        return true;
+                    }
+                });
+
+//        new WebDriverWait(driver, 10)
+//                .ignoring(WebDriverException.class)
+//                .until(new Predicate<WebDriver>() {
+//                    @Override
+//                    public boolean apply(@Nullable WebDriver driver) {
+//                        driver.findElement(By.id("map")).click();
+//                        return true;
+//                    }
+//                });
+//        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button")));
+//        new WebDriverWait(driver, 20)
+//                .ignoring(WebDriverException.class)
+//                .until(new Predicate<WebDriver>() {
+//                    @Override
+//                    public boolean apply(@Nullable WebDriver driver) {
+//                        driver.findElement(By.cssSelector("button")).click();
+//                        return true;
+//                    }
+//                });
+//        driver.findElement(By.linkText("aloginov")).click();
+//        driver.findElement(By.linkText("Log Out")).click();
+//        driver.findElement(By.id("myBtn")).click();
+//        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.id("username")));
+//        driver.findElement(By.id("username")).clear();
+//        driver.findElement(By.id("username")).sendKeys("gchichvarkin");
+//        driver.findElement(By.id("password")).clear();
+//        driver.findElement(By.id("password")).sendKeys("1234");
+//        driver.findElement(By.xpath("//button[@type='submit']")).click();
+//        driver.findElement(By.linkText("Orders")).click();
+//        driver.findElement(By.id("map")).click();
+//        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button")));
+//        new WebDriverWait(driver, 20)
+//                .ignoring(WebDriverException.class)
+//                .until(new Predicate<WebDriver>() {
+//                    @Override
+//                    public boolean apply(@Nullable WebDriver driver) {
+//                        driver.findElement(By.cssSelector("button")).click();
+//                        return true;
+//                    }
+//                });
+//        driver.findElement(By.linkText("gchichvarkin")).click();
+//        driver.findElement(By.linkText("Log Out")).click();
     }
 
     @After

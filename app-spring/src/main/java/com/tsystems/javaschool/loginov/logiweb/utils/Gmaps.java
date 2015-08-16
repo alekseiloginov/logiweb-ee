@@ -5,14 +5,12 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.DirectionsRoute;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
 /**
  * Utility class to calculate a journey duration using Google Maps API implementation.
  */
-@Component
 public class Gmaps {
     private static final Logger LOG = Logger.getLogger(Gmaps.class);
     private String waypointCities = "optimize:true";

@@ -55,7 +55,11 @@ public class OrderDaoImpl implements OrderDao {
         Session session = this.sessionFactory.getCurrentSession();
         List orderIdList =
                 session.createSQLQuery("SELECT order_id FROM order_drivers WHERE driver_id="+driver.getId()).list();
-        return (Order) session.get(Order.class, (int) orderIdList.get(0));
+        Order order = null;
+        if (orderIdList != null && !orderIdList.isEmpty()) {
+            order = (Order) session.get(Order.class, (int) orderIdList.get(0));
+        }
+        return order;
     }
 
     @Override
